@@ -1,6 +1,7 @@
 import os
 import io
 import random
+from datetime import datetime
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload, MediaFileUpload
 from google.oauth2.credentials import Credentials
@@ -50,7 +51,7 @@ TAGS = [
 ]
 
 # ==============================
-# AUTH
+# AUTHENTICATION
 # ==============================
 
 creds = Credentials(
@@ -69,7 +70,7 @@ youtube = build("youtube", "v3", credentials=creds)
 drive = build("drive", "v3", credentials=creds)
 
 # ==============================
-# GET FILES FROM DRIVE
+# GET MP4 FILES FROM DRIVE
 # ==============================
 
 results = drive.files().list(
@@ -89,7 +90,7 @@ file_name = video["name"]
 print("Downloading:", file_name)
 
 # ==============================
-# DOWNLOAD FILE
+# DOWNLOAD FILE LOCALLY
 # ==============================
 
 request = drive.files().get_media(fileId=file_id)
@@ -101,7 +102,7 @@ while not done:
     status, done = downloader.next_chunk()
 
 # ==============================
-# PICK RANDOM TITLE & DESCRIPTION
+# PICK RANDOM TITLE + DESCRIPTION
 # ==============================
 
 selected_title = random.choice(TITLES)
@@ -114,16 +115,25 @@ selected_description = random.choice(DESCRIPTIONS)
 media = MediaFileUpload(file_name, mimetype="video/mp4", resumable=True)
 
 request = youtube.videos().insert(
-    part="snippet,status",
+    part="snippet,status,recordingDetails",
     body={
         "snippet": {
             "title": selected_title,
             "description": selected_description,
             "tags": TAGS,
-            "categoryId": "15"
+            "categoryId": "22"
         },
         "status": {
-            "privacyStatus": "public"
+            "privacyStatus": "public",
+            "selfDeclaredMadeForKids": False,
+            "license": "youtube"
+        },
+        "recordingDetails": {
+            "location": {
+                "latitude": 19.0760,
+                "longitude": 72.8777
+            },
+            "recordingDate": datetime.utcnow().isoformat("T") + "Z"
         }
     },
     media_body=media
@@ -135,7 +145,7 @@ video_id = response.get("id")
 print("Uploaded:", video_id)
 
 # ==============================
-# MOVE FILE
+# MOVE FILE TO UPLOADED FOLDER
 # ==============================
 
 drive.files().update(
@@ -143,6 +153,10 @@ drive.files().update(
     addParents=UPLOADED_FOLDER_ID,
     removeParents=PENDING_FOLDER_ID
 ).execute()
+
+# ==============================
+# DELETE LOCAL COPY
+# ==============================
 
 os.remove(file_name)
 
