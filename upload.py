@@ -23,6 +23,33 @@ TITLES = [
 ]
 
 # ==============================
+# DESCRIPTION ROTATION
+# ==============================
+
+DESCRIPTIONS = [
+    "Discover must-have baby products every parent is loving right now 💛 Safe, useful, and perfect for your little one. #babyproducts #parenting #shorts",
+    "Looking for baby essentials that actually make life easier? Here are smart picks for modern parents 👶✨ #newborn #babycare #shorts",
+    "Top trending baby items parents swear by 🍼 Safe, practical, and loved by kids! #babylife #parentingtips #shorts"
+]
+
+# ==============================
+# TAGS
+# ==============================
+
+TAGS = [
+    "baby products",
+    "baby essentials",
+    "newborn baby",
+    "baby care",
+    "parenting tips",
+    "baby must haves",
+    "infant products",
+    "mom life",
+    "parent hacks",
+    "shorts"
+]
+
+# ==============================
 # AUTH
 # ==============================
 
@@ -74,10 +101,11 @@ while not done:
     status, done = downloader.next_chunk()
 
 # ==============================
-# PICK RANDOM TITLE
+# PICK RANDOM TITLE & DESCRIPTION
 # ==============================
 
 selected_title = random.choice(TITLES)
+selected_description = random.choice(DESCRIPTIONS)
 
 # ==============================
 # UPLOAD TO YOUTUBE
@@ -90,7 +118,8 @@ request = youtube.videos().insert(
     body={
         "snippet": {
             "title": selected_title,
-            "description": "High quality baby products for modern parents 💛 #shorts",
+            "description": selected_description,
+            "tags": TAGS,
             "categoryId": "15"
         },
         "status": {
@@ -106,7 +135,7 @@ video_id = response.get("id")
 print("Uploaded:", video_id)
 
 # ==============================
-# MOVE FILE TO UPLOADED
+# MOVE FILE
 # ==============================
 
 drive.files().update(
@@ -114,10 +143,6 @@ drive.files().update(
     addParents=UPLOADED_FOLDER_ID,
     removeParents=PENDING_FOLDER_ID
 ).execute()
-
-# ==============================
-# CLEAN LOCAL FILE
-# ==============================
 
 os.remove(file_name)
 
