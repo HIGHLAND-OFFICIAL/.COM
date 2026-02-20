@@ -6,11 +6,21 @@ from googleapiclient.http import MediaIoBaseDownload, MediaFileUpload
 from google.oauth2.credentials import Credentials
 
 # ==============================
-# GOOGLE DRIVE FOLDER IDS (CHANGE LATER)
+# GOOGLE DRIVE FOLDER IDS
 # ==============================
 
-PENDING_FOLDER_ID = "PASTE_PENDING_FOLDER_ID"
-UPLOADED_FOLDER_ID = "PASTE_UPLOADED_FOLDER_ID"
+PENDING_FOLDER_ID = "1TnjfCVkuLeYmPNJ2L8e1C2T-ZaX0Y5mU"
+UPLOADED_FOLDER_ID = "1RjtlPgm9NM3r5-6nJK5nRjfTE2d9RKQz"
+
+# ==============================
+# TITLE ROTATION
+# ==============================
+
+TITLES = [
+    "Baby Products That Your Child Will Love #shorts",
+    "🛁 Perfect For Your New Born Child #shorts",
+    "Must-Have Baby Essentials Every Parent Needs 👶✨ #shorts"
+]
 
 # ==============================
 # AUTH
@@ -49,8 +59,6 @@ video = random.choice(files)
 file_id = video["id"]
 file_name = video["name"]
 
-title = file_name.replace(".mp4", "")
-
 print("Downloading:", file_name)
 
 # ==============================
@@ -66,6 +74,12 @@ while not done:
     status, done = downloader.next_chunk()
 
 # ==============================
+# PICK RANDOM TITLE
+# ==============================
+
+selected_title = random.choice(TITLES)
+
+# ==============================
 # UPLOAD TO YOUTUBE
 # ==============================
 
@@ -75,8 +89,8 @@ request = youtube.videos().insert(
     part="snippet,status",
     body={
         "snippet": {
-            "title": title,
-            "description": "#shorts",
+            "title": selected_title,
+            "description": "High quality baby products for modern parents 💛 #shorts",
             "categoryId": "15"
         },
         "status": {
@@ -92,7 +106,7 @@ video_id = response.get("id")
 print("Uploaded:", video_id)
 
 # ==============================
-# MOVE FILE
+# MOVE FILE TO UPLOADED
 # ==============================
 
 drive.files().update(
@@ -100,6 +114,10 @@ drive.files().update(
     addParents=UPLOADED_FOLDER_ID,
     removeParents=PENDING_FOLDER_ID
 ).execute()
+
+# ==============================
+# CLEAN LOCAL FILE
+# ==============================
 
 os.remove(file_name)
 
