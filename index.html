@@ -3,56 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Highland - Coming Soon</title>
+    <title>Highland - Admin Dashboard</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
             background: linear-gradient(135deg, #1a1a2e, #16213e);
             color: white;
             min-height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
         .container {
-            background: rgba(255,255,255,0.1);
-            padding: 40px;
-            border-radius: 20px;
-            max-width: 600px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
         }
         h1 {
             font-size: 48px;
+            text-align: center;
             margin-bottom: 20px;
             color: #ffd700;
         }
-        p {
-            font-size: 18px;
-            line-height: 1.6;
+        .subhead {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 40px;
+            color: #ccc;
         }
-        .status {
-            background: #00ff00;
-            color: #000;
-            padding: 10px;
+        .card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        .feature {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            font-size: 18px;
+        }
+        .feature::before {
+            content: "✅";
+            margin-right: 15px;
+            font-size: 24px;
+        }
+        .payment-link {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 15px;
             border-radius: 10px;
-            margin-top: 20px;
+            text-align: center;
+            margin: 30px 0;
+            font-size: 20px;
             font-weight: bold;
+            word-break: break-all;
+        }
+        .payment-link a {
+            color: #1a1a2e;
+            text-decoration: none;
+        }
+        .admin-btn {
+            background: #00ff00;
+            color: #1a1a2e;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .admin-btn:hover {
+            background: #00cc00;
+        }
+        .login-form {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .dashboard {
+            display: none;
+            margin-top: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+        th {
+            background: #ffd700;
+            color: #1a1a2e;
+        }
+        .withdrawal-card {
+            background: #444;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+        }
+        .mark-btn {
+            background: #00ff00;
+            padding: 8px 16px;
+            margin-top: 10px;
+        }
+        .stats {
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🚀 Highland</h1>
-        <h2>Your Path to Financial Freedom!</h2>
-        <p>✅ Platform is being built<br>
-        ✅ Coming soon with powerful features<br>
-        ✅ Get ready to build your empire</p>
-        <div class="status">
-            ✅ Website is LIVE! GitHub Pages working perfectly!
+        <div class="subhead">Your Path to Financial Freedom!</div>
+
+        <div class="card">
+            <div class="feature">Unlock powerful platform with premium analytics</div>
+            <div class="feature">Create and sell courses, eBooks & more</div>
+            <div class="feature">Earn ₹400 for every friend you refer!</div>
+            <div class="feature">Build your own team — earn from their success!</div>
         </div>
-        <p style="margin-top: 20px; font-size: 14px;">Payment Link: <strong>https://rzp.io/rzp/XhvqGQZ</strong></p>
+
+        <div class="payment-link">
+            🔗 PAYMENT LINK: <br>
+            <a href="https://rzp.io/rzp/XhvqGQZ" target="_blank">https://rzp.io/rzp/XhvqGQZ</a>
+        </div>
+
+        <button class="admin-btn" onclick="showLogin()">👑 Admin Login</button>
+
+        <div id="loginForm" class="login-form">
+            <h3>Admin Login</h3>
+            <input type="password" id="adminPassword" placeholder="Enter Admin Password">
+            <button onclick="adminLogin()">Login</button>
+        </div>
+
+        <div id="adminDashboard" class="dashboard">
+            <h2>📊 Admin Dashboard</h2>
+            <div id="dashboardContent">Loading...</div>
+        </div>
     </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC9aONpIxib8xv6dO6W0BJSNuvursk3CcI",
+            authDomain: "highlandplatform.firebaseapp.com",
+            projectId: "highlandplatform",
+            storageBucket: "highlandplatform.firebasestorage.app",
+            messagingSenderId: "103706215525",
+            appId: "1:103706215525:web:a179f9fdd41d3c0399728c",
+            measurementId: "G-1T55XSXD4Z"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const ADMIN_PASSWORD = "highland2024";
+
+        function showLogin() {
+            document.getElementById('loginForm').style.display = 'block';
+        }
+
+        async function adminLogin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                await loadDashboard();
+            } else {
+                alert('Wrong password!');
+            }
+        }
+
+        async function loadDashboard() {
+            const dashboard = document.getElementById('dashboardContent');
+            dashboard.innerHTML = 'Loading...';
+            
+            try {
+                const payments = await db.collection('payments').orderBy('createdAt', 'desc').get();
+                const withdrawals = await db.collection('withdrawals').where('status', '==', 'pending').get();
+                
+                let totalCollected = 0;
+                let totalCommission = 0;
+                let uniqueMembers = new Set();
+                
+                payments.forEach(doc => {
+                    const data = doc.data();
+                    totalCollected += data.amount || 0;
+                    totalCommission += data.commission || 0;
+                    if (data.customerPhone) uniqueMembers.add(data.customerPhone);
+                });
+                
+                let html = `
+                    <div class="stats">
+                        <h3>💰 Summary</h3>
+                        <p>📊 Total Members: ${uniqueMembers.size}</p>
+                        <p>💵 Total Collected: ₹${totalCollected}</p>
+                        <p>👑 Your 20% Share: ₹${Math.round(totalCollected * 0.2)}</p>
+                        <p>🤝 Paid to Referrers: ₹${totalCommission}</p>
+                        <p>⏳ Pending Withdrawals: ${withdrawals.size}</p>
+                    </div>
+                    
+                    <h3>📋 Recent Payments</h3>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Amount</th>
+                            <th>Referred By</th>
+                            <th>Time</th>
+                        </tr>
+                `;
+                
+                payments.forEach(doc => {
+                    const data = doc.data();
+                    html += `
+                        <tr>
+                            <td>${data.customerName || 'Unknown'}</td>
+                            <td>${data.customerPhone || '-'}</td>
+                            <td>₹${data.amount}</td>
+                            <td>${data.referredBy || 'None'}</td>
+                            <td>${data.createdAt?.toDate().toLocaleString() || 'Unknown'}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += `</table>`;
+                
+                if (withdrawals.size > 0) {
+                    html += `<h3 style="margin-top: 30px;">💸 Withdrawal Requests</h3>`;
+                    withdrawals.forEach(doc => {
+                        const data = doc.data();
+                        html += `
+                            <div class="withdrawal-card">
+                                <p><strong>${data.memberName}</strong> - ₹${data.amount}</p>
+                                <p>📱 Phone: ${data.memberPhone}</p>
+                                <p>🏦 UPI: ${data.upiId}</p>
+                                <button class="mark-btn" onclick="markPaid('${doc.id}')">✅ Mark as Paid</button>
+                            </div>
+                        `;
+                    });
+                }
+                
+                dashboard.innerHTML = html;
+            } catch (error) {
+                dashboard.innerHTML = '<p style="color: red;">Error loading dashboard: ' + error.message + '</p>';
+            }
+        }
+        
+        async function markPaid(id) {
+            await db.collection('withdrawals').doc(id).update({ status: 'completed' });
+            loadDashboard();
+        }
+        
+        // Make functions available globally
+        window.showLogin = showLogin;
+        window.adminLogin = adminLogin;
+        window.loadDashboard = loadDashboard;
+        window.markPaid = markPaid;
+    </script>
 </body>
 </html>
