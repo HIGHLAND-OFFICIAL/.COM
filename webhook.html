@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Highland Webhook</title>
+</head>
+<body>
+    <h1>🔗 Highland Webhook Receiver</h1>
+    <p>Status: <span id="status">Waiting for payments...</span></p>
+    <div id="log"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC9aONpIxib8xv6dO6W0BJSNuvursk3CcI",
+            authDomain: "highlandplatform.firebaseapp.com",
+            projectId: "highlandplatform",
+            storageBucket: "highlandplatform.firebasestorage.app",
+            messagingSenderId: "103706215525",
+            appId: "1:103706215525:web:a179f9fdd41d3c0399728c",
+            measurementId: "G-1T55XSXD4Z"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function logMessage(msg) {
+            const logDiv = document.getElementById('log');
+            logDiv.innerHTML += `<p>📝 ${new Date().toLocaleTimeString()}: ${msg}</p>`;
+            console.log(msg);
+        }
+
+        async function processPayment(paymentData) {
+            try {
+                const payment = paymentData.payload.payment.entity;
+                const notes = payment.notes || {};
+                
+                logMessage(`Processing payment: ${payment.id} - ₹${payment.amount/100}`);
+                
+                const paymentRecord = {
+                    paymentId: payment.id,
+                    amount: payment.amount / 100,
+                    customerName: notes.name || payment.notes?.customer_name || 'Unknown',
+                    customerEmail: notes.email || payment.notes?.customer_email || '',
+                    customerPhone: notes.phone || payment.notes?.customer_phone || '',
+                    referredBy: notes.referred_by || '',
+                    commission: 0,
+                    status: 'captured',
+                    createdAt: new Date()
+                };
+                
+                // Calculate commission (80% to referrer)
+                if (paymentRecord.referredBy && paymentRecord.referredBy !== '') {
+                    paymentRecord.commission = paymentRecord.amount * 0.8;
+                    logMessage(`✅ Commission: ₹${paymentRecord.commission} to referrer: ${paymentRecord.referredBy}`);
+                    
+                    // Add to referrer's wallet
+                    const referrerRef = db.collection('members').doc(paymentRecord.referredBy);
+                    const referrer = await referrerRef.get();
+                    
+                    if (referrer.exists) {
+                        const currentBalance = referrer.data().walletBalance || 0;
+                        await referrerRef.update({
+                            walletBalance: currentBalance + paymentRecord.commission
+                        });
+                        logMessage(`💰 Updated ${paymentRecord.referredBy}'s wallet: +₹${paymentRecord.commission}`);
+                    } else {
+                        // Create member if doesn't exist
+                        await referrerRef.set({
+                            walletBalance: paymentRecord.commission,
+                            createdAt: new Date()
+                        });
+                        logMessage(`🆕 Created new member: ${paymentRecord.referredBy} with ₹${paymentRecord.commission}`);
+                    }
+                }
+                
+                // Save payment
+                await db.collection('payments').add(paymentRecord);
+                logMessage(`💾 Saved payment to database`);
+                
+                document.getElementById('status').innerHTML = '✅ Payment processed successfully!';
+                document.getElementById('status').style.color = 'green';
+                
+            } catch (error) {
+                logMessage(`❌ Error: ${error.message}`);
+                document.getElementById('status').innerHTML = '❌ Error processing payment';
+                document.getElementById('status').style.color = 'red';
+            }
+        }
+
+        // Check if this page was called with payment data
+        async function handleWebhook() {
+            logMessage('Webhook receiver ready');
+            
+            // For Razorpay webhook, the data comes in the request body
+            // Since this is a static page, we need to check URL params for testing
+            const urlParams = new URLSearchParams(window.location.search);
+            const testData = urlParams.get('test');
+            
+            if (testData) {
+                // Test mode
+                const mockPayment = {
+                    payload: {
+                        payment: {
+                            entity: {
+                                id: 'test_' + Date.now(),
+                                amount: 50000, // ₹500 in paise
+                                notes: {
+                                    referred_by: 'TEST_USER',
+                                    name: 'Test Customer',
+                                    phone: '9999999999',
+                                    email: 'test@email.com'
+                                }
+                            }
+                        }
+                    }
+                };
+                logMessage('🧪 TEST MODE: Processing test payment');
+                await processPayment(mockPayment);
+            } else {
+                logMessage('📡 Waiting for Razorpay webhook...');
+                logMessage('💡 To test, add ?test=1 to the URL');
+            }
+        }
+        
+        // Run when page loads
+        handleWebhook();
+    </script>
+</body>
+</html>
