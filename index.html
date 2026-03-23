@@ -3,117 +3,528 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Highland | Earn ₹400 Per Referral</title>
+    <title>Highland | Build Your Empire</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: radial-gradient(circle at 20% 30%, #0a0f1e, #03050b);
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .bg-glow {
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #05080f;
+            color: #fff;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Animated particles background */
+        .bg-particles {
             position: fixed;
-            width: 100%;
-            height: 100%;
             top: 0;
             left: 0;
-            z-index: -1;
-            background: radial-gradient(circle at 50% 50%, rgba(255,215,0,0.08) 0%, transparent 70%);
-            animation: pulse 4s ease-in-out infinite;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: radial-gradient(circle at 20% 30%, #0a0f1e, #03050b);
         }
-        @keyframes pulse {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.1); }
+
+        .bg-particles::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle, rgba(255,215,0,0.08) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: moveBg 60s linear infinite;
         }
-        .container { max-width: 500px; margin: 0 auto; padding: 20px; position: relative; z-index: 2; }
-        .card {
-            background: rgba(15, 25, 45, 0.7);
-            backdrop-filter: blur(12px);
-            border-radius: 32px;
-            padding: 28px 24px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            transition: transform 0.2s ease;
+
+        @keyframes moveBg {
+            0% { transform: translate(0,0); }
+            100% { transform: translate(40px,40px); }
         }
-        .card:hover { transform: translateY(-4px); border-color: rgba(255, 215, 0, 0.6); }
+
+        .container {
+            max-width: 550px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Glass card */
+        .glass-card {
+            background: rgba(15, 25, 45, 0.65);
+            backdrop-filter: blur(16px);
+            border-radius: 48px;
+            padding: 32px 28px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,215,0,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255,215,0,0.8);
+            transform: translateY(-5px);
+        }
+
         h1 {
-            font-size: 48px;
+            font-size: 56px;
             font-weight: 800;
             text-align: center;
             background: linear-gradient(135deg, #ffd700, #ffb347);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            letter-spacing: -1px;
             margin-bottom: 8px;
         }
-        .subhead { text-align: center; font-size: 16px; color: #a0a8c0; margin-bottom: 30px; }
-        .feature { display: flex; align-items: center; gap: 14px; margin: 20px 0; font-size: 16px; font-weight: 500; }
+
+        .subhead {
+            text-align: center;
+            font-size: 18px;
+            color: #b0b8d0;
+            margin-bottom: 32px;
+            font-weight: 500;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 24px 0;
+            font-size: 17px;
+            font-weight: 500;
+        }
+
         .feature-icon {
-            width: 32px;
-            height: 32px;
-            background: rgba(255, 215, 0, 0.2);
-            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,180,70,0.1));
+            border-radius: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 24px;
+            border: 1px solid rgba(255,215,0,0.3);
         }
-        .btn {
+
+        .btn-gold {
             display: block;
             background: linear-gradient(135deg, #ffd700, #ffb347);
             color: #0a0f1e;
             text-align: center;
-            padding: 16px;
+            padding: 18px;
             border-radius: 60px;
             font-weight: 800;
             text-decoration: none;
             font-size: 18px;
-            margin: 28px 0 20px;
+            margin: 32px 0 20px;
             width: 100%;
             cursor: pointer;
-            transition: transform 0.2s;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            transition: all 0.2s;
+            box-shadow: 0 6px 20px rgba(255,215,0,0.3);
+            border: none;
         }
-        .btn:hover { transform: scale(1.02); }
-        .stats { display: flex; justify-content: space-between; text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .stat-number { font-size: 28px; font-weight: 800; color: #ffd700; }
-        .stat-label { font-size: 12px; color: #8a92b0; margin-top: 5px; }
-        .leaderboard-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
-        .rank { font-weight: 800; color: #ffd700; width: 45px; font-size: 18px; }
-        .name { flex: 1; font-weight: 500; }
-        .referrals { font-weight: 800; color: #ffd700; background: rgba(255,215,0,0.15); padding: 4px 12px; border-radius: 40px; font-size: 14px; }
-        .section-title { font-size: 20px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
-        .footer-note { text-align: center; font-size: 12px; color: #5a6280; margin-top: 20px; }
+
+        .btn-gold:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(255,215,0,0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #ffd700;
+            color: #ffd700;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255,215,0,0.1);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffd700;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #8a92b0;
+            margin-top: 5px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .rank {
+            font-weight: 800;
+            color: #ffd700;
+            width: 50px;
+            font-size: 18px;
+        }
+
+        .name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .referrals {
+            font-weight: 800;
+            background: rgba(255,215,0,0.2);
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 14px;
+            color: #ffd700;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #5a6280;
+            margin-top: 30px;
+        }
+
+        /* Form styles */
+        input {
+            width: 100%;
+            padding: 16px 20px;
+            margin: 12px 0;
+            border: none;
+            border-radius: 60px;
+            font-size: 16px;
+            background: rgba(255,255,255,0.95);
+            font-weight: 500;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255,215,0,0.5);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .wallet-amount {
+            font-size: 48px;
+            font-weight: 800;
+            color: #ffd700;
+        }
+
+        .referral-link {
+            background: rgba(0,0,0,0.6);
+            padding: 14px;
+            border-radius: 60px;
+            font-size: 14px;
+            word-break: break-all;
+            font-family: monospace;
+            margin: 16px 0;
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .premium {
+            background: rgba(255,215,0,0.2);
+            color: #ffd700;
+        }
+
+        .free {
+            background: rgba(255,255,255,0.1);
+            color: #ccc;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .share-btn {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 40px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .share-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .whatsapp {
+            background: #25D36620;
+            border: 1px solid #25D366;
+            color: #25D366;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffd700;
+            color: #0a0f1e;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-weight: bold;
+            z-index: 100;
+            animation: fadeUp 0.3s ease;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .glass-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        #recaptcha-container {
+            height: 0;
+            overflow: hidden;
+            visibility: hidden;
+        }
+
+        .how-it-works-step {
+            display: flex;
+            gap: 16px;
+            margin: 20px 0;
+            align-items: center;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,215,0,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #ffd700;
+        }
     </style>
 </head>
 <body>
-    <div class="bg-glow"></div>
+    <div class="bg-particles"></div>
     <div class="container">
-        <h1>HIGHLAND</h1>
-        <div class="subhead">Your Path to Financial Freedom</div>
-        <div class="card">
-            <div class="feature"><div class="feature-icon">💰</div><div>Pay ₹500 once — earn forever</div></div>
-            <div class="feature"><div class="feature-icon">👥</div><div>Get ₹400 for every friend you refer</div></div>
-            <div class="feature"><div class="feature-icon">🏆</div><div>Top referrers win bonuses</div></div>
-            <div class="feature"><div class="feature-icon">⚡</div><div>Instant wallet updates</div></div>
-            <a href="login.html" class="btn">🚀 Get Started — It's Free</a>
-            <div class="stats">
-                <div><div class="stat-number" id="totalMembers">0</div><div class="stat-label">Members</div></div>
-                <div><div class="stat-number" id="totalEarned">₹0</div><div class="stat-label">Paid to Members</div></div>
+        <!-- LANDING SECTION -->
+        <div id="landingSection">
+            <h1>HIGHLAND</h1>
+            <div class="subhead">The Empire Blueprint</div>
+
+            <div class="glass-card">
+                <div class="feature">
+                    <div class="feature-icon">💰</div>
+                    <div>Pay ₹500 once — earn forever</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">👑</div>
+                    <div>Get ₹400 for every warrior you bring</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🏆</div>
+                    <div>Top referrers win exclusive prizes</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <div>Instant wallet — withdraw anytime</div>
+                </div>
+                <button class="btn-gold" onclick="showLogin()">🔓 ENTER THE REALM →</button>
+
+                <div class="stats">
+                    <div><div class="stat-number" id="totalMembers">0</div><div class="stat-label">Members</div></div>
+                    <div><div class="stat-number" id="totalEarned">₹0</div><div class="stat-label">Paid to Members</div></div>
+                </div>
+            </div>
+
+            <!-- How It Works Section -->
+            <div class="glass-card">
+                <div class="section-title"><span>📖</span> How It Works</div>
+                <div class="how-it-works-step">
+                    <div class="step-number">1</div>
+                    <div>Sign up with your phone — free</div>
+                </div>
+                <div class="how-it-works-step">
+                    <div class="step-number">2</div>
+                    <div>Pay ₹500 once to become Premium</div>
+                </div>
+                <div class="how-it-works-step">
+                    <div class="step-number">3</div>
+                    <div>Share your unique link with friends</div>
+                </div>
+                <div class="how-it-works-step">
+                    <div class="step-number">4</div>
+                    <div>Get ₹400 for every friend who joins</div>
+                </div>
+                <div class="how-it-works-step">
+                    <div class="step-number">5</div>
+                    <div>Withdraw your earnings anytime</div>
+                </div>
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="glass-card">
+                <div class="section-title"><span>🏆</span> Top Commanders</div>
+                <div id="leaderboard">
+                    <div class="leaderboard-item">
+                        <div class="rank">—</div>
+                        <div class="name">Loading...</div>
+                        <div class="referrals">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Proof -->
+            <div class="glass-card">
+                <div class="section-title"><span>🔥</span> Recent Earnings</div>
+                <div id="recentEarnings">
+                    <div style="text-align: center; color: #aaa;">Loading...</div>
+                </div>
+            </div>
+
+            <div class="footer">
+                No hidden fees • Instant payouts • Build your legacy
             </div>
         </div>
-        <div class="card">
-            <div class="section-title"><span>🏆</span> Top Referrers</div>
-            <div id="leaderboard"><div class="leaderboard-item"><div class="rank">—</div><div class="name">Loading...</div><div class="referrals">0</div></div></div>
+
+        <!-- LOGIN SECTION -->
+        <div id="loginSection" class="hidden">
+            <div class="glass-card" style="text-align: center;">
+                <h1 style="font-size: 42px;">🔐 ENTER</h1>
+                <div class="sub">Authenticate with your phone</div>
+
+                <div id="phoneSection">
+                    <input type="tel" id="phone" placeholder="10-digit mobile number" maxlength="10">
+                    <button class="btn-gold" onclick="sendOTP()">Send OTP</button>
+                </div>
+
+                <div id="otpSection" class="hidden">
+                    <input type="text" id="otp" placeholder="Enter 6-digit code">
+                    <button class="btn-gold" onclick="verifyOTP()">Verify & Enter</button>
+                </div>
+
+                <div id="loginMessage" style="margin-top: 20px; font-size: 14px; color: #ffaa44;"></div>
+                <button class="btn-outline" style="margin-top: 20px;" onclick="showLanding()">← Back</button>
+                <div id="recaptcha-container"></div>
+            </div>
         </div>
-        <div class="footer-note">No hidden fees • Instant payouts • Build your empire</div>
+
+        <!-- DASHBOARD SECTION -->
+        <div id="dashboardSection" class="hidden">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,180,70,0.05)); border: 1px solid rgba(255,215,0,0.6);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-size: 14px; color: #aaa;">MY TREASURY</div>
+                        <div class="wallet-amount" id="walletAmount">₹0</div>
+                    </div>
+                    <div id="memberBadge"></div>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div style="font-weight: bold; margin-bottom: 12px;">🔗 YOUR WARRIOR LINK</div>
+                <div class="referral-link" id="referralLink">Loading...</div>
+                <div class="share-buttons">
+                    <div class="share-btn" onclick="copyLink()">📋 Copy Link</div>
+                    <div class="share-btn whatsapp" onclick="shareWhatsApp()">💬 WhatsApp</div>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div style="font-weight: bold; margin-bottom: 16px;">⚡ ACTIONS</div>
+                <div id="upgradeSection"></div>
+                <button class="btn-gold btn-outline" onclick="requestWithdraw()" style="margin-top: 12px;">💸 Withdraw Earnings</button>
+            </div>
+
+            <div class="glass-card">
+                <div style="font-weight: bold; margin-bottom: 16px;">📊 MY STATS</div>
+                <div class="stat-row">
+                    <span>Total Referrals</span>
+                    <span class="stat-value" id="totalReferrals">0</span>
+                </div>
+                <div class="stat-row">
+                    <span>Lifetime Earned</span>
+                    <span class="stat-value" id="totalEarnedDashboard">₹0</span>
+                </div>
+                <div class="stat-row">
+                    <span>Referral Badge</span>
+                    <span class="stat-value" id="referralBadge">🥉 Recruit</span>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div style="font-weight: bold; margin-bottom: 16px;">📜 Withdrawal History</div>
+                <div id="withdrawalHistory">
+                    <div style="text-align: center; color: #aaa;">No withdrawals yet</div>
+                </div>
+            </div>
+
+            <button class="btn-gold logout" onclick="logout()" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #aaa; margin-top: 20px;">🚪 Exit</button>
+        </div>
     </div>
+
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script>
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyC9aONpIxib8xv6dO6W0BJSNuvursk3CcI",
             authDomain: "highlandplatform.firebaseapp.com",
@@ -122,30 +533,255 @@
             messagingSenderId: "103706215525",
             appId: "1:103706215525:web:a179f9fdd41d3c0399728c"
         };
+
         firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
         const db = firebase.firestore();
-        async function loadStats() {
+
+        let currentUser = null;
+        let confirmationResult = null;
+
+        // ========== UI FUNCTIONS ==========
+        function showLogin() {
+            document.getElementById('landingSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+        }
+
+        function showLanding() {
+            document.getElementById('landingSection').classList.remove('hidden');
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('landingSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            loadUserData();
+        }
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerText = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+
+        // ========== LOAD PUBLIC DATA ==========
+        async function loadPublicData() {
             const users = await db.collection('users').get();
             const payments = await db.collection('payments').where('type', '==', 'access').get();
             let totalPaid = 0;
             payments.forEach(doc => { totalPaid += doc.data().commission || 0; });
             document.getElementById('totalMembers').innerText = users.size;
             document.getElementById('totalEarned').innerText = '₹' + totalPaid.toLocaleString();
-        }
-        async function loadLeaderboard() {
-            const users = await db.collection('users').orderBy('totalReferrals', 'desc').limit(10).get();
-            const container = document.getElementById('leaderboard');
-            container.innerHTML = '';
+
+            // Leaderboard
+            const topUsers = await db.collection('users').orderBy('totalReferrals', 'desc').limit(10).get();
+            const leaderboardDiv = document.getElementById('leaderboard');
+            leaderboardDiv.innerHTML = '';
             let rank = 1;
-            users.forEach(doc => {
+            topUsers.forEach(doc => {
                 const data = doc.data();
-                container.innerHTML += `<div class="leaderboard-item"><div class="rank">${rank}</div><div class="name">${data.name || data.phone || 'Member'}</div><div class="referrals">${data.totalReferrals || 0}</div></div>`;
+                leaderboardDiv.innerHTML += `
+                    <div class="leaderboard-item">
+                        <div class="rank">${rank}</div>
+                        <div class="name">${data.name || data.phone || 'Member'}</div>
+                        <div class="referrals">${data.totalReferrals || 0}</div>
+                    </div>
+                `;
                 rank++;
             });
-            if (rank === 1) container.innerHTML = '<div class="leaderboard-item">Be the first to refer!</div>';
+            if (rank === 1) leaderboardDiv.innerHTML = '<div class="leaderboard-item">Be the first commander!</div>';
+
+            // Recent earnings (social proof)
+            const recentPayments = await db.collection('payments').where('type', '==', 'access').orderBy('createdAt', 'desc').limit(5).get();
+            const earningsDiv = document.getElementById('recentEarnings');
+            earningsDiv.innerHTML = '';
+            recentPayments.forEach(doc => {
+                const data = doc.data();
+                if (data.referredBy) {
+                    earningsDiv.innerHTML += `<div class="leaderboard-item"><span>💰 ${data.referredBy} earned ₹${data.commission}</span><span style="font-size:12px;">just now</span></div>`;
+                }
+            });
+            if (earningsDiv.innerHTML === '') earningsDiv.innerHTML = '<div style="text-align: center; color: #aaa;">Be the first to earn!</div>';
         }
-        loadStats();
-        loadLeaderboard();
+
+        // ========== AUTH FUNCTIONS ==========
+        window.sendOTP = function() {
+            const phone = document.getElementById('phone').value;
+            if (phone.length !== 10) {
+                document.getElementById('loginMessage').innerText = 'Enter 10-digit mobile number';
+                return;
+            }
+            document.getElementById('loginMessage').innerText = 'Sending OTP...';
+            const appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { size: 'invisible' });
+            auth.signInWithPhoneNumber('+91' + phone, appVerifier)
+                .then((result) => {
+                    confirmationResult = result;
+                    document.getElementById('loginMessage').innerText = '✓ OTP sent!';
+                    document.getElementById('phoneSection').classList.add('hidden');
+                    document.getElementById('otpSection').classList.remove('hidden');
+                })
+                .catch((error) => {
+                    document.getElementById('loginMessage').innerText = 'Error: ' + error.message;
+                });
+        };
+
+        window.verifyOTP = function() {
+            const otp = document.getElementById('otp').value;
+            if (otp.length !== 6) {
+                document.getElementById('loginMessage').innerText = 'Enter 6-digit OTP';
+                return;
+            }
+            document.getElementById('loginMessage').innerText = 'Verifying...';
+            confirmationResult.confirm(otp)
+                .then(async (result) => {
+                    const user = result.user;
+                    const phone = user.phoneNumber.slice(3);
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const referrer = urlParams.get('ref');
+
+                    const userDoc = await db.collection('users').doc(user.uid).get();
+                    if (!userDoc.exists) {
+                        await db.collection('users').doc(user.uid).set({
+                            phone: phone,
+                            name: phone,
+                            referralCode: user.uid.slice(0, 8).toUpperCase(),
+                            referredBy: referrer || null,
+                            isMember: false,
+                            walletBalance: 0,
+                            totalReferrals: 0,
+                            createdAt: new Date()
+                        });
+                        if (referrer) {
+                            const referrerDoc = await db.collection('users').doc(referrer).get();
+                            if (referrerDoc.exists) {
+                                await db.collection('users').doc(referrer).update({
+                                    totalReferrals: firebase.firestore.FieldValue.increment(1)
+                                });
+                            }
+                        }
+                    }
+                    localStorage.setItem('userId', user.uid);
+                    currentUser = user;
+                    showDashboard();
+                })
+                .catch((error) => {
+                    document.getElementById('loginMessage').innerText = 'Wrong OTP: ' + error.message;
+                });
+        };
+
+        // ========== DASHBOARD DATA ==========
+        async function loadUserData() {
+            if (!currentUser) {
+                const userId = localStorage.getItem('userId');
+                if (userId) currentUser = { uid: userId };
+                else return;
+            }
+            const doc = await db.collection('users').doc(currentUser.uid).get();
+            const data = doc.data();
+            if (!data) return;
+
+            document.getElementById('walletAmount').innerText = '₹' + (data.walletBalance || 0);
+            document.getElementById('totalReferrals').innerText = data.totalReferrals || 0;
+
+            const link = `https://highland-official.github.io/.COM/?ref=${currentUser.uid}`;
+            document.getElementById('referralLink').innerText = link;
+
+            // Badge based on referrals
+            const referrals = data.totalReferrals || 0;
+            let badge = '🥉 Recruit';
+            if (referrals >= 50) badge = '👑 Warlord';
+            else if (referrals >= 25) badge = '⚔️ Commander';
+            else if (referrals >= 10) badge = '🏅 Veteran';
+            else if (referrals >= 5) badge = '⭐ Soldier';
+            document.getElementById('referralBadge').innerText = badge;
+
+            const badgeDiv = document.getElementById('memberBadge');
+            const upgradeDiv = document.getElementById('upgradeSection');
+            if (data.isMember) {
+                badgeDiv.innerHTML = '<span class="status-badge premium">⭐ PREMIUM WARRIOR</span>';
+                upgradeDiv.innerHTML = '<button class="btn-gold" style="background:#00aa55; cursor:default;">✅ Already Elite</button>';
+            } else {
+                badgeDiv.innerHTML = '<span class="status-badge free">🔓 RECRUIT</span>';
+                upgradeDiv.innerHTML = '<a href="https://rzp.io/rzp/XhvqGQZ" target="_blank" class="btn-gold">⚔️ UPGRADE TO PREMIUM (₹500)</a>';
+            }
+
+            const payments = await db.collection('payments').where('referrerId', '==', currentUser.uid).get();
+            let totalEarned = 0;
+            payments.forEach(p => { totalEarned += p.data().commission || 0; });
+            document.getElementById('totalEarnedDashboard').innerText = '₹' + totalEarned;
+
+            // Withdrawal history
+            const withdrawals = await db.collection('withdrawals').where('userId', '==', currentUser.uid).orderBy('createdAt', 'desc').get();
+            const historyDiv = document.getElementById('withdrawalHistory');
+            if (withdrawals.empty) {
+                historyDiv.innerHTML = '<div style="text-align: center; color: #aaa;">No withdrawals yet</div>';
+            } else {
+                historyDiv.innerHTML = '';
+                withdrawals.forEach(doc => {
+                    const w = doc.data();
+                    historyDiv.innerHTML += `<div class="leaderboard-item"><span>₹${w.amount}</span><span style="font-size:12px;">${w.status === 'pending' ? '⏳ Pending' : '✅ Completed'}</span></div>`;
+                });
+            }
+        }
+
+        window.copyLink = function() {
+            const link = document.getElementById('referralLink').innerText;
+            navigator.clipboard.writeText(link);
+            showToast('Link copied! Share with friends.');
+        };
+
+        window.shareWhatsApp = function() {
+            const link = document.getElementById('referralLink').innerText;
+            const text = `Join Highland and start earning! Use my link: ${link}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        };
+
+        window.requestWithdraw = async function() {
+            const doc = await db.collection('users').doc(currentUser.uid).get();
+            const data = doc.data();
+            if (!data.walletBalance || data.walletBalance < 100) {
+                showToast('Minimum withdrawal is ₹100');
+                return;
+            }
+            const upi = prompt('Enter your UPI ID (example@okhdfcbank):');
+            if (!upi) return;
+            await db.collection('withdrawals').add({
+                userId: currentUser.uid,
+                name: data.name || data.phone,
+                amount: data.walletBalance,
+                upiId: upi,
+                status: 'pending',
+                createdAt: new Date()
+            });
+            showToast('Withdrawal request sent!');
+            loadUserData();
+        };
+
+        window.logout = function() {
+            auth.signOut();
+            localStorage.removeItem('userId');
+            currentUser = null;
+            showLanding();
+        };
+
+        // ========== CHECK LOGIN STATUS ON LOAD ==========
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                showDashboard();
+            } else {
+                showLanding();
+            }
+            await loadPublicData();
+        });
+
+        // Initial load
+        loadPublicData();
     </script>
 </body>
 </html>
