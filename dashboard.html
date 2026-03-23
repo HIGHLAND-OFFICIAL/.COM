@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>My Dashboard | Highland</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at 20% 30%, #0a0f1e, #03050b);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 500px; margin: 0 auto; }
+        .card {
+            background: rgba(15, 25, 45, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        .wallet { background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,180,70,0.1)); border: 1px solid rgba(255,215,0,0.5); }
+        .wallet-amount { font-size: 42px; font-weight: 800; color: #ffd700; }
+        .referral-link { background: rgba(0,0,0,0.5); padding: 14px; border-radius: 60px; font-size: 14px; word-break: break-all; font-family: monospace; margin: 15px 0; }
+        .btn { background: linear-gradient(135deg, #ffd700, #ffb347); color: #0a0f1e; padding: 14px 20px; border-radius: 60px; font-weight: 800; border: none; width: 100%; cursor: pointer; font-size: 16px; margin: 8px 0; }
+        .btn-outline { background: transparent; border: 2px solid #ffd700; color: #ffd700; }
+        .logout { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #aaa; margin-top: 20px; }
+        .status-badge { display: inline-block; padding: 6px 12px; border-radius: 40px; font-size: 12px; font-weight: bold; }
+        .premium { background: #ffd70020; color: #ffd700; }
+        .free { background: #ffffff20; color: #ccc; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card wallet">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div><div style="font-size: 14px; color: #aaa;">My Wallet</div><div class="wallet-amount" id="walletAmount">₹0</div></div>
+                <div id="memberBadge"></div>
+            </div>
+        </div>
+        <div class="card">
+            <div style="font-weight: bold; margin-bottom: 10px;">🔗 Your Referral Link</div>
+            <div class="referral-link" id="referralLink">Loading...</div>
+            <button class="btn" onclick="copyLink()">📋 Copy Link</button>
+        </div>
+        <div class="card">
+            <div style="font-weight: bold; margin-bottom: 15px;">💰 Actions</div>
+            <div id="upgradeSection"></div>
+            <button class="btn btn-outline" onclick="requestWithdraw()">💸 Request Withdrawal</button>
+        </div>
+        <div class="card">
+            <div style="font-weight: bold; margin-bottom: 15px;">📊 My Stats</div>
+            <div style="display: flex; justify-content: space-between;">
+                <div><span style="color: #ffd700;" id="totalReferrals">0</span><br>Referrals</div>
+                <div><span style="color: #ffd700;" id="totalEarned">₹0</span><br>Total Earned</div>
+            </div>
+        </div>
+        <button class="btn logout" onclick="logout()">🚪 Logout</button>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC9aONpIxib8xv6dO6W0BJSNuvursk3CcI",
+            authDomain: "highlandplatform.firebaseapp.com",
+            projectId: "highlandplatform",
+            storageBucket: "highlandplatform.firebasestorage.app",
+            messagingSenderId: "103706215525",
+            appId: "1:103706215525:web:a179f9fdd41d3c0399728c"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        let currentUser = null;
+        auth.onAuthStateChanged(async (user) => {
+            if (!user) { window.location.href = 'login.html'; return; }
+            currentUser = user;
+            await loadUserData();
+        });
+        async function loadUserData() {
+            const doc = await db.collection('users').doc(currentUser.uid).get();
+            const data = doc.data();
+            if (!data) return;
+            document.getElementById('walletAmount').innerText = '₹' + (data.walletBalance || 0);
+            document.getElementById('totalReferrals').innerText = data.totalReferrals || 0;
+            const link = `https://highland-official.github.io/.COM/login.html?ref=${currentUser.uid}`;
+            document.getElementById('referralLink').innerText = link;
+            const badge = document.getElementById('memberBadge');
+            const upgradeDiv = document.getElementById('upgradeSection');
+            if (data.isMember) {
+                badge.innerHTML = '<span class="status-badge premium">⭐ Premium Member</span>';
+                upgradeDiv.innerHTML = '<button class="btn" style="background:#00aa55;">✅ Already Premium</button>';
+            } else {
+                badge.innerHTML = '<span class="status-badge free">🔓 Free Member</span>';
+                upgradeDiv.innerHTML = '<button class="btn" onclick="window.location.href=\'upgrade.html\'">🚀 Upgrade to Premium (₹500)</button>';
+            }
+            const payments = await db.collection('payments').where('referrerId', '==', currentUser.uid).get();
+            let totalEarned = 0;
+            payments.forEach(p => { totalEarned += p.data().commission || 0; });
+            document.getElementById('totalEarned').innerText = '₹' + totalEarned;
+        }
+        window.copyLink = function() { navigator.clipboard.writeText(document.getElementById('referralLink').innerText); alert('Link copied! Share it with friends.'); };
+        window.requestWithdraw = async function() {
+            const userDoc = await db.collection('users').doc(currentUser.uid).get();
+            const data = userDoc.data();
+            if (!data.walletBalance || data.walletBalance < 100) { alert('Minimum withdrawal is ₹100'); return; }
+            const upi = prompt('Enter your UPI ID (example@okhdfcbank):');
+            if (!upi) return;
+            await db.collection('withdrawals').add({ userId: currentUser.uid, name: data.name || data.phone, amount: data.walletBalance, upiId: upi, status: 'pending', createdAt: new Date() });
+            alert('Withdrawal request sent! Admin will process within 24h.');
+        };
+        window.logout = function() { auth.signOut(); localStorage.removeItem('userId'); window.location.href = 'index.html'; };
+    </script>
+</body>
+</html>
