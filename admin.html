@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Highland</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0f1e; color: white; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .card { background: #1e2a3a; border-radius: 24px; padding: 24px; margin-bottom: 24px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #334155; }
+        th { color: #ffd700; }
+        .btn { background: #ffd700; color: #000; padding: 8px 16px; border: none; border-radius: 40px; cursor: pointer; }
+        .login-screen { text-align: center; padding: 50px; }
+        input { padding: 12px; margin: 10px; border-radius: 40px; border: none; width: 200px; }
+    </style>
+</head>
+<body>
+    <div id="loginDiv" class="login-screen">
+        <h2>Admin Login</h2>
+        <input type="password" id="adminPass" placeholder="Enter password">
+        <button class="btn" onclick="checkAdmin()">Login</button>
+    </div>
+    <div id="adminPanel" style="display: none;">
+        <div class="container">
+            <h1>👑 Admin Dashboard</h1>
+            <div class="card"><h3>📊 Summary</h3><div id="summary">Loading...</div></div>
+            <div class="card"><h3>💸 Withdrawal Requests</h3><div id="withdrawals">Loading...</div></div>
+            <div class="card"><h3>📋 Recent Payments</h3><div id="payments">Loading...</div></div>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC9aONpIxib8xv6dO6W0BJSNuvursk3CcI",
+            authDomain: "highlandplatform.firebaseapp.com",
+            projectId: "highlandplatform",
+            storageBucket: "highlandplatform.firebasestorage.app",
+            messagingSenderId: "103706215525",
+            appId: "1:103706215525:web:a179f9fdd41d3c0399728c"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        window.checkAdmin = function() {
+            if (document.getElementById('adminPass').value === 'highland2024') {
+                document.getElementById('loginDiv').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadData();
+            } else { alert('Wrong password'); }
+        };
+        async function loadData() {
+            const users = await db.collection('users').get();
+            const members = users.docs.filter(d => d.data().isMember).length;
+            const payments = await db.collection('payments').where('type', '==', 'access').get();
+            let total = 0;
+            payments.forEach(p => { total += p.data().amount || 0; });
+            document.getElementById('summary').innerHTML = `<p>Total Users: ${users.size}</p><p>Paid Members: ${members}</p><p>Total Revenue: ₹${total}</p><p>Your 20%: ₹${total * 0.2}</p>`;
+            const withdrawals = await db.collection('withdrawals').where('status', '==', 'pending').get();
+            let wHtml = '<table><th>Name</th><th>Amount</th><th>UPI</th><th>Action</th></tr>';
+            withdrawals.forEach(doc => {
+                const d = doc.data();
+                wHtml += `<tr><td>${d.name}</td><td>₹${d.amount}</td><td>${d.upiId}</td><td><button class="btn" onclick="markPaid('${doc.id}', ${d.amount}, '${d.userId}')">✅ Mark Paid</button></td></tr>`;
+            });
+            document.getElementById('withdrawals').innerHTML = wHtml + '</table>';
+            const allPayments = await db.collection('payments').orderBy('createdAt', 'desc').limit(20).get();
+            let pHtml = '<table><tr><th>User</th><th>Amount</th><th>Referrer</th><th>Time</th></tr>';
+            allPayments.forEach(doc => {
+                const p = doc.data();
+                pHtml += `<tr><td>${p.customerName || 'Unknown'}</td><td>₹${p.amount}</td><td>${p.referredBy || 'None'}</td><td>${p.createdAt?.toDate().toLocaleString() || 'Unknown'}</td></tr>`;
+            });
+            document.getElementById('payments').innerHTML = pHtml + '</table>';
+        }
+        window.markPaid = async function(id, amount, userId) {
+            await db.collection('withdrawals').doc(id).update({ status: 'completed' });
+            await db.collection('users').doc(userId).update({ walletBalance: 0 });
+            alert('Marked as paid!');
+            loadData();
+        };
+    </script>
+</body>
+</html>
