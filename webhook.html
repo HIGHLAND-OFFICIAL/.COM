@@ -1,67 +1,102 @@
 <!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><title>Highland Webhook</title></head>
-<body style="background:#0a0f1e; color:white; font-family:monospace; padding:20px;">
-<h1>🔗 Highland Webhook Receiver</h1>
-<p>Status: <span id="status">Waiting for payments...</span></p>
-<div id="log"></div>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script>
-const firebaseConfig = {
-    apiKey: "AIzaSyC9aONpIxib8xv6dO6W0BJSNuvursk3CcI",
-    authDomain: "highlandplatform.firebaseapp.com",
-    projectId: "highlandplatform",
-    storageBucket: "highlandplatform.firebasestorage.app",
-    messagingSenderId: "103706215525",
-    appId: "1:103706215525:web:a179f9fdd41d3c0399728c"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-function log(msg) { const div = document.getElementById('log'); div.innerHTML += `<p>📝 ${new Date().toLocaleTimeString()}: ${msg}</p>`; console.log(msg); }
-async function processPayment(paymentData) {
-    try {
-        const payment = paymentData.payload.payment.entity;
-        const notes = payment.notes || {};
-        const amount = payment.amount / 100;
-        log(`Processing: ${payment.id} - ₹${amount}`);
-        const paymentRecord = {
-            paymentId: payment.id,
-            amount: amount,
-            customerName: notes.name || 'Unknown',
-            customerPhone: notes.phone || '',
-            referredBy: notes.referred_by || '',
-            referrerId: notes.referred_by || null,
-            commission: 0,
-            type: 'access',
-            createdAt: new Date()
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Highland Webhook</title>
+    <style>
+        body { background: #0a0f1e; color: #ffd700; font-family: monospace; padding: 20px; }
+        .log { background: #1e2a3a; padding: 15px; border-radius: 12px; margin-top: 20px; color: #ccc; }
+    </style>
+</head>
+<body>
+    <h1>🔗 Highland Payment Gateway</h1>
+    <p>Status: <span id="status">🟢 Listening for payments...</span></p>
+    <div class="log" id="log">Waiting for Razorpay webhook...</div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC9aONpIxib8xv6dO6W0BJSNuvursk3CcI",
+            authDomain: "highlandplatform.firebaseapp.com",
+            projectId: "highlandplatform",
+            storageBucket: "highlandplatform.firebasestorage.app",
+            messagingSenderId: "103706215525",
+            appId: "1:103706215525:web:a179f9fdd41d3c0399728c"
         };
-        if (paymentRecord.referredBy && paymentRecord.referredBy !== '') {
-            paymentRecord.commission = amount * 0.8;
-            const referrerRef = db.collection('users').doc(paymentRecord.referredBy);
-            const referrer = await referrerRef.get();
-            if (referrer.exists) {
-                await referrerRef.update({ walletBalance: firebase.firestore.FieldValue.increment(paymentRecord.commission) });
-                log(`✅ Added ₹${paymentRecord.commission} to ${paymentRecord.referredBy}'s wallet`);
-            } else { log(`⚠️ Referrer ${paymentRecord.referredBy} not found`); }
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function log(msg) {
+            const logDiv = document.getElementById('log');
+            logDiv.innerHTML += `<div>📝 ${new Date().toLocaleTimeString()}: ${msg}</div>`;
         }
-        await db.collection('payments').add(paymentRecord);
-        if (paymentRecord.referredBy) {
-            await db.collection('users').doc(paymentRecord.referredBy).update({ totalReferrals: firebase.firestore.FieldValue.increment(1) });
+
+        async function processPayment(paymentData) {
+            try {
+                const payment = paymentData.payload.payment.entity;
+                const notes = payment.notes || {};
+                const amount = payment.amount / 100;
+                log(`Processing payment ${payment.id} for ₹${amount}`);
+
+                const paymentRecord = {
+                    paymentId: payment.id,
+                    amount: amount,
+                    customerName: notes.name || 'Anonymous',
+                    customerPhone: notes.phone || '',
+                    referredBy: notes.referred_by || '',
+                    referrerId: notes.referred_by || null,
+                    commission: 0,
+                    type: 'access',
+                    createdAt: new Date()
+                };
+
+                if (paymentRecord.referredBy && paymentRecord.referredBy !== '') {
+                    paymentRecord.commission = amount * 0.8;
+                    const referrerRef = db.collection('users').doc(paymentRecord.referredBy);
+                    const referrer = await referrerRef.get();
+                    if (referrer.exists) {
+                        await referrerRef.update({
+                            walletBalance: firebase.firestore.FieldValue.increment(paymentRecord.commission)
+                        });
+                        log(`✅ Added ₹${paymentRecord.commission} to ${paymentRecord.referredBy}'s wallet`);
+                    } else {
+                        log(`⚠️ Referrer ${paymentRecord.referredBy} not found`);
+                    }
+                }
+
+                await db.collection('payments').add(paymentRecord);
+                if (paymentRecord.referredBy) {
+                    await db.collection('users').doc(paymentRecord.referredBy).update({
+                        totalReferrals: firebase.firestore.FieldValue.increment(1)
+                    });
+                }
+
+                log(`💾 Payment saved`);
+                document.getElementById('status').innerHTML = '✅ Payment processed!';
+            } catch (e) {
+                log(`❌ Error: ${e.message}`);
+            }
         }
-        log(`💾 Saved payment to database`);
-        document.getElementById('status').innerHTML = '✅ Payment processed!';
-    } catch(e) { log(`❌ Error: ${e.message}`); document.getElementById('status').innerHTML = '❌ Error'; }
-}
-async function handleWebhook() {
-    log('Webhook ready');
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('test') === '1') {
-        log('🧪 TEST MODE');
-        await processPayment({ payload: { payment: { entity: { id: 'test', amount: 50000, notes: { referred_by: 'TEST', name: 'Test', phone: '9999999999' } } } } });
-    } else { log('📡 Waiting for Razorpay webhook...'); }
-}
-handleWebhook();
-</script>
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('test') === '1') {
+            log('🧪 TEST MODE');
+            processPayment({
+                payload: {
+                    payment: {
+                        entity: {
+                            id: 'test_' + Date.now(),
+                            amount: 50000,
+                            notes: { referred_by: 'TEST_USER', name: 'Test', phone: '9999999999' }
+                        }
+                    }
+                }
+            });
+        } else {
+            log('🟢 Webhook ready');
+        }
+    </script>
 </body>
 </html>
