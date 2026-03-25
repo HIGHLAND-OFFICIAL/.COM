@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Highland | Break The Matrix</title>
+    <title>Highland | ₹400 Per Friend</title>
     <style>
         * {
             margin: 0;
@@ -12,277 +12,193 @@
         }
 
         body {
-            font-family: 'Share Tech Mono', 'Courier New', 'SF Mono', monospace;
-            background: #050a0f;
-            color: #ffd700;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1a2634;
             min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Cyber grid background */
-        .cyber-grid {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            background-image: 
-                linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: gridMove 20s linear infinite;
-        }
-
-        @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(40px, 40px); }
-        }
-
-        /* Glitch overlay */
-        .glitch-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.3;
-            mix-blend-mode: overlay;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 255, 0, 0.03) 0px,
-                rgba(0, 255, 0, 0.03) 2px,
-                transparent 2px,
-                transparent 6px
-            );
+            padding: 24px 16px;
         }
 
         .container {
-            max-width: 600px;
+            max-width: 520px;
             margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 10;
         }
 
-        /* Glass card with glitch border */
-        .glass-card {
-            background: rgba(5, 10, 15, 0.75);
-            backdrop-filter: blur(12px);
-            border-radius: 32px;
+        .card {
+            background: white;
+            border-radius: 28px;
             padding: 32px 28px;
-            margin-bottom: 24px;
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1), inset 0 0 10px rgba(255, 215, 0, 0.05);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #ffd700, #0f0, #ffd700);
-            border-radius: 34px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .glass-card:hover::before {
-            opacity: 0.3;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
-            border-color: rgba(255, 215, 0, 0.8);
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e9edf2;
         }
 
         h1 {
-            font-size: 64px;
-            font-weight: 900;
+            font-size: 40px;
+            font-weight: 700;
             text-align: center;
-            letter-spacing: -2px;
-            text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700, 0 0 30px rgba(0,255,0,0.3);
+            color: #1a2634;
             margin-bottom: 8px;
-            animation: glitchText 3s infinite;
+            letter-spacing: -0.5px;
         }
 
-        @keyframes glitchText {
-            0%, 100% { text-shadow: 0 0 5px #ffd700, 0 0 10px #0f0; }
-            95% { text-shadow: -2px 0 #0f0, 2px 0 #ffd700; }
-            96% { text-shadow: 2px 0 #0f0, -2px 0 #ffd700; }
-        }
-
-        .subhead {
-            text-align: center;
-            font-size: 14px;
-            color: #8a9a5a;
-            margin-bottom: 32px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(255,215,0,0.3);
+        .badge {
+            background: #e8f0fe;
+            color: #1a4d8c;
             display: inline-block;
-            width: auto;
-            margin-left: auto;
-            margin-right: auto;
-            padding-bottom: 8px;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 24px;
+        }
+
+        .price-box {
+            text-align: center;
+            margin: 24px 0;
+        }
+
+        .price {
+            font-size: 52px;
+            font-weight: 800;
+            color: #1a2634;
+        }
+
+        .price-small {
+            font-size: 15px;
+            color: #6c7a8a;
+            margin-top: 8px;
+        }
+
+        .highlight {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1a4d8c;
+            text-align: center;
+            margin: 20px 0;
         }
 
         .feature {
             display: flex;
             align-items: center;
-            gap: 16px;
-            margin: 24px 0;
+            gap: 14px;
+            margin: 20px 0;
             font-size: 16px;
-            font-weight: 500;
-            font-family: monospace;
-            border-left: 2px solid #ffd700;
-            padding-left: 16px;
-            transition: all 0.2s;
-        }
-
-        .feature:hover {
-            border-left-color: #0f0;
-            transform: translateX(5px);
+            line-height: 1.4;
         }
 
         .feature-icon {
-            width: 44px;
-            height: 44px;
-            background: rgba(255,215,0,0.1);
+            width: 36px;
+            height: 36px;
+            background: #eef2f7;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            border: 1px solid #ffd700;
-            box-shadow: 0 0 5px #ffd700;
+            font-size: 18px;
+            flex-shrink: 0;
         }
 
-        .btn-gold {
+        .btn {
             display: block;
-            background: linear-gradient(135deg, #ffd700, #ffb347);
-            color: #050a0f;
+            background: #1a4d8c;
+            color: white;
             text-align: center;
             padding: 18px;
-            border-radius: 60px;
-            font-weight: 800;
-            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
             font-size: 18px;
-            margin: 32px 0 20px;
             width: 100%;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 0 15px rgba(255,215,0,0.5);
             border: none;
-            font-family: monospace;
-            letter-spacing: 2px;
+            margin: 28px 0 20px;
+            transition: 0.2s;
         }
 
-        .btn-gold:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 25px rgba(255,215,0,0.8);
+        .btn:hover {
+            background: #0f3a6b;
+            transform: scale(1.01);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #1a4d8c;
+            color: #1a4d8c;
         }
 
         .stats {
             display: flex;
             justify-content: space-between;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 24px;
             padding-top: 20px;
-            border-top: 1px solid rgba(255,215,0,0.2);
+            border-top: 1px solid #eef2f7;
         }
 
         .stat-number {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 800;
-            color: #ffd700;
-            text-shadow: 0 0 5px #ffd700;
-            font-family: monospace;
+            color: #1a4d8c;
         }
 
         .stat-label {
-            font-size: 11px;
-            color: #8a9a5a;
+            font-size: 12px;
+            color: #6c7a8a;
             margin-top: 5px;
-            letter-spacing: 1px;
         }
 
-        .leaderboard-item {
+        .step {
             display: flex;
-            justify-content: space-between;
+            gap: 14px;
+            margin: 20px 0;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background: #eef2f7;
+            border-radius: 50%;
+            display: flex;
             align-items: center;
-            padding: 14px 0;
-            border-bottom: 1px solid rgba(255,215,0,0.15);
-            font-family: monospace;
-        }
-
-        .rank {
-            font-weight: 800;
-            color: #ffd700;
-            width: 50px;
-            font-size: 18px;
-        }
-
-        .name {
-            flex: 1;
-            font-weight: 500;
-            color: #0f0;
-        }
-
-        .referrals {
-            font-weight: 800;
-            background: rgba(255,215,0,0.15);
-            padding: 4px 12px;
-            border-radius: 40px;
+            justify-content: center;
+            font-weight: bold;
+            color: #1a4d8c;
+            flex-shrink: 0;
             font-size: 14px;
-            color: #ffd700;
         }
 
-        .section-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 20px;
+        .social-proof {
+            background: #eef2f7;
+            border-radius: 20px;
+            padding: 16px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .proof-item {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 12px;
-            border-bottom: 1px solid rgba(255,215,0,0.3);
-            padding-bottom: 10px;
-            font-family: monospace;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #1a2634;
         }
 
-        .footer {
-            text-align: center;
-            font-size: 10px;
-            color: #5a6a3a;
-            margin-top: 30px;
-            font-family: monospace;
+        .proof-icon {
+            font-size: 20px;
         }
 
         input {
             width: 100%;
-            padding: 16px 20px;
-            margin: 12px 0;
-            border: none;
-            border-radius: 60px;
+            padding: 16px;
+            margin: 10px 0;
+            border: 1px solid #dce3ec;
+            border-radius: 50px;
+            background: white;
+            color: #1a2634;
             font-size: 16px;
-            background: rgba(0,0,0,0.85);
-            color: #ffd700;
-            font-family: monospace;
-            border: 1px solid #ffd700;
-        }
-
-        input:focus {
-            outline: none;
-            box-shadow: 0 0 10px #ffd700;
         }
 
         .hidden {
@@ -290,85 +206,36 @@
         }
 
         .wallet-amount {
-            font-size: 48px;
+            font-size: 44px;
             font-weight: 800;
-            color: #ffd700;
-            text-shadow: 0 0 10px #ffd700;
-            font-family: monospace;
+            color: #1a4d8c;
         }
 
         .referral-link {
-            background: rgba(0,0,0,0.8);
+            background: #f5f7fa;
             padding: 14px;
-            border-radius: 60px;
-            font-size: 12px;
+            border-radius: 50px;
+            font-size: 13px;
             word-break: break-all;
             font-family: monospace;
             margin: 16px 0;
-            border: 1px solid #ffd700;
-            color: #0f0;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 6px 14px;
-            border-radius: 40px;
-            font-size: 11px;
-            font-weight: bold;
-            font-family: monospace;
-        }
-
-        .premium {
-            background: rgba(255,215,0,0.2);
-            color: #ffd700;
-            border: 1px solid #ffd700;
-        }
-
-        .free {
-            background: rgba(0,255,0,0.1);
-            color: #0f0;
-            border: 1px solid #0f0;
-        }
-
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            margin: 12px 0;
-            font-family: monospace;
-        }
-
-        .stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #ffd700;
+            border: 1px solid #e9edf2;
         }
 
         .share-buttons {
             display: flex;
             gap: 12px;
-            margin-top: 12px;
         }
 
         .share-btn {
             flex: 1;
-            background: rgba(255,215,0,0.1);
-            padding: 10px;
-            border-radius: 40px;
+            background: #f5f7fa;
+            padding: 12px;
+            border-radius: 50px;
             text-align: center;
             cursor: pointer;
-            font-size: 13px;
-            transition: all 0.2s;
-            border: 1px solid #ffd700;
-            font-family: monospace;
-        }
-
-        .share-btn:hover {
-            background: rgba(255,215,0,0.3);
-        }
-
-        .whatsapp {
-            border-color: #25D366;
-            color: #25D366;
+            font-weight: 500;
+            border: 1px solid #e9edf2;
         }
 
         .toast {
@@ -376,214 +243,197 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: #ffd700;
-            color: #050a0f;
+            background: #1a2634;
+            color: white;
             padding: 12px 24px;
-            border-radius: 60px;
-            font-weight: bold;
+            border-radius: 50px;
+            font-weight: 500;
             z-index: 200;
-            font-family: monospace;
-            animation: fadeUp 0.3s ease;
         }
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: #8c9aae;
+            margin-top: 20px;
         }
 
-        .how-it-works-step {
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .premium { background: #e8f0fe; color: #1a4d8c; }
+        .free { background: #f0f2f5; color: #6c7a8a; }
+
+        .stat-row {
             display: flex;
-            gap: 16px;
-            margin: 20px 0;
-            align-items: center;
-            font-family: monospace;
+            justify-content: space-between;
+            margin: 14px 0;
         }
 
-        .step-number {
-            width: 40px;
-            height: 40px;
-            background: rgba(255,215,0,0.15);
-            border-radius: 50%;
+        .leaderboard-item {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            color: #ffd700;
-            border: 1px solid #ffd700;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eef2f7;
         }
 
         #recaptcha-container {
             height: 0;
             overflow: hidden;
         }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid #ffd700;
-            color: #ffd700;
-        }
-
-        .btn-outline:hover {
-            background: rgba(255,215,0,0.1);
-        }
-
-        .logout {
-            background: transparent;
-            border: 1px solid rgba(255,215,0,0.3);
-            color: #ffd700;
-        }
     </style>
 </head>
 <body>
-    <div class="cyber-grid"></div>
-    <div class="glitch-overlay"></div>
     <div class="container">
-        <!-- LANDING SECTION -->
+        <!-- LANDING PAGE -->
         <div id="landingSection">
-            <h1>HIGHLAND</h1>
-            <div style="text-align: center;">
-                <div class="subhead">> BREAK THE MATRIX</div>
-            </div>
+            <div class="card" style="text-align: center;">
+                <h1>HIGHLAND</h1>
+                <div style="margin-top: 8px;">
+                    <span class="badge">Join 1,000+ Members</span>
+                </div>
 
-            <div class="glass-card">
+                <div class="price-box">
+                    <div class="price">₹500</div>
+                    <div class="price-small">One-time payment • Lifetime access</div>
+                </div>
+
+                <div class="highlight">Earn ₹400 per friend</div>
+
                 <div class="feature">
                     <div class="feature-icon">💰</div>
-                    <div>PAY ₹500 ONCE — EARN FOREVER</div>
+                    <div><strong>Pay ₹500 once</strong> — earn forever</div>
                 </div>
                 <div class="feature">
-                    <div class="feature-icon">👑</div>
-                    <div>GET ₹400 (80%) FOR EVERY RECRUIT</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🏆</div>
-                    <div>TOP COMMANDERS GET BONUSES</div>
+                    <div class="feature-icon">👥</div>
+                    <div><strong>Get ₹400</strong> for every friend who joins</div>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">⚡</div>
-                    <div>INSTANT WALLET — WITHDRAW ANYTIME</div>
+                    <div><strong>Instant wallet</strong> — withdraw to UPI</div>
                 </div>
-                <button class="btn-gold" onclick="showLogin()">> ACCESS TERMINAL _</button>
+
+                <!-- SOCIAL PROOF SECTION -->
+                <div class="social-proof">
+                    <div class="proof-item">
+                        <span class="proof-icon">💰</span>
+                        <span>Raj earned ₹12,400 this week</span>
+                    </div>
+                    <div class="proof-item">
+                        <span class="proof-icon">👥</span>
+                        <span>Priya referred 23 friends — earned ₹9,200</span>
+                    </div>
+                    <div class="proof-item">
+                        <span class="proof-icon">🏆</span>
+                        <span>Mohan is top referrer with 47 recruits</span>
+                    </div>
+                    <div class="proof-item">
+                        <span class="proof-icon">⚡</span>
+                        <span>Neha withdrew ₹8,000 yesterday</span>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="showLogin()">Start Now →</button>
 
                 <div class="stats">
-                    <div><div class="stat-number" id="totalMembers">0</div><div class="stat-label">ACTIVE UNITS</div></div>
-                    <div><div class="stat-number" id="totalEarned">₹0</div><div class="stat-label">PAID OUT</div></div>
-                </div>
-            </div>
-
-            <!-- How It Works -->
-            <div class="glass-card">
-                <div class="section-title"><span>[📖]</span> OPERATION PROTOCOL</div>
-                <div class="how-it-works-step">
-                    <div class="step-number">1</div>
-                    <div>INITIATE: Sign up with phone → Free</div>
-                </div>
-                <div class="how-it-works-step">
-                    <div class="step-number">2</div>
-                    <div>ACTIVATE: One-time ₹500 → Premium status</div>
-                </div>
-                <div class="how-it-works-step">
-                    <div class="step-number">3</div>
-                    <div>DEPLOY: Share unique link to your network</div>
-                </div>
-                <div class="how-it-works-step">
-                    <div class="step-number">4</div>
-                    <div>COLLECT: ₹400 per recruit → Wallet grows</div>
-                </div>
-                <div class="how-it-works-step">
-                    <div class="step-number">5</div>
-                    <div>EXTRACT: Withdraw to UPI anytime</div>
-                </div>
-            </div>
-
-            <!-- Leaderboard -->
-            <div class="glass-card">
-                <div class="section-title"><span>[🏆]</span> TOP COMMANDERS</div>
-                <div id="leaderboard">
-                    <div class="leaderboard-item">
-                        <div class="rank">—</div>
-                        <div class="name">SCANNING...</div>
-                        <div class="referrals">0</div>
+                    <div>
+                        <div class="stat-number" id="totalMembers">0</div>
+                        <div class="stat-label">Members</div>
+                    </div>
+                    <div>
+                        <div class="stat-number" id="totalEarned">₹0</div>
+                        <div class="stat-label">Paid to Members</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Social Proof -->
-            <div class="glass-card">
-                <div class="section-title"><span>[🔥]</span> RECENT EXFILTRATIONS</div>
-                <div id="recentEarnings">
-                    <div style="text-align: center; color: #8a9a5a;">LOADING...</div>
+            <!-- How it works -->
+            <div class="card">
+                <div style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">How It Works</div>
+                <div class="step"><div class="step-number">1</div><div>Sign up with your phone — free</div></div>
+                <div class="step"><div class="step-number">2</div><div>Pay ₹500 once — become Premium</div></div>
+                <div class="step"><div class="step-number">3</div><div>Get your unique link</div></div>
+                <div class="step"><div class="step-number">4</div><div>Share with friends — they pay ₹500</div></div>
+                <div class="step"><div class="step-number">5</div><div>You get ₹400 instantly in wallet</div></div>
+                <div class="step"><div class="step-number">6</div><div>Withdraw to UPI / Bank</div></div>
+            </div>
+
+            <!-- Top Referrers -->
+            <div class="card">
+                <div style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Top Referrers</div>
+                <div id="leaderboard">
+                    <div class="leaderboard-item"><span>Loading...</span><span>0</span></div>
                 </div>
             </div>
 
             <div class="footer">
-                [ NO HIDDEN FEES ] [ INSTANT PAYOUTS ] [ BUILD YOUR EMPIRE ]
+                Instant Payouts • No Hidden Fees • Trusted by 1,000+ Members
             </div>
         </div>
 
         <!-- LOGIN SECTION -->
         <div id="loginSection" class="hidden">
-            <div class="glass-card" style="text-align: center;">
-                <h1 style="font-size: 42px;">> ACCESS</h1>
-                <div class="subhead">AUTHENTICATE WITH PHONE</div>
-
+            <div class="card" style="text-align: center;">
+                <h1 style="font-size: 32px;">Login</h1>
                 <div id="phoneSection">
                     <input type="tel" id="phone" placeholder="10-digit mobile number" maxlength="10">
-                    <button class="btn-gold" onclick="sendOTP()">SEND OTP</button>
+                    <button class="btn" onclick="sendOTP()">Send OTP</button>
                 </div>
-
                 <div id="otpSection" class="hidden">
-                    <input type="text" id="otp" placeholder="6-digit code">
-                    <button class="btn-gold" onclick="verifyOTP()">VERIFY & ENTER</button>
+                    <input type="text" id="otp" placeholder="6-digit OTP">
+                    <button class="btn" onclick="verifyOTP()">Verify & Login</button>
                 </div>
-
-                <div id="loginMessage" style="margin-top: 20px; font-size: 12px; color: #ffaa44;"></div>
-                <button class="btn-gold btn-outline" style="margin-top: 20px;" onclick="showLanding()">← RETURN</button>
+                <div id="loginMessage" style="margin-top: 15px; color: #1a4d8c; font-size: 14px;"></div>
+                <button class="btn btn-outline" style="margin-top: 15px;" onclick="showLanding()">← Back</button>
                 <div id="recaptcha-container"></div>
             </div>
         </div>
 
-        <!-- DASHBOARD SECTION -->
+        <!-- DASHBOARD -->
         <div id="dashboardSection" class="hidden">
-            <div class="glass-card" style="border: 1px solid #ffd700; background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(0,0,0,0.8));">
+            <div class="card" style="background: #f8fafc;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <div style="font-size: 12px; color: #8a9a5a;">TREASURY</div>
+                        <div style="font-size: 14px; color: #6c7a8a;">My Wallet</div>
                         <div class="wallet-amount" id="walletAmount">₹0</div>
                     </div>
                     <div id="memberBadge"></div>
                 </div>
             </div>
 
-            <div class="glass-card">
-                <div class="section-title"><span>[🔗]</span> DEPLOY LINK</div>
+            <div class="card">
+                <div style="font-weight: 700; margin-bottom: 12px;">Your Link</div>
                 <div class="referral-link" id="referralLink">Loading...</div>
                 <div class="share-buttons">
-                    <div class="share-btn" onclick="copyLink()">[ COPY ]</div>
-                    <div class="share-btn whatsapp" onclick="shareWhatsApp()">[ WHATSAPP ]</div>
+                    <div class="share-btn" onclick="copyLink()">Copy Link</div>
+                    <div class="share-btn" onclick="shareWhatsApp()">WhatsApp</div>
                 </div>
             </div>
 
-            <div class="glass-card">
-                <div class="section-title"><span>[⚡]</span> OPERATIONS</div>
+            <div class="card">
+                <div style="font-weight: 700; margin-bottom: 16px;">Actions</div>
                 <div id="upgradeSection"></div>
-                <button class="btn-gold btn-outline" onclick="requestWithdraw()" style="margin-top: 12px;">[ WITHDRAW ]</button>
+                <button class="btn btn-outline" onclick="requestWithdraw()" style="margin-top: 12px;">Withdraw Money</button>
             </div>
 
-            <div class="glass-card">
-                <div class="section-title"><span>[📊]</span> STATS</div>
-                <div class="stat-row"><span>TOTAL RECRUITS</span><span class="stat-value" id="totalReferrals">0</span></div>
-                <div class="stat-row"><span>LIFETIME EARNED</span><span class="stat-value" id="totalEarnedDashboard">₹0</span></div>
-                <div class="stat-row"><span>RANK</span><span class="stat-value" id="referralBadge">RECRUIT</span></div>
+            <div class="card">
+                <div style="font-weight: 700; margin-bottom: 16px;">My Stats</div>
+                <div class="stat-row"><span>Friends Joined</span><span style="font-weight:700;" id="totalReferrals">0</span></div>
+                <div class="stat-row"><span>Total Earned</span><span style="font-weight:700; color:#1a4d8c;" id="totalEarnedDashboard">₹0</span></div>
+                <div class="stat-row"><span>Your Rank</span><span style="font-weight:700;" id="referralBadge">Recruit</span></div>
             </div>
 
-            <div class="glass-card">
-                <div class="section-title"><span>[📜]</span> WITHDRAWAL LOG</div>
-                <div id="withdrawalHistory">
-                    <div style="text-align: center; color: #8a9a5a;">NO RECORDS</div>
-                </div>
+            <div class="card">
+                <div style="font-weight: 700; margin-bottom: 16px;">Withdrawal History</div>
+                <div id="withdrawalHistory"><div style="color:#8c9aae;">No withdrawals yet</div></div>
             </div>
 
-            <button class="btn-gold logout" onclick="logout()">[ EXIT ]</button>
+            <button class="btn btn-outline" onclick="logout()" style="margin-top: 10px;">Logout</button>
         </div>
     </div>
 
@@ -599,244 +449,140 @@
             messagingSenderId: "103706215525",
             appId: "1:103706215525:web:a179f9fdd41d3c0399728c"
         };
-
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
-
         let currentUser = null;
         let confirmationResult = null;
-
-        function showLogin() {
-            document.getElementById('landingSection').classList.add('hidden');
-            document.getElementById('loginSection').classList.remove('hidden');
-            document.getElementById('dashboardSection').classList.add('hidden');
-        }
 
         function showLanding() {
             document.getElementById('landingSection').classList.remove('hidden');
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('dashboardSection').classList.add('hidden');
         }
-
+        function showLogin() {
+            document.getElementById('landingSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+        }
         function showDashboard() {
             document.getElementById('landingSection').classList.add('hidden');
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('dashboardSection').classList.remove('hidden');
             loadUserData();
         }
-
         function showToast(msg) {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerText = msg;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 2000);
+            let t = document.createElement('div'); t.className = 'toast'; t.innerText = msg;
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 2000);
         }
 
         async function loadPublicData() {
-            const users = await db.collection('users').get();
-            const payments = await db.collection('payments').where('type', '==', 'access').get();
+            let users = await db.collection('users').get();
+            let payments = await db.collection('payments').where('type', '==', 'access').get();
             let totalPaid = 0;
-            payments.forEach(doc => { totalPaid += doc.data().commission || 0; });
+            payments.forEach(p => totalPaid += p.data().commission || 0);
             document.getElementById('totalMembers').innerText = users.size;
-            document.getElementById('totalEarned').innerText = '₹' + totalPaid.toLocaleString();
+            document.getElementById('totalEarned').innerText = '₹' + totalPaid;
 
-            const topUsers = await db.collection('users').orderBy('totalReferrals', 'desc').limit(10).get();
-            const leaderboardDiv = document.getElementById('leaderboard');
-            leaderboardDiv.innerHTML = '';
+            let top = await db.collection('users').orderBy('totalReferrals', 'desc').limit(10).get();
+            let lb = document.getElementById('leaderboard');
+            lb.innerHTML = '';
             let rank = 1;
-            topUsers.forEach(doc => {
-                const data = doc.data();
-                leaderboardDiv.innerHTML += `
-                    <div class="leaderboard-item">
-                        <div class="rank">${rank}</div>
-                        <div class="name">${data.name || data.phone || 'AGENT'}</div>
-                        <div class="referrals">${data.totalReferrals || 0}</div>
-                    </div>
-                `;
+            top.forEach(doc => {
+                let d = doc.data();
+                lb.innerHTML += `<div class="leaderboard-item"><span>${rank}. ${d.name || d.phone || 'Member'}</span><span>${d.totalReferrals || 0}</span></div>`;
                 rank++;
             });
-            if (rank === 1) leaderboardDiv.innerHTML = '<div class="leaderboard-item">[ NO DATA ]</div>';
-
-            const recentPayments = await db.collection('payments').where('type', '==', 'access').orderBy('createdAt', 'desc').limit(5).get();
-            const earningsDiv = document.getElementById('recentEarnings');
-            earningsDiv.innerHTML = '';
-            recentPayments.forEach(doc => {
-                const data = doc.data();
-                if (data.referredBy) {
-                    earningsDiv.innerHTML += `<div class="leaderboard-item"><span>💰 ${data.referredBy} +₹${data.commission}</span><span style="font-size:10px;">NOW</span></div>`;
-                }
-            });
-            if (earningsDiv.innerHTML === '') earningsDiv.innerHTML = '<div style="text-align: center;">[ WAITING FOR FIRST MOVE ]</div>';
+            if(rank===1) lb.innerHTML = '<div class="leaderboard-item">Be the first!</div>';
         }
 
         window.sendOTP = function() {
-            const phone = document.getElementById('phone').value;
-            if (phone.length !== 10) {
-                document.getElementById('loginMessage').innerText = '[ ERROR: INVALID NUMBER ]';
-                return;
-            }
-            document.getElementById('loginMessage').innerText = '[ SENDING OTP... ]';
-            const appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { size: 'invisible' });
+            let phone = document.getElementById('phone').value;
+            if(phone.length !== 10) { document.getElementById('loginMessage').innerText = 'Enter 10 digits'; return; }
+            document.getElementById('loginMessage').innerText = 'Sending...';
+            let appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { size: 'invisible' });
             auth.signInWithPhoneNumber('+91' + phone, appVerifier)
-                .then((result) => {
-                    confirmationResult = result;
-                    document.getElementById('loginMessage').innerText = '[ OTP SENT ]';
-                    document.getElementById('phoneSection').classList.add('hidden');
-                    document.getElementById('otpSection').classList.remove('hidden');
-                })
-                .catch((error) => {
-                    document.getElementById('loginMessage').innerText = '[ ERROR: ' + error.message + ' ]';
-                });
+                .then(r => { confirmationResult = r; document.getElementById('loginMessage').innerText = 'OTP sent!'; document.getElementById('phoneSection').classList.add('hidden'); document.getElementById('otpSection').classList.remove('hidden'); })
+                .catch(e => { document.getElementById('loginMessage').innerText = 'Error: ' + e.message; });
         };
-
         window.verifyOTP = function() {
-            const otp = document.getElementById('otp').value;
-            if (otp.length !== 6) {
-                document.getElementById('loginMessage').innerText = '[ ERROR: INVALID CODE ]';
-                return;
-            }
-            document.getElementById('loginMessage').innerText = '[ VERIFYING... ]';
-            confirmationResult.confirm(otp)
-                .then(async (result) => {
-                    const user = result.user;
-                    const phone = user.phoneNumber.slice(3);
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const referrer = urlParams.get('ref');
-
-                    const userDoc = await db.collection('users').doc(user.uid).get();
-                    if (!userDoc.exists) {
-                        await db.collection('users').doc(user.uid).set({
-                            phone: phone,
-                            name: phone,
-                            referralCode: user.uid.slice(0, 8).toUpperCase(),
-                            referredBy: referrer || null,
-                            isMember: false,
-                            walletBalance: 0,
-                            totalReferrals: 0,
-                            createdAt: new Date()
-                        });
-                        if (referrer) {
-                            const referrerDoc = await db.collection('users').doc(referrer).get();
-                            if (referrerDoc.exists) {
-                                await db.collection('users').doc(referrer).update({
-                                    totalReferrals: firebase.firestore.FieldValue.increment(1)
-                                });
-                            }
-                        }
+            let otp = document.getElementById('otp').value;
+            if(otp.length !== 6) { document.getElementById('loginMessage').innerText = '6 digits required'; return; }
+            document.getElementById('loginMessage').innerText = 'Verifying...';
+            confirmationResult.confirm(otp).then(async (result) => {
+                let user = result.user;
+                let phone = user.phoneNumber.slice(3);
+                let params = new URLSearchParams(window.location.search);
+                let referrer = params.get('ref');
+                let doc = await db.collection('users').doc(user.uid).get();
+                if(!doc.exists){
+                    await db.collection('users').doc(user.uid).set({
+                        phone: phone, name: phone, referralCode: user.uid.slice(0,8).toUpperCase(),
+                        referredBy: referrer || null, isMember: false, walletBalance: 0, totalReferrals: 0, createdAt: new Date()
+                    });
+                    if(referrer){
+                        let refDoc = await db.collection('users').doc(referrer).get();
+                        if(refDoc.exists) await db.collection('users').doc(referrer).update({ totalReferrals: firebase.firestore.FieldValue.increment(1) });
                     }
-                    localStorage.setItem('userId', user.uid);
-                    currentUser = user;
-                    showDashboard();
-                })
-                .catch((error) => {
-                    document.getElementById('loginMessage').innerText = '[ WRONG OTP ]';
-                });
+                }
+                localStorage.setItem('userId', user.uid);
+                currentUser = user;
+                showDashboard();
+            }).catch(e => { document.getElementById('loginMessage').innerText = 'Wrong OTP'; });
         };
 
         async function loadUserData() {
-            if (!currentUser) {
-                const userId = localStorage.getItem('userId');
-                if (userId) currentUser = { uid: userId };
-                else return;
-            }
-            const doc = await db.collection('users').doc(currentUser.uid).get();
-            const data = doc.data();
-            if (!data) return;
-
+            if(!currentUser) { let id = localStorage.getItem('userId'); if(id) currentUser = { uid: id }; else return; }
+            let doc = await db.collection('users').doc(currentUser.uid).get();
+            let data = doc.data();
+            if(!data) return;
             document.getElementById('walletAmount').innerText = '₹' + (data.walletBalance || 0);
             document.getElementById('totalReferrals').innerText = data.totalReferrals || 0;
-
-            const link = `https://highland-official.github.io/.COM/?ref=${currentUser.uid}`;
+            let link = `https://highland-official.github.io/.COM/?ref=${currentUser.uid}`;
             document.getElementById('referralLink').innerText = link;
 
-            const referrals = data.totalReferrals || 0;
-            let badge = 'RECRUIT';
-            if (referrals >= 50) badge = 'WARLORD';
-            else if (referrals >= 25) badge = 'COMMANDER';
-            else if (referrals >= 10) badge = 'VETERAN';
-            else if (referrals >= 5) badge = 'SOLDIER';
+            let refs = data.totalReferrals || 0;
+            let badge = 'Recruit';
+            if(refs>=50) badge = 'Warlord';
+            else if(refs>=25) badge = 'Commander';
+            else if(refs>=10) badge = 'Veteran';
+            else if(refs>=5) badge = 'Soldier';
             document.getElementById('referralBadge').innerText = badge;
 
-            const badgeDiv = document.getElementById('memberBadge');
-            const upgradeDiv = document.getElementById('upgradeSection');
-            if (data.isMember) {
-                badgeDiv.innerHTML = '<span class="status-badge premium">[ PREMIUM ]</span>';
-                upgradeDiv.innerHTML = '<button class="btn-gold" style="background:#00aa55; cursor:default;">[ ACTIVE ]</button>';
+            if(data.isMember){
+                document.getElementById('memberBadge').innerHTML = '<span class="status-badge premium">Premium</span>';
+                document.getElementById('upgradeSection').innerHTML = '<button class="btn" style="background:#2a6e3a; cursor:default;">Active</button>';
             } else {
-                badgeDiv.innerHTML = '<span class="status-badge free">[ RECRUIT ]</span>';
-                upgradeDiv.innerHTML = '<a href="https://rzp.io/rzp/XhvqGQZ" target="_blank" class="btn-gold">[ ACTIVATE ₹500 ]</a>';
+                document.getElementById('memberBadge').innerHTML = '<span class="status-badge free">Free</span>';
+                document.getElementById('upgradeSection').innerHTML = '<a href="https://rzp.io/rzp/XhvqGQZ" target="_blank" class="btn">Upgrade (₹500)</a>';
             }
+            let earnings = await db.collection('payments').where('referrerId', '==', currentUser.uid).get();
+            let total = 0;
+            earnings.forEach(e => total += e.data().commission || 0);
+            document.getElementById('totalEarnedDashboard').innerText = '₹' + total;
 
-            const payments = await db.collection('payments').where('referrerId', '==', currentUser.uid).get();
-            let totalEarned = 0;
-            payments.forEach(p => { totalEarned += p.data().commission || 0; });
-            document.getElementById('totalEarnedDashboard').innerText = '₹' + totalEarned;
-
-            const withdrawals = await db.collection('withdrawals').where('userId', '==', currentUser.uid).orderBy('createdAt', 'desc').get();
-            const historyDiv = document.getElementById('withdrawalHistory');
-            if (withdrawals.empty) {
-                historyDiv.innerHTML = '<div style="text-align: center;">[ NO EXFILTRATIONS ]</div>';
-            } else {
-                historyDiv.innerHTML = '';
-                withdrawals.forEach(doc => {
-                    const w = doc.data();
-                    historyDiv.innerHTML += `<div class="leaderboard-item"><span>₹${w.amount}</span><span style="font-size:10px;">${w.status === 'pending' ? 'PENDING' : 'COMPLETED'}</span></div>`;
-                });
-            }
+            let withdrawals = await db.collection('withdrawals').where('userId', '==', currentUser.uid).orderBy('createdAt', 'desc').get();
+            let histDiv = document.getElementById('withdrawalHistory');
+            if(withdrawals.empty) histDiv.innerHTML = '<div style="color:#8c9aae;">No withdrawals yet</div>';
+            else { histDiv.innerHTML = ''; withdrawals.forEach(w => { let wd = w.data(); histDiv.innerHTML += `<div class="leaderboard-item"><span>₹${wd.amount}</span><span>${wd.status === 'pending' ? 'Pending' : 'Completed'}</span></div>`; }); }
         }
 
-        window.copyLink = function() {
-            const link = document.getElementById('referralLink').innerText;
-            navigator.clipboard.writeText(link);
-            showToast('[ LINK COPIED ]');
-        };
-
-        window.shareWhatsApp = function() {
-            const link = document.getElementById('referralLink').innerText;
-            const text = `Join Highland. Use my link: ${link}`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-        };
-
+        window.copyLink = function() { navigator.clipboard.writeText(document.getElementById('referralLink').innerText); showToast('Link copied!'); };
+        window.shareWhatsApp = function() { let link = document.getElementById('referralLink').innerText; window.open(`https://wa.me/?text=Join Highland and earn ₹400 per friend! ${link}`, '_blank'); };
         window.requestWithdraw = async function() {
-            const doc = await db.collection('users').doc(currentUser.uid).get();
-            const data = doc.data();
-            if (!data.walletBalance || data.walletBalance < 100) {
-                showToast('[ MINIMUM ₹100 ]');
-                return;
-            }
-            const upi = prompt('ENTER UPI ID:');
-            if (!upi) return;
-            await db.collection('withdrawals').add({
-                userId: currentUser.uid,
-                name: data.name || data.phone,
-                amount: data.walletBalance,
-                upiId: upi,
-                status: 'pending',
-                createdAt: new Date()
-            });
-            showToast('[ REQUEST SENT ]');
+            let doc = await db.collection('users').doc(currentUser.uid).get();
+            let data = doc.data();
+            if(!data.walletBalance || data.walletBalance < 100) { showToast('Minimum ₹100 required'); return; }
+            let upi = prompt('Enter UPI ID (example@okhdfcbank):');
+            if(!upi) return;
+            await db.collection('withdrawals').add({ userId: currentUser.uid, name: data.name || data.phone, amount: data.walletBalance, upiId: upi, status: 'pending', createdAt: new Date() });
+            showToast('Request sent!');
             loadUserData();
         };
+        window.logout = function() { auth.signOut(); localStorage.removeItem('userId'); currentUser = null; showLanding(); };
 
-        window.logout = function() {
-            auth.signOut();
-            localStorage.removeItem('userId');
-            currentUser = null;
-            showLanding();
-        };
-
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                currentUser = user;
-                showDashboard();
-            } else {
-                showLanding();
-            }
-            await loadPublicData();
-        });
-
+        auth.onAuthStateChanged(async (u) => { if(u) { currentUser = u; showDashboard(); } else showLanding(); await loadPublicData(); });
         loadPublicData();
     </script>
 </body>
