@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Highland | ₹400 Per Friend</title>
+    <title>Highland | Work From Home • Earn ₹400 Per Friend</title>
     <style>
         * {
             margin: 0;
@@ -13,117 +13,133 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #f5f7fa;
-            color: #1a2634;
+            background: #f8fafc;
+            color: #1e293b;
             min-height: 100vh;
-            padding: 24px 16px;
+            padding: 20px 16px;
         }
 
         .container {
-            max-width: 520px;
+            max-width: 540px;
             margin: 0 auto;
         }
 
+        /* Cards */
         .card {
             background: white;
-            border-radius: 28px;
+            border-radius: 32px;
             padding: 32px 28px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            border: 1px solid #e9edf2;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            border: 1px solid #e2e8f0;
         }
 
-        h1 {
-            font-size: 40px;
-            font-weight: 700;
-            text-align: center;
-            color: #1a2634;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
-
-        .badge {
-            background: #e8f0fe;
-            color: #1a4d8c;
+        /* Job Badge */
+        .job-badge {
+            background: #e6f7e6;
+            color: #2e7d32;
             display: inline-block;
             padding: 6px 14px;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            font-size: 38px;
+            font-weight: 800;
+            text-align: center;
+            color: #0f172a;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .subhead {
+            text-align: center;
+            font-size: 16px;
+            color: #475569;
             margin-bottom: 24px;
         }
 
-        .price-box {
+        .highlight-box {
+            background: #f1f5f9;
+            border-radius: 24px;
+            padding: 24px;
             text-align: center;
             margin: 24px 0;
         }
 
-        .price {
+        .earning-number {
             font-size: 52px;
             font-weight: 800;
-            color: #1a2634;
+            color: #0f172a;
         }
 
-        .price-small {
-            font-size: 15px;
-            color: #6c7a8a;
+        .earning-label {
+            font-size: 14px;
+            color: #475569;
             margin-top: 8px;
         }
 
-        .highlight {
-            font-size: 26px;
-            font-weight: 700;
-            color: #1a4d8c;
-            text-align: center;
-            margin: 20px 0;
+        .price {
+            font-size: 44px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .price-small {
+            font-size: 14px;
+            color: #64748b;
         }
 
         .feature {
             display: flex;
             align-items: center;
             gap: 14px;
-            margin: 20px 0;
-            font-size: 16px;
+            margin: 18px 0;
+            font-size: 15px;
             line-height: 1.4;
         }
 
         .feature-icon {
-            width: 36px;
-            height: 36px;
-            background: #eef2f7;
+            width: 34px;
+            height: 34px;
+            background: #f1f5f9;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 16px;
             flex-shrink: 0;
         }
 
         .btn {
             display: block;
-            background: #1a4d8c;
+            background: #0f172a;
             color: white;
             text-align: center;
             padding: 18px;
-            border-radius: 50px;
+            border-radius: 60px;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 17px;
             width: 100%;
             cursor: pointer;
             border: none;
-            margin: 28px 0 20px;
+            margin: 24px 0 16px;
             transition: 0.2s;
         }
 
         .btn:hover {
-            background: #0f3a6b;
+            background: #1e293b;
             transform: scale(1.01);
         }
 
         .btn-outline {
             background: transparent;
-            border: 2px solid #1a4d8c;
-            color: #1a4d8c;
+            border: 2px solid #0f172a;
+            color: #0f172a;
         }
 
         .stats {
@@ -132,72 +148,73 @@
             text-align: center;
             margin-top: 24px;
             padding-top: 20px;
-            border-top: 1px solid #eef2f7;
+            border-top: 1px solid #eef2f6;
         }
 
         .stat-number {
             font-size: 28px;
             font-weight: 800;
-            color: #1a4d8c;
+            color: #0f172a;
         }
 
         .stat-label {
             font-size: 12px;
-            color: #6c7a8a;
+            color: #64748b;
             margin-top: 5px;
         }
 
         .step {
             display: flex;
             gap: 14px;
-            margin: 20px 0;
+            margin: 18px 0;
             align-items: flex-start;
         }
 
         .step-number {
-            width: 30px;
-            height: 30px;
-            background: #eef2f7;
+            width: 28px;
+            height: 28px;
+            background: #f1f5f9;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            color: #1a4d8c;
+            color: #0f172a;
             flex-shrink: 0;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .social-proof {
-            background: #eef2f7;
+            background: #f8fafc;
             border-radius: 20px;
             padding: 16px;
             margin-top: 20px;
-            text-align: center;
+            border: 1px solid #eef2f6;
         }
 
         .proof-item {
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 12px;
-            margin: 10px 0;
+            margin: 12px 0;
             font-size: 14px;
-            color: #1a2634;
+            color: #1e293b;
         }
 
-        .proof-icon {
-            font-size: 20px;
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eef2f6;
         }
 
         input {
             width: 100%;
             padding: 16px;
             margin: 10px 0;
-            border: 1px solid #dce3ec;
-            border-radius: 50px;
+            border: 1px solid #e2e8f0;
+            border-radius: 60px;
             background: white;
-            color: #1a2634;
             font-size: 16px;
         }
 
@@ -206,20 +223,20 @@
         }
 
         .wallet-amount {
-            font-size: 44px;
+            font-size: 42px;
             font-weight: 800;
-            color: #1a4d8c;
+            color: #0f172a;
         }
 
         .referral-link {
-            background: #f5f7fa;
+            background: #f8fafc;
             padding: 14px;
-            border-radius: 50px;
+            border-radius: 60px;
             font-size: 13px;
             word-break: break-all;
             font-family: monospace;
             margin: 16px 0;
-            border: 1px solid #e9edf2;
+            border: 1px solid #e2e8f0;
         }
 
         .share-buttons {
@@ -229,13 +246,13 @@
 
         .share-btn {
             flex: 1;
-            background: #f5f7fa;
+            background: #f1f5f9;
             padding: 12px;
-            border-radius: 50px;
+            border-radius: 60px;
             text-align: center;
             cursor: pointer;
             font-weight: 500;
-            border: 1px solid #e9edf2;
+            font-size: 14px;
         }
 
         .toast {
@@ -243,10 +260,10 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: #1a2634;
+            background: #0f172a;
             color: white;
             padding: 12px 24px;
-            border-radius: 50px;
+            border-radius: 60px;
             font-weight: 500;
             z-index: 200;
         }
@@ -254,7 +271,7 @@
         .footer {
             text-align: center;
             font-size: 11px;
-            color: #8c9aae;
+            color: #94a3b8;
             margin-top: 20px;
         }
 
@@ -266,20 +283,13 @@
             font-weight: 500;
         }
 
-        .premium { background: #e8f0fe; color: #1a4d8c; }
-        .free { background: #f0f2f5; color: #6c7a8a; }
+        .premium { background: #e6f7e6; color: #2e7d32; }
+        .free { background: #f1f5f9; color: #64748b; }
 
         .stat-row {
             display: flex;
             justify-content: space-between;
             margin: 14px 0;
-        }
-
-        .leaderboard-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #eef2f7;
         }
 
         #recaptcha-container {
@@ -293,102 +303,107 @@
         <!-- LANDING PAGE -->
         <div id="landingSection">
             <div class="card" style="text-align: center;">
+                <div>
+                    <span class="job-badge">🔵 NOW HIRING • WORK FROM HOME</span>
+                </div>
                 <h1>HIGHLAND</h1>
-                <div style="margin-top: 8px;">
-                    <span class="badge">Join 1,000+ Members</span>
-                </div>
+                <div class="subhead">Simple income opportunity • No experience needed</div>
 
-                <div class="price-box">
-                    <div class="price">₹500</div>
-                    <div class="price-small">One-time payment • Lifetime access</div>
+                <div class="highlight-box">
+                    <div class="earning-number">₹400</div>
+                    <div class="earning-label">earned per referral</div>
+                    <div style="margin-top: 12px; font-size: 13px; color: #2e7d32;">✓ Instant credit to wallet</div>
                 </div>
-
-                <div class="highlight">Earn ₹400 per friend</div>
 
                 <div class="feature">
-                    <div class="feature-icon">💰</div>
-                    <div><strong>Pay ₹500 once</strong> — earn forever</div>
+                    <div class="feature-icon">💼</div>
+                    <div><strong>One-time ₹500</strong> — start your earning journey</div>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">👥</div>
-                    <div><strong>Get ₹400</strong> for every friend who joins</div>
+                    <div><strong>₹400 per friend</strong> — paid instantly when they join</div>
                 </div>
                 <div class="feature">
-                    <div class="feature-icon">⚡</div>
-                    <div><strong>Instant wallet</strong> — withdraw to UPI</div>
+                    <div class="feature-icon">🏦</div>
+                    <div><strong>Withdraw to UPI</strong> — money in your bank account</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📱</div>
+                    <div><strong>Work from phone</strong> — share link, earn daily</div>
                 </div>
 
-                <!-- SOCIAL PROOF SECTION -->
+                <!-- Social Proof -->
                 <div class="social-proof">
                     <div class="proof-item">
-                        <span class="proof-icon">💰</span>
-                        <span>Raj earned ₹12,400 this week</span>
+                        <span>💰</span>
+                        <span><strong>Rajesh K.</strong> earned ₹12,400 this month</span>
                     </div>
                     <div class="proof-item">
-                        <span class="proof-icon">👥</span>
-                        <span>Priya referred 23 friends — earned ₹9,200</span>
+                        <span>👥</span>
+                        <span><strong>Priya S.</strong> referred 23 friends — made ₹9,200</span>
                     </div>
                     <div class="proof-item">
-                        <span class="proof-icon">🏆</span>
-                        <span>Mohan is top referrer with 47 recruits</span>
+                        <span>🏆</span>
+                        <span><strong>Mohammed A.</strong> top earner: ₹28,000 last month</span>
                     </div>
                     <div class="proof-item">
-                        <span class="proof-icon">⚡</span>
-                        <span>Neha withdrew ₹8,000 yesterday</span>
+                        <span>⚡</span>
+                        <span><strong>Neha V.</strong> withdrew ₹8,000 yesterday</span>
                     </div>
                 </div>
 
-                <button class="btn" onclick="showLogin()">Start Now →</button>
+                <button class="btn" onclick="showLogin()">Apply for Income →</button>
 
                 <div class="stats">
                     <div>
                         <div class="stat-number" id="totalMembers">0</div>
-                        <div class="stat-label">Members</div>
+                        <div class="stat-label">Active Members</div>
                     </div>
                     <div>
                         <div class="stat-number" id="totalEarned">₹0</div>
-                        <div class="stat-label">Paid to Members</div>
+                        <div class="stat-label">Total Paid</div>
                     </div>
                 </div>
             </div>
 
-            <!-- How it works -->
+            <!-- How It Works -->
             <div class="card">
                 <div style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">How It Works</div>
-                <div class="step"><div class="step-number">1</div><div>Sign up with your phone — free</div></div>
-                <div class="step"><div class="step-number">2</div><div>Pay ₹500 once — become Premium</div></div>
-                <div class="step"><div class="step-number">3</div><div>Get your unique link</div></div>
-                <div class="step"><div class="step-number">4</div><div>Share with friends — they pay ₹500</div></div>
-                <div class="step"><div class="step-number">5</div><div>You get ₹400 instantly in wallet</div></div>
-                <div class="step"><div class="step-number">6</div><div>Withdraw to UPI / Bank</div></div>
+                <div class="step"><div class="step-number">1</div><div>Sign up with your phone — <strong>free</strong></div></div>
+                <div class="step"><div class="step-number">2</div><div>Pay ₹500 once — start your work</div></div>
+                <div class="step"><div class="step-number">3</div><div>Get your personal referral link</div></div>
+                <div class="step"><div class="step-number">4</div><div>Share with friends, family, WhatsApp groups</div></div>
+                <div class="step"><div class="step-number">5</div><div>Earn ₹400 per person who joins</div></div>
+                <div class="step"><div class="step-number">6</div><div>Withdraw to your UPI — daily payout</div></div>
             </div>
 
-            <!-- Top Referrers -->
+            <!-- Top Earners -->
             <div class="card">
-                <div style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Top Referrers</div>
+                <div style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">🏆 Top Earners This Week</div>
                 <div id="leaderboard">
                     <div class="leaderboard-item"><span>Loading...</span><span>0</span></div>
                 </div>
             </div>
 
             <div class="footer">
-                Instant Payouts • No Hidden Fees • Trusted by 1,000+ Members
+                Work from home • Instant payouts • Trusted by 1,000+ earners
             </div>
         </div>
 
         <!-- LOGIN SECTION -->
         <div id="loginSection" class="hidden">
             <div class="card" style="text-align: center;">
-                <h1 style="font-size: 32px;">Login</h1>
+                <h1 style="font-size: 32px;">Apply</h1>
+                <div style="margin-bottom: 20px; color: #475569;">Enter your phone to get started</div>
                 <div id="phoneSection">
                     <input type="tel" id="phone" placeholder="10-digit mobile number" maxlength="10">
                     <button class="btn" onclick="sendOTP()">Send OTP</button>
                 </div>
                 <div id="otpSection" class="hidden">
                     <input type="text" id="otp" placeholder="6-digit OTP">
-                    <button class="btn" onclick="verifyOTP()">Verify & Login</button>
+                    <button class="btn" onclick="verifyOTP()">Verify & Start</button>
                 </div>
-                <div id="loginMessage" style="margin-top: 15px; color: #1a4d8c; font-size: 14px;"></div>
+                <div id="loginMessage" style="margin-top: 15px; font-size: 14px; color: #2e7d32;"></div>
                 <button class="btn btn-outline" style="margin-top: 15px;" onclick="showLanding()">← Back</button>
                 <div id="recaptcha-container"></div>
             </div>
@@ -399,7 +414,7 @@
             <div class="card" style="background: #f8fafc;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <div style="font-size: 14px; color: #6c7a8a;">My Wallet</div>
+                        <div style="font-size: 13px; color: #64748b;">My Earnings</div>
                         <div class="wallet-amount" id="walletAmount">₹0</div>
                     </div>
                     <div id="memberBadge"></div>
@@ -407,30 +422,33 @@
             </div>
 
             <div class="card">
-                <div style="font-weight: 700; margin-bottom: 12px;">Your Link</div>
+                <div style="font-weight: 700; margin-bottom: 12px;">🔗 My Work Link</div>
                 <div class="referral-link" id="referralLink">Loading...</div>
                 <div class="share-buttons">
                     <div class="share-btn" onclick="copyLink()">Copy Link</div>
                     <div class="share-btn" onclick="shareWhatsApp()">WhatsApp</div>
+                </div>
+                <div style="font-size: 12px; color: #64748b; margin-top: 12px; text-align: center;">
+                    Share this link • Earn ₹400 per join
                 </div>
             </div>
 
             <div class="card">
                 <div style="font-weight: 700; margin-bottom: 16px;">Actions</div>
                 <div id="upgradeSection"></div>
-                <button class="btn btn-outline" onclick="requestWithdraw()" style="margin-top: 12px;">Withdraw Money</button>
+                <button class="btn btn-outline" onclick="requestWithdraw()" style="margin-top: 12px;">Withdraw Earnings</button>
             </div>
 
             <div class="card">
-                <div style="font-weight: 700; margin-bottom: 16px;">My Stats</div>
-                <div class="stat-row"><span>Friends Joined</span><span style="font-weight:700;" id="totalReferrals">0</span></div>
-                <div class="stat-row"><span>Total Earned</span><span style="font-weight:700; color:#1a4d8c;" id="totalEarnedDashboard">₹0</span></div>
-                <div class="stat-row"><span>Your Rank</span><span style="font-weight:700;" id="referralBadge">Recruit</span></div>
+                <div style="font-weight: 700; margin-bottom: 16px;">My Performance</div>
+                <div class="stat-row"><span>People Joined</span><span style="font-weight:700;" id="totalReferrals">0</span></div>
+                <div class="stat-row"><span>Total Earned</span><span style="font-weight:700; color:#0f172a;" id="totalEarnedDashboard">₹0</span></div>
+                <div class="stat-row"><span>Your Level</span><span style="font-weight:700;" id="referralBadge">Recruit</span></div>
             </div>
 
             <div class="card">
                 <div style="font-weight: 700; margin-bottom: 16px;">Withdrawal History</div>
-                <div id="withdrawalHistory"><div style="color:#8c9aae;">No withdrawals yet</div></div>
+                <div id="withdrawalHistory"><div style="color:#94a3b8;">No withdrawals yet</div></div>
             </div>
 
             <button class="btn btn-outline" onclick="logout()" style="margin-top: 10px;">Logout</button>
@@ -494,13 +512,13 @@
                 lb.innerHTML += `<div class="leaderboard-item"><span>${rank}. ${d.name || d.phone || 'Member'}</span><span>${d.totalReferrals || 0}</span></div>`;
                 rank++;
             });
-            if(rank===1) lb.innerHTML = '<div class="leaderboard-item">Be the first!</div>';
+            if(rank===1) lb.innerHTML = '<div class="leaderboard-item">Be the first earner!</div>';
         }
 
         window.sendOTP = function() {
             let phone = document.getElementById('phone').value;
             if(phone.length !== 10) { document.getElementById('loginMessage').innerText = 'Enter 10 digits'; return; }
-            document.getElementById('loginMessage').innerText = 'Sending...';
+            document.getElementById('loginMessage').innerText = 'Sending OTP...';
             let appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { size: 'invisible' });
             auth.signInWithPhoneNumber('+91' + phone, appVerifier)
                 .then(r => { confirmationResult = r; document.getElementById('loginMessage').innerText = 'OTP sent!'; document.getElementById('phoneSection').classList.add('hidden'); document.getElementById('otpSection').classList.remove('hidden'); })
@@ -544,18 +562,18 @@
 
             let refs = data.totalReferrals || 0;
             let badge = 'Recruit';
-            if(refs>=50) badge = 'Warlord';
-            else if(refs>=25) badge = 'Commander';
-            else if(refs>=10) badge = 'Veteran';
-            else if(refs>=5) badge = 'Soldier';
+            if(refs>=50) badge = 'Master Earner';
+            else if(refs>=25) badge = 'Top Earner';
+            else if(refs>=10) badge = 'Pro Earner';
+            else if(refs>=5) badge = 'Earning Star';
             document.getElementById('referralBadge').innerText = badge;
 
             if(data.isMember){
-                document.getElementById('memberBadge').innerHTML = '<span class="status-badge premium">Premium</span>';
-                document.getElementById('upgradeSection').innerHTML = '<button class="btn" style="background:#2a6e3a; cursor:default;">Active</button>';
+                document.getElementById('memberBadge').innerHTML = '<span class="status-badge premium">Active Earner</span>';
+                document.getElementById('upgradeSection').innerHTML = '<button class="btn" style="background:#2e7d32; cursor:default;">✅ Ready to Earn</button>';
             } else {
-                document.getElementById('memberBadge').innerHTML = '<span class="status-badge free">Free</span>';
-                document.getElementById('upgradeSection').innerHTML = '<a href="https://rzp.io/rzp/XhvqGQZ" target="_blank" class="btn">Upgrade (₹500)</a>';
+                document.getElementById('memberBadge').innerHTML = '<span class="status-badge free">Not Started</span>';
+                document.getElementById('upgradeSection').innerHTML = '<a href="https://rzp.io/rzp/XhvqGQZ" target="_blank" class="btn">Start Earning (₹500)</a>';
             }
             let earnings = await db.collection('payments').where('referrerId', '==', currentUser.uid).get();
             let total = 0;
@@ -564,20 +582,20 @@
 
             let withdrawals = await db.collection('withdrawals').where('userId', '==', currentUser.uid).orderBy('createdAt', 'desc').get();
             let histDiv = document.getElementById('withdrawalHistory');
-            if(withdrawals.empty) histDiv.innerHTML = '<div style="color:#8c9aae;">No withdrawals yet</div>';
+            if(withdrawals.empty) histDiv.innerHTML = '<div style="color:#94a3b8;">No withdrawals yet</div>';
             else { histDiv.innerHTML = ''; withdrawals.forEach(w => { let wd = w.data(); histDiv.innerHTML += `<div class="leaderboard-item"><span>₹${wd.amount}</span><span>${wd.status === 'pending' ? 'Pending' : 'Completed'}</span></div>`; }); }
         }
 
         window.copyLink = function() { navigator.clipboard.writeText(document.getElementById('referralLink').innerText); showToast('Link copied!'); };
-        window.shareWhatsApp = function() { let link = document.getElementById('referralLink').innerText; window.open(`https://wa.me/?text=Join Highland and earn ₹400 per friend! ${link}`, '_blank'); };
+        window.shareWhatsApp = function() { let link = document.getElementById('referralLink').innerText; window.open(`https://wa.me/?text=Highland work from home opportunity — earn ₹400 per person! Join using my link: ${link}`, '_blank'); };
         window.requestWithdraw = async function() {
             let doc = await db.collection('users').doc(currentUser.uid).get();
             let data = doc.data();
-            if(!data.walletBalance || data.walletBalance < 100) { showToast('Minimum ₹100 required'); return; }
+            if(!data.walletBalance || data.walletBalance < 100) { showToast('Minimum ₹100 required to withdraw'); return; }
             let upi = prompt('Enter UPI ID (example@okhdfcbank):');
             if(!upi) return;
             await db.collection('withdrawals').add({ userId: currentUser.uid, name: data.name || data.phone, amount: data.walletBalance, upiId: upi, status: 'pending', createdAt: new Date() });
-            showToast('Request sent!');
+            showToast('Withdrawal request sent!');
             loadUserData();
         };
         window.logout = function() { auth.signOut(); localStorage.removeItem('userId'); currentUser = null; showLanding(); };
