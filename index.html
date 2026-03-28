@@ -123,7 +123,6 @@
             border-radius: 60px;
             font-size: 16px;
             outline: none;
-            transition: border-color 0.2s;
         }
         input:focus { border-color: #1e3a5f; }
         .hidden { display: none; }
@@ -153,9 +152,7 @@
             text-align: center;
             cursor: pointer;
             font-weight: 500;
-            transition: all 0.2s;
         }
-        .share-btn:hover { background: #e2e8f0; }
         .toast {
             position: fixed;
             bottom: 30px;
@@ -188,10 +185,6 @@
         .premium { background: #e8f0fe; color: #1e3a5f; }
         .free { background: #f0f2f6; color: #7e8c9e; }
         .stat-row { display: flex; justify-content: space-between; margin: 12px 0; }
-        .leaderboard-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eef2f6; }
-        .leaderboard-rank { font-weight: 700; color: #c97e00; width: 40px; }
-        .leaderboard-name { flex: 1; }
-        .leaderboard-earnings { font-weight: 700; }
         .loading-spinner {
             display: inline-block;
             width: 16px;
@@ -223,7 +216,7 @@
                 <div class="feature"><div class="feature-icon">💼</div><div><strong>Pay ₹500 once</strong> — start your job</div></div>
                 <div class="feature"><div class="feature-icon">👥</div><div><strong>Unlimited referrals</strong> — earn daily</div></div>
                 <div class="feature"><div class="feature-icon">🏦</div><div><strong>Withdraw to UPI</strong> — instant money</div></div>
-                <button class="btn" id="applyBtn">📋 Apply for Job →</button>
+                <button class="btn" onclick="window.showLogin()">📋 Apply for Job →</button>
                 <div class="stats">
                     <div><div class="stat-number" id="totalMembers">0</div><div class="stat-label">Workers</div></div>
                     <div><div class="stat-number" id="totalEarned">₹0</div><div class="stat-label">Paid Out</div></div>
@@ -246,14 +239,14 @@
                 <div style="margin: 12px 0 24px; color: #5b6e8c;">Enter your phone to start</div>
                 <div id="phoneSection">
                     <input type="tel" id="phoneLogin" placeholder="10-digit mobile number" maxlength="10">
-                    <button class="btn" id="sendOtpBtn">Send OTP</button>
+                    <button class="btn" onclick="window.sendOTP()">Send OTP</button>
                 </div>
                 <div id="otpSection" class="hidden">
                     <input type="text" id="otpCode" placeholder="6-digit OTP">
-                    <button class="btn" id="verifyOtpBtn">Verify & Start</button>
+                    <button class="btn" onclick="window.verifyOTP()">Verify & Start</button>
                 </div>
                 <div id="loginMessage" style="margin-top: 15px; font-size: 14px; color: #c97e00;"></div>
-                <button class="btn btn-outline" id="backToLandingBtn">← Back</button>
+                <button class="btn btn-outline" onclick="window.showLanding()">← Back</button>
             </div>
         </div>
 
@@ -269,14 +262,14 @@
                 <div style="font-weight: 700; margin-bottom: 12px;">🔗 My Work Link</div>
                 <div class="referral-link" id="referralLink">Loading...</div>
                 <div class="share-buttons">
-                    <div class="share-btn" id="copyLinkBtn">Copy Link</div>
-                    <div class="share-btn" id="whatsappShareBtn">WhatsApp</div>
+                    <div class="share-btn" onclick="window.copyLink()">Copy Link</div>
+                    <div class="share-btn" onclick="window.shareWhatsApp()">WhatsApp</div>
                 </div>
             </div>
             <div class="card">
                 <div style="font-weight: 700; margin-bottom: 16px;">Actions</div>
                 <div id="upgradeSection"></div>
-                <button class="btn btn-outline" id="withdrawBtn">Withdraw Money</button>
+                <button class="btn btn-outline" onclick="window.requestWithdraw()">Withdraw Money</button>
             </div>
             <div class="card">
                 <div style="font-weight: 700; margin-bottom: 16px;">My Stats</div>
@@ -288,7 +281,7 @@
                 <div style="font-weight: 700; margin-bottom: 16px;">Withdrawal History</div>
                 <div id="withdrawalHistory"><div style="color:#9aa9bb;">No withdrawals yet</div></div>
             </div>
-            <button class="btn btn-outline" id="logoutBtn">Logout</button>
+            <button class="btn btn-outline" onclick="window.logout()">Logout</button>
         </div>
     </div>
 
@@ -315,14 +308,14 @@
         let currentUserId = null;
         let currentSession = null;
         
-        // ========== UI FUNCTIONS ==========
-        function showLanding() {
+        // ========== UI FUNCTIONS (exposed globally) ==========
+        window.showLanding = function() {
             document.getElementById('landingSection').classList.remove('hidden');
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('dashboardSection').classList.add('hidden');
-        }
+        };
         
-        function showLogin() {
+        window.showLogin = function() {
             document.getElementById('landingSection').classList.add('hidden');
             document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('dashboardSection').classList.add('hidden');
@@ -332,7 +325,7 @@
             document.getElementById('phoneLogin').value = '';
             document.getElementById('otpCode').value = '';
             document.getElementById('loginMessage').innerHTML = '';
-        }
+        };
         
         function showDashboard() {
             document.getElementById('landingSection').classList.add('hidden');
@@ -350,7 +343,7 @@
         }
         
         // ========== OTP FUNCTIONS ==========
-        async function sendOTP() {
+        window.sendOTP = async function() {
             const phone = document.getElementById('phoneLogin').value;
             if (phone.length !== 10) {
                 document.getElementById('loginMessage').innerHTML = '❌ Please enter a valid 10-digit mobile number';
@@ -365,9 +358,9 @@
             } catch (e) {
                 document.getElementById('loginMessage').innerHTML = '❌ Error: ' + e.message;
             }
-        }
+        };
         
-        async function verifyOTP() {
+        window.verifyOTP = async function() {
             const otp = document.getElementById('otpCode').value;
             if (otp.length !== 6) {
                 document.getElementById('loginMessage').innerHTML = '❌ Please enter the 6-digit OTP';
@@ -421,7 +414,7 @@
             } catch (e) {
                 document.getElementById('loginMessage').innerHTML = '❌ Wrong OTP. Please try again.';
             }
-        }
+        };
         
         // ========== DASHBOARD FUNCTIONS ==========
         async function loadUserData() {
@@ -494,7 +487,7 @@
             } catch(e) { console.error(e); }
         }
         
-        async function requestWithdraw() {
+        window.requestWithdraw = async function() {
             try {
                 const user = await databases.getDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, currentUserId);
                 if (!user.walletBalance || user.walletBalance < 100) {
@@ -515,28 +508,28 @@
             } catch(e) {
                 showToast('Error: ' + e.message);
             }
-        }
+        };
         
-        async function logout() {
+        window.logout = async function() {
             try {
                 await account.deleteSession('current');
             } catch(e) {}
             localStorage.removeItem('userId');
             currentUserId = null;
-            showLanding();
+            window.showLanding();
             showToast('👋 Logged out successfully');
-        }
+        };
         
-        function copyLink() {
+        window.copyLink = function() {
             const link = document.getElementById('referralLink').innerText;
             navigator.clipboard.writeText(link);
             showToast('✨ Link copied to clipboard!');
-        }
+        };
         
-        function shareWhatsApp() {
+        window.shareWhatsApp = function() {
             let link = document.getElementById('referralLink').innerText;
             window.open(`https://wa.me/?text=🚀 Join Highland and earn ₹400 per referral! Work from home job. Use my link: ${link}`, '_blank');
-        }
+        };
         
         // ========== CHECK SESSION ON LOAD ==========
         async function checkSession() {
@@ -547,26 +540,15 @@
                     localStorage.setItem('userId', currentUserId);
                     showDashboard();
                 } else {
-                    showLanding();
+                    window.showLanding();
                 }
             } catch(e) {
-                showLanding();
+                window.showLanding();
             }
             loadPublicStats();
         }
         
-        // ========== ATTACH EVENT LISTENERS ==========
-        document.getElementById('applyBtn').addEventListener('click', showLogin);
-        document.getElementById('sendOtpBtn').addEventListener('click', sendOTP);
-        document.getElementById('verifyOtpBtn').addEventListener('click', verifyOTP);
-        document.getElementById('backToLandingBtn').addEventListener('click', showLanding);
-        document.getElementById('copyLinkBtn').addEventListener('click', copyLink);
-        document.getElementById('whatsappShareBtn').addEventListener('click', shareWhatsApp);
-        document.getElementById('withdrawBtn').addEventListener('click', requestWithdraw);
-        document.getElementById('logoutBtn').addEventListener('click', logout);
-        
-        // Start the app
         checkSession();
     </script>
 </body>
-</html>
+    </html>
