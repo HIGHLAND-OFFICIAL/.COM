@@ -155,7 +155,7 @@
             font-weight: 500;
             transition: all 0.2s;
         }
-        .share-btn:hover { background: #e2e8f0; transform: scale(0.98); }
+        .share-btn:hover { background: #e2e8f0; }
         .toast {
             position: fixed;
             bottom: 30px;
@@ -192,7 +192,6 @@
         .leaderboard-rank { font-weight: 700; color: #c97e00; width: 40px; }
         .leaderboard-name { flex: 1; }
         .leaderboard-earnings { font-weight: 700; }
-        #recaptcha-container { height: 0; overflow: hidden; }
         .loading-spinner {
             display: inline-block;
             width: 16px;
@@ -224,7 +223,7 @@
                 <div class="feature"><div class="feature-icon">💼</div><div><strong>Pay ₹500 once</strong> — start your job</div></div>
                 <div class="feature"><div class="feature-icon">👥</div><div><strong>Unlimited referrals</strong> — earn daily</div></div>
                 <div class="feature"><div class="feature-icon">🏦</div><div><strong>Withdraw to UPI</strong> — instant money</div></div>
-                <button class="btn" onclick="showLogin()">📋 Apply for Job →</button>
+                <button class="btn" id="applyBtn">📋 Apply for Job →</button>
                 <div class="stats">
                     <div><div class="stat-number" id="totalMembers">0</div><div class="stat-label">Workers</div></div>
                     <div><div class="stat-number" id="totalEarned">₹0</div><div class="stat-label">Paid Out</div></div>
@@ -247,14 +246,14 @@
                 <div style="margin: 12px 0 24px; color: #5b6e8c;">Enter your phone to start</div>
                 <div id="phoneSection">
                     <input type="tel" id="phoneLogin" placeholder="10-digit mobile number" maxlength="10">
-                    <button class="btn" onclick="sendOTP()">Send OTP</button>
+                    <button class="btn" id="sendOtpBtn">Send OTP</button>
                 </div>
                 <div id="otpSection" class="hidden">
                     <input type="text" id="otpCode" placeholder="6-digit OTP">
-                    <button class="btn" onclick="verifyOTP()">Verify & Start</button>
+                    <button class="btn" id="verifyOtpBtn">Verify & Start</button>
                 </div>
                 <div id="loginMessage" style="margin-top: 15px; font-size: 14px; color: #c97e00;"></div>
-                <button class="btn btn-outline" style="margin-top: 15px;" onclick="showLanding()">← Back</button>
+                <button class="btn btn-outline" id="backToLandingBtn">← Back</button>
             </div>
         </div>
 
@@ -270,14 +269,14 @@
                 <div style="font-weight: 700; margin-bottom: 12px;">🔗 My Work Link</div>
                 <div class="referral-link" id="referralLink">Loading...</div>
                 <div class="share-buttons">
-                    <div class="share-btn" onclick="copyLink()">Copy Link</div>
-                    <div class="share-btn" onclick="shareWhatsApp()">WhatsApp</div>
+                    <div class="share-btn" id="copyLinkBtn">Copy Link</div>
+                    <div class="share-btn" id="whatsappShareBtn">WhatsApp</div>
                 </div>
             </div>
             <div class="card">
                 <div style="font-weight: 700; margin-bottom: 16px;">Actions</div>
                 <div id="upgradeSection"></div>
-                <button class="btn btn-outline" onclick="requestWithdraw()">Withdraw Money</button>
+                <button class="btn btn-outline" id="withdrawBtn">Withdraw Money</button>
             </div>
             <div class="card">
                 <div style="font-weight: 700; margin-bottom: 16px;">My Stats</div>
@@ -289,14 +288,14 @@
                 <div style="font-weight: 700; margin-bottom: 16px;">Withdrawal History</div>
                 <div id="withdrawalHistory"><div style="color:#9aa9bb;">No withdrawals yet</div></div>
             </div>
-            <button class="btn btn-outline" onclick="logout()">Logout</button>
+            <button class="btn btn-outline" id="logoutBtn">Logout</button>
         </div>
     </div>
 
     <script type="module">
         import { Client, Account, Databases, ID, Query } from 'https://cdn.jsdelivr.net/npm/appwrite@14.0.0/dist/esm/sdk.min.js';
 
-        // ========== UPDATED APPWRITE CONFIG ==========
+        // ========== YOUR APPWRITE CONFIG ==========
         const APPWRITE_ENDPOINT = 'https://cloud.appwrite.io/v1';
         const APPWRITE_PROJECT_ID = '69c74d8a001174da7635';
         const APPWRITE_API_KEY = 'standard_314e257fb22bfa214fceaafcf89ef99fac8efadfc2b7e1cc8ceda94a82d0a0dc29e65e44c95f35fbab75d2003fd7124074e033819fcdd83ee083cb87434328dadeec4440c687a2a8d865c82be32682f1ab148195bac4a309dcc9d050819e84869a5399d25d370ac24f4c7cad7d7163c15fb939877394806f7265cf03b18373b1';
@@ -316,18 +315,24 @@
         let currentUserId = null;
         let currentSession = null;
         
-        // UI functions
-        window.showLanding = function() {
+        // ========== UI FUNCTIONS ==========
+        function showLanding() {
             document.getElementById('landingSection').classList.remove('hidden');
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('dashboardSection').classList.add('hidden');
-        };
+        }
         
-        window.showLogin = function() {
+        function showLogin() {
             document.getElementById('landingSection').classList.add('hidden');
             document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('dashboardSection').classList.add('hidden');
-        };
+            // Reset OTP form
+            document.getElementById('phoneSection').classList.remove('hidden');
+            document.getElementById('otpSection').classList.add('hidden');
+            document.getElementById('phoneLogin').value = '';
+            document.getElementById('otpCode').value = '';
+            document.getElementById('loginMessage').innerHTML = '';
+        }
         
         function showDashboard() {
             document.getElementById('landingSection').classList.add('hidden');
@@ -341,31 +346,31 @@
             t.className = 'toast'; 
             t.innerText = msg;
             document.body.appendChild(t);
-            setTimeout(() => t.remove(), 2500);
+            setTimeout(() => t.remove(), 3000);
         }
         
-        // OTP Login (Appwrite Phone)
-        window.sendOTP = async function() {
+        // ========== OTP FUNCTIONS ==========
+        async function sendOTP() {
             const phone = document.getElementById('phoneLogin').value;
             if (phone.length !== 10) {
-                document.getElementById('loginMessage').innerText = 'Please enter a valid 10-digit mobile number';
+                document.getElementById('loginMessage').innerHTML = '❌ Please enter a valid 10-digit mobile number';
                 return;
             }
             document.getElementById('loginMessage').innerHTML = '<span class="loading-spinner"></span>Sending OTP...';
             try {
                 currentSession = await account.createPhoneSession('+91' + phone);
-                document.getElementById('loginMessage').innerHTML = '✅ OTP sent successfully! Check your SMS.';
+                document.getElementById('loginMessage').innerHTML = '✅ OTP sent! Check your SMS.';
                 document.getElementById('phoneSection').classList.add('hidden');
                 document.getElementById('otpSection').classList.remove('hidden');
             } catch (e) {
-                document.getElementById('loginMessage').innerText = '❌ Error: ' + e.message;
+                document.getElementById('loginMessage').innerHTML = '❌ Error: ' + e.message;
             }
-        };
+        }
         
-        window.verifyOTP = async function() {
+        async function verifyOTP() {
             const otp = document.getElementById('otpCode').value;
             if (otp.length !== 6) {
-                document.getElementById('loginMessage').innerText = 'Please enter the 6-digit OTP';
+                document.getElementById('loginMessage').innerHTML = '❌ Please enter the 6-digit OTP';
                 return;
             }
             document.getElementById('loginMessage').innerHTML = '<span class="loading-spinner"></span>Verifying...';
@@ -375,12 +380,13 @@
                 
                 const urlParams = new URLSearchParams(window.location.search);
                 const referrer = urlParams.get('ref');
+                const phoneNumber = document.getElementById('phoneLogin').value;
                 
                 // Check if user exists
                 const existing = await databases.listDocuments(
                     APPWRITE_DATABASE_ID,
                     USERS_COLLECTION,
-                    [Query.equal('phone', [document.getElementById('phoneLogin').value])]
+                    [Query.equal('phone', [phoneNumber])]
                 );
                 
                 if (existing.total === 0) {
@@ -389,13 +395,12 @@
                         USERS_COLLECTION,
                         ID.unique(),
                         {
-                            phone: document.getElementById('phoneLogin').value,
-                            name: document.getElementById('phoneLogin').value,
+                            phone: phoneNumber,
+                            name: phoneNumber,
                             referredBy: referrer || null,
                             isMember: false,
                             walletBalance: 0,
                             totalReferrals: 0,
-                            totalEarned: 0,
                             referralCode: session.userId.slice(0,8).toUpperCase()
                         }
                     );
@@ -412,12 +417,13 @@
                 }
                 localStorage.setItem('userId', session.userId);
                 showDashboard();
-                showToast('Welcome to Highland! 🎉');
+                showToast('🎉 Welcome to Highland! Start earning today.');
             } catch (e) {
-                document.getElementById('loginMessage').innerText = '❌ Wrong OTP. Please try again.';
+                document.getElementById('loginMessage').innerHTML = '❌ Wrong OTP. Please try again.';
             }
-        };
+        }
         
+        // ========== DASHBOARD FUNCTIONS ==========
         async function loadUserData() {
             if (!currentUserId) currentUserId = localStorage.getItem('userId');
             if (!currentUserId) return;
@@ -488,17 +494,7 @@
             } catch(e) { console.error(e); }
         }
         
-        window.copyLink = function() {
-            navigator.clipboard.writeText(document.getElementById('referralLink').innerText);
-            showToast('✨ Link copied to clipboard!');
-        };
-        
-        window.shareWhatsApp = function() {
-            let link = document.getElementById('referralLink').innerText;
-            window.open(`https://wa.me/?text=🚀 Join Highland and earn ₹400 per referral! Work from home job. Use my link: ${link}`, '_blank');
-        };
-        
-        window.requestWithdraw = async function() {
+        async function requestWithdraw() {
             try {
                 const user = await databases.getDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, currentUserId);
                 if (!user.walletBalance || user.walletBalance < 100) {
@@ -514,14 +510,14 @@
                     upiId: upi,
                     status: 'pending'
                 });
-                showToast('✅ Withdrawal request sent! Will be processed within 24-48 hours.');
+                showToast('✅ Withdrawal request sent! Processed within 24-48 hours.');
                 loadUserData();
             } catch(e) {
                 showToast('Error: ' + e.message);
             }
-        };
+        }
         
-        window.logout = async function() {
+        async function logout() {
             try {
                 await account.deleteSession('current');
             } catch(e) {}
@@ -529,9 +525,20 @@
             currentUserId = null;
             showLanding();
             showToast('👋 Logged out successfully');
-        };
+        }
         
-        // Check existing session
+        function copyLink() {
+            const link = document.getElementById('referralLink').innerText;
+            navigator.clipboard.writeText(link);
+            showToast('✨ Link copied to clipboard!');
+        }
+        
+        function shareWhatsApp() {
+            let link = document.getElementById('referralLink').innerText;
+            window.open(`https://wa.me/?text=🚀 Join Highland and earn ₹400 per referral! Work from home job. Use my link: ${link}`, '_blank');
+        }
+        
+        // ========== CHECK SESSION ON LOAD ==========
         async function checkSession() {
             try {
                 const session = await account.getSession('current');
@@ -547,6 +554,18 @@
             }
             loadPublicStats();
         }
+        
+        // ========== ATTACH EVENT LISTENERS ==========
+        document.getElementById('applyBtn').addEventListener('click', showLogin);
+        document.getElementById('sendOtpBtn').addEventListener('click', sendOTP);
+        document.getElementById('verifyOtpBtn').addEventListener('click', verifyOTP);
+        document.getElementById('backToLandingBtn').addEventListener('click', showLanding);
+        document.getElementById('copyLinkBtn').addEventListener('click', copyLink);
+        document.getElementById('whatsappShareBtn').addEventListener('click', shareWhatsApp);
+        document.getElementById('withdrawBtn').addEventListener('click', requestWithdraw);
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+        
+        // Start the app
         checkSession();
     </script>
 </body>
