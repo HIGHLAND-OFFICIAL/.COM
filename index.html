@@ -3,143 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Highland | Work From Home Job • Earn ₹400 Per Referral</title>
+    <title>Highland | Work From Home Job</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #f4f6fa;
-            color: #1a2c3e;
+            background: #f5f7fb;
+            color: #1e293b;
             min-height: 100vh;
-            padding: 24px 16px;
+            padding: 20px;
         }
-
-        .container {
-            max-width: 560px;
-            margin: 0 auto;
-        }
-
-        /* Cards - Clean, subtle shadow */
+        .container { max-width: 500px; margin: 0 auto; }
         .card {
             background: white;
-            border-radius: 28px;
+            border-radius: 32px;
             padding: 28px 24px;
             margin-bottom: 20px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.04);
             border: 1px solid #eef2f6;
-            transition: all 0.2s;
         }
-
-        /* Job Badge */
         .job-badge {
             background: #1e3a5f;
             color: white;
             display: inline-block;
             padding: 6px 16px;
             border-radius: 40px;
-            font-weight: 600;
             font-size: 12px;
+            font-weight: 600;
             margin-bottom: 20px;
-            letter-spacing: 0.3px;
         }
-
         h1 {
-            font-size: 40px;
+            font-size: 38px;
             font-weight: 800;
-            text-align: center;
             color: #1e3a5f;
             margin-bottom: 8px;
-            letter-spacing: -0.5px;
         }
-
         .subhead {
-            text-align: center;
             font-size: 16px;
             color: #5b6e8c;
-            margin-bottom: 28px;
-            font-weight: 500;
+            margin-bottom: 24px;
         }
-
-        /* Earnings Box */
-        .earnings-box {
+        .earnings {
             background: #fef7e0;
             border-radius: 24px;
-            padding: 24px 20px;
+            padding: 24px;
             text-align: center;
             margin: 20px 0;
-            border: 1px solid #f5e5b5;
         }
-
         .earnings-number {
-            font-size: 56px;
+            font-size: 52px;
             font-weight: 800;
             color: #c97e00;
         }
-
-        .earnings-label {
-            font-size: 15px;
+        .earnings-text {
+            font-size: 14px;
             color: #7a6a3a;
             margin-top: 8px;
-            font-weight: 500;
         }
-
         .feature {
             display: flex;
             align-items: center;
-            gap: 14px;
-            margin: 18px 0;
+            gap: 12px;
+            margin: 16px 0;
             font-size: 15px;
-            line-height: 1.4;
         }
-
         .feature-icon {
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             background: #f0f2f6;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
-            flex-shrink: 0;
-            color: #c97e00;
         }
-
         .btn {
-            display: block;
             background: #1e3a5f;
             color: white;
             text-align: center;
-            padding: 18px;
+            padding: 16px;
             border-radius: 60px;
             font-weight: 700;
-            font-size: 17px;
+            font-size: 16px;
             width: 100%;
             cursor: pointer;
             border: none;
-            margin: 24px 0 16px;
-            transition: background 0.2s;
+            margin: 20px 0;
+            transition: all 0.2s ease;
         }
-
-        .btn:hover {
-            background: #0f2b44;
-        }
-
+        .btn:hover { background: #0f2b44; transform: scale(0.98); }
         .btn-outline {
             background: transparent;
             border: 2px solid #1e3a5f;
             color: #1e3a5f;
         }
-
-        .btn-outline:hover {
-            background: #f0f4fa;
-        }
-
+        .btn-outline:hover { background: #1e3a5f; color: white; }
         .stats {
             display: flex;
             justify-content: space-between;
@@ -148,154 +106,32 @@
             padding-top: 20px;
             border-top: 1px solid #eef2f6;
         }
-
         .stat-number {
             font-size: 28px;
             font-weight: 800;
             color: #1e3a5f;
         }
-
         .stat-label {
             font-size: 12px;
             color: #7e8c9e;
-            margin-top: 5px;
         }
-
-        .step {
-            display: flex;
-            gap: 14px;
-            margin: 18px 0;
-            align-items: flex-start;
-        }
-
-        .step-number {
-            width: 28px;
-            height: 28px;
-            background: #eef2f6;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #1e3a5f;
-            flex-shrink: 0;
-            font-size: 13px;
-        }
-
-        /* Section Titles */
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #1e3a5f;
-            border-left: 4px solid #c97e00;
-            padding-left: 14px;
-        }
-
-        /* Earner Cards */
-        .earner-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .earner-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 0;
-            border-bottom: 1px solid #eef2f6;
-        }
-
-        .earner-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .earner-avatar {
-            width: 44px;
-            height: 44px;
-            background: #eef2f6;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: #1e3a5f;
-            font-size: 16px;
-        }
-
-        .earner-name {
-            font-weight: 600;
-            font-size: 15px;
-            color: #1a2c3e;
-        }
-
-        .earner-detail {
-            font-size: 12px;
-            color: #7e8c9e;
-            margin-top: 2px;
-        }
-
-        .earner-amount {
-            font-weight: 700;
-            font-size: 18px;
-            color: #c97e00;
-        }
-
-        .leaderboard-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #eef2f6;
-        }
-
-        .leaderboard-rank {
-            font-weight: 700;
-            color: #c97e00;
-            width: 36px;
-        }
-
-        .leaderboard-name {
-            flex: 1;
-            font-weight: 500;
-        }
-
-        .leaderboard-earnings {
-            font-weight: 700;
-            color: #1e3a5f;
-        }
-
         input {
             width: 100%;
             padding: 16px;
             margin: 10px 0;
             border: 1px solid #e2e8f0;
             border-radius: 60px;
-            background: white;
             font-size: 16px;
-        }
-
-        input:focus {
             outline: none;
-            border-color: #c97e00;
+            transition: border-color 0.2s;
         }
-
-        .hidden {
-            display: none;
-        }
-
+        input:focus { border-color: #1e3a5f; }
+        .hidden { display: none; }
         .wallet-amount {
             font-size: 42px;
             font-weight: 800;
             color: #1e3a5f;
         }
-
         .referral-link {
             background: #f8fafc;
             padding: 14px;
@@ -304,14 +140,11 @@
             word-break: break-all;
             font-family: monospace;
             margin: 16px 0;
-            border: 1px solid #e2e8f0;
         }
-
         .share-buttons {
             display: flex;
             gap: 12px;
         }
-
         .share-btn {
             flex: 1;
             background: #f1f5f9;
@@ -320,13 +153,9 @@
             text-align: center;
             cursor: pointer;
             font-weight: 500;
-            font-size: 14px;
+            transition: all 0.2s;
         }
-
-        .share-btn:hover {
-            background: #e6edf4;
-        }
-
+        .share-btn:hover { background: #e2e8f0; transform: scale(0.98); }
         .toast {
             position: fixed;
             bottom: 30px;
@@ -338,42 +167,45 @@
             border-radius: 60px;
             font-weight: 500;
             z-index: 200;
+            animation: fadeInUp 0.3s ease;
         }
-
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
         .footer {
             text-align: center;
             font-size: 11px;
             color: #9aa9bb;
             margin-top: 20px;
         }
-
         .status-badge {
             display: inline-block;
             padding: 6px 14px;
             border-radius: 40px;
             font-size: 12px;
-            font-weight: 600;
         }
-
         .premium { background: #e8f0fe; color: #1e3a5f; }
         .free { background: #f0f2f6; color: #7e8c9e; }
-
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            margin: 14px 0;
+        .stat-row { display: flex; justify-content: space-between; margin: 12px 0; }
+        .leaderboard-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eef2f6; }
+        .leaderboard-rank { font-weight: 700; color: #c97e00; width: 40px; }
+        .leaderboard-name { flex: 1; }
+        .leaderboard-earnings { font-weight: 700; }
+        #recaptcha-container { height: 0; overflow: hidden; }
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #1e3a5f;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
         }
-
-        #recaptcha-container {
-            height: 0;
-            overflow: hidden;
-        }
-
-        .withdrawal-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #eef2f6;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -381,213 +213,48 @@
     <div class="container">
         <!-- LANDING PAGE -->
         <div id="landingSection">
-            <!-- Main Card -->
             <div class="card" style="text-align: center;">
                 <span class="job-badge">🔵 WORK FROM HOME • INDIA</span>
                 <h1>HIGHLAND</h1>
-                <div class="subhead">Earn a full-time income from your phone • No experience needed</div>
-
-                <div class="earnings-box">
+                <div class="subhead">Earn ₹400 per person • No experience needed</div>
+                <div class="earnings">
                     <div class="earnings-number">₹400</div>
-                    <div class="earnings-label">earned per person you refer</div>
-                    <div style="margin-top: 10px; font-size: 13px; color: #7a6a3a;">✓ Paid instantly to your wallet</div>
+                    <div class="earnings-text">earned for every friend who joins</div>
                 </div>
-
-                <div class="feature">
-                    <div class="feature-icon">💼</div>
-                    <div><strong>One-time ₹500</strong> — start your job today</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">👥</div>
-                    <div><strong>₹400 per referral</strong> — unlimited earning potential</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🏦</div>
-                    <div><strong>Withdraw to UPI</strong> — money in your bank account</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">📱</div>
-                    <div><strong>Work from phone</strong> — share links, earn daily</div>
-                </div>
-
-                <button class="btn" onclick="showLogin()">📋 Apply for This Job →</button>
-
+                <div class="feature"><div class="feature-icon">💼</div><div><strong>Pay ₹500 once</strong> — start your job</div></div>
+                <div class="feature"><div class="feature-icon">👥</div><div><strong>Unlimited referrals</strong> — earn daily</div></div>
+                <div class="feature"><div class="feature-icon">🏦</div><div><strong>Withdraw to UPI</strong> — instant money</div></div>
+                <button class="btn" onclick="showLogin()">📋 Apply for Job →</button>
                 <div class="stats">
-                    <div>
-                        <div class="stat-number" id="totalMembers">0</div>
-                        <div class="stat-label">Active Workers</div>
-                    </div>
-                    <div>
-                        <div class="stat-number" id="totalEarned">₹0</div>
-                        <div class="stat-label">Total Paid Out</div>
-                    </div>
+                    <div><div class="stat-number" id="totalMembers">0</div><div class="stat-label">Workers</div></div>
+                    <div><div class="stat-number" id="totalEarned">₹0</div><div class="stat-label">Paid Out</div></div>
                 </div>
             </div>
-
-            <!-- SECTION 1: Real Monthly Earners -->
             <div class="card">
-                <div class="section-title">
-                    <span>🏆</span> Real Monthly Earners
-                </div>
-                <div class="earner-list">
-                    <div class="earner-item">
-                        <div class="earner-info">
-                            <div class="earner-avatar">RK</div>
-                            <div>
-                                <div class="earner-name">Rajesh K.</div>
-                                <div class="earner-detail">Mumbai • 31 referrals this month</div>
-                            </div>
-                        </div>
-                        <div class="earner-amount">₹12,400</div>
-                    </div>
-                    <div class="earner-item">
-                        <div class="earner-info">
-                            <div class="earner-avatar">PS</div>
-                            <div>
-                                <div class="earner-name">Priya S.</div>
-                                <div class="earner-detail">Delhi • 23 referrals • 2 months active</div>
-                            </div>
-                        </div>
-                        <div class="earner-amount">₹9,200</div>
-                    </div>
-                    <div class="earner-item">
-                        <div class="earner-info">
-                            <div class="earner-avatar">MA</div>
-                            <div>
-                                <div class="earner-name">Mohammed A.</div>
-                                <div class="earner-detail">Hyderabad • 70 total referrals</div>
-                            </div>
-                        </div>
-                        <div class="earner-amount">₹28,000</div>
-                    </div>
-                </div>
+                <div style="font-weight: 700; margin-bottom: 16px;">💰 Real Earners</div>
+                <div style="display: flex; justify-content: space-between; margin: 12px 0;"><span>Rajesh K. (Mumbai)</span><span style="font-weight: 700;">₹12,400</span></div>
+                <div style="display: flex; justify-content: space-between; margin: 12px 0;"><span>Priya S. (Delhi)</span><span style="font-weight: 700;">₹9,200</span></div>
+                <div style="display: flex; justify-content: space-between; margin: 12px 0;"><span>Mohammed A. (Hyd)</span><span style="font-weight: 700;">₹28,000</span></div>
+                <div style="margin-top: 12px; font-size: 12px; color: #7e8c9e;">Last 30 days earnings</div>
             </div>
-
-            <!-- SECTION 2: Weekly Top Earners -->
-            <div class="card">
-                <div class="section-title">
-                    <span>⚡</span> This Week's Top Earners
-                </div>
-                <div class="earner-list">
-                    <div class="earner-item">
-                        <div class="earner-info">
-                            <div class="earner-avatar">AK</div>
-                            <div>
-                                <div class="earner-name">Amit K.</div>
-                                <div class="earner-detail">Bangalore • 12 new referrals</div>
-                            </div>
-                        </div>
-                        <div class="earner-amount">₹4,800</div>
-                    </div>
-                    <div class="earner-item">
-                        <div class="earner-info">
-                            <div class="earner-avatar">SR</div>
-                            <div>
-                                <div class="earner-name">Sunita R.</div>
-                                <div class="earner-detail">Lucknow • 9 new referrals</div>
-                            </div>
-                        </div>
-                        <div class="earner-amount">₹3,600</div>
-                    </div>
-                    <div class="earner-item">
-                        <div class="earner-info">
-                            <div class="earner-avatar">VP</div>
-                            <div>
-                                <div class="earner-name">Vikram P.</div>
-                                <div class="earner-detail">Chennai • 7 new referrals</div>
-                            </div>
-                        </div>
-                        <div class="earner-amount">₹2,800</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECTION 3: Recent Withdrawals -->
-            <div class="card">
-                <div class="section-title">
-                    <span>💰</span> Recent Withdrawals
-                </div>
-                <div class="earner-list">
-                    <div class="earner-item">
-                        <div class="earner-info">
-                            <div class="earner-avatar">MJ</div>
-                            <div>
-                                <div class="earner-name">Meena J.</div>
-                                <div class="earner-detail">Jaipur • 2 hours ago</div>
-                            </div>
-                        </div>
-                        <div class="earner-amount">₹2,400</div>
-                    </div>
-                    <div class="earner-item">
-                        <div class="earner-info">
-                            <div class="earner-avatar">RT</div>
-                            <div>
-                                <div class="earner-name">Rahul T.</div>
-                                <div class="earner-detail">Ahmedabad • Yesterday</div>
-                            </div>
-                        </div>
-                        <div class="earner-amount">₹5,200</div>
-                    </div>
-                    <div class="earner-item">
-                        <div class="earner-info">
-                            <div class="earner-avatar">SP</div>
-                            <div>
-                                <div class="earner-name">Shweta P.</div>
-                                <div class="earner-detail">Indore • 3 days ago</div>
-                            </div>
-                        </div>
-                        <div class="earner-amount">₹3,800</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECTION 4: How It Works -->
-            <div class="card">
-                <div class="section-title">
-                    <span>📋</span> How This Job Works
-                </div>
-                <div class="step"><div class="step-number">1</div><div><strong>Apply for free</strong> — sign up with your phone</div></div>
-                <div class="step"><div class="step-number">2</div><div><strong>Pay ₹500 once</strong> — your job kit (one-time)</div></div>
-                <div class="step"><div class="step-number">3</div><div><strong>Get your work link</strong> — unique to you</div></div>
-                <div class="step"><div class="step-number">4</div><div><strong>Share the opportunity</strong> — with friends, family, WhatsApp</div></div>
-                <div class="step"><div class="step-number">5</div><div><strong>Earn ₹400 per person</strong> — paid instantly to your wallet</div></div>
-                <div class="step"><div class="step-number">6</div><div><strong>Withdraw daily</strong> — money to your UPI account</div></div>
-                <div style="background: #f0f4fa; border-radius: 20px; padding: 14px; margin-top: 16px; text-align: center;">
-                    <span style="font-weight: 600;">💡 No experience needed • Work 1-2 hours/day • Unlimited earning</span>
-                </div>
-            </div>
-
-            <!-- SECTION 5: Top Earners Leaderboard -->
-            <div class="card">
-                <div class="section-title">
-                    <span>🏅</span> Top Earners Leaderboard
-                </div>
-                <div id="leaderboard">
-                    <div class="leaderboard-item"><span class="leaderboard-rank">—</span><span class="leaderboard-name">Loading...</span><span class="leaderboard-earnings">—</span></div>
-                </div>
-            </div>
-
-            <div class="footer">
-                Genuine work-from-home job • Instant payouts • Trusted by 5,000+ earners
-            </div>
+            <div class="footer">Genuine work • Instant payouts • Trusted by 1,000+ earners</div>
         </div>
 
         <!-- LOGIN SECTION -->
         <div id="loginSection" class="hidden">
             <div class="card" style="text-align: center;">
-                <h1 style="font-size: 32px;">Apply for Job</h1>
-                <div style="margin-bottom: 20px; color: #5b6e8c;">Enter your phone to start your application</div>
+                <h1 style="font-size: 28px;">Apply for Job</h1>
+                <div style="margin: 12px 0 24px; color: #5b6e8c;">Enter your phone to start</div>
                 <div id="phoneSection">
-                    <input type="tel" id="phone" placeholder="10-digit mobile number" maxlength="10">
+                    <input type="tel" id="phoneLogin" placeholder="10-digit mobile number" maxlength="10">
                     <button class="btn" onclick="sendOTP()">Send OTP</button>
                 </div>
                 <div id="otpSection" class="hidden">
-                    <input type="text" id="otp" placeholder="6-digit OTP">
-                    <button class="btn" onclick="verifyOTP()">Verify & Start Job</button>
+                    <input type="text" id="otpCode" placeholder="6-digit OTP">
+                    <button class="btn" onclick="verifyOTP()">Verify & Start</button>
                 </div>
                 <div id="loginMessage" style="margin-top: 15px; font-size: 14px; color: #c97e00;"></div>
                 <button class="btn btn-outline" style="margin-top: 15px;" onclick="showLanding()">← Back</button>
-                <div id="recaptcha-container"></div>
             </div>
         </div>
 
@@ -595,196 +262,292 @@
         <div id="dashboardSection" class="hidden">
             <div class="card">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div style="font-size: 13px; color: #7e8c9e;">My Job Earnings</div>
-                        <div class="wallet-amount" id="walletAmount">₹0</div>
-                    </div>
+                    <div><div style="font-size: 13px; color: #7e8c9e;">My Earnings</div><div class="wallet-amount" id="walletAmount">₹0</div></div>
                     <div id="memberBadge"></div>
                 </div>
             </div>
-
             <div class="card">
                 <div style="font-weight: 700; margin-bottom: 12px;">🔗 My Work Link</div>
                 <div class="referral-link" id="referralLink">Loading...</div>
                 <div class="share-buttons">
                     <div class="share-btn" onclick="copyLink()">Copy Link</div>
-                    <div class="share-btn" onclick="shareWhatsApp()">Share on WhatsApp</div>
-                </div>
-                <div style="font-size: 12px; color: #7e8c9e; margin-top: 12px; text-align: center;">
-                    Share this link • Earn ₹400 per person who joins
+                    <div class="share-btn" onclick="shareWhatsApp()">WhatsApp</div>
                 </div>
             </div>
-
             <div class="card">
-                <div style="font-weight: 700; margin-bottom: 16px;">Job Actions</div>
+                <div style="font-weight: 700; margin-bottom: 16px;">Actions</div>
                 <div id="upgradeSection"></div>
-                <button class="btn btn-outline" onclick="requestWithdraw()" style="margin-top: 12px;">Withdraw My Earnings</button>
+                <button class="btn btn-outline" onclick="requestWithdraw()">Withdraw Money</button>
             </div>
-
             <div class="card">
-                <div style="font-weight: 700; margin-bottom: 16px;">My Job Performance</div>
+                <div style="font-weight: 700; margin-bottom: 16px;">My Stats</div>
                 <div class="stat-row"><span>People Joined</span><span style="font-weight:700;" id="totalReferrals">0</span></div>
-                <div class="stat-row"><span>Total Earnings</span><span style="font-weight:700; color:#c97e00;" id="totalEarnedDashboard">₹0</span></div>
-                <div class="stat-row"><span>Job Level</span><span style="font-weight:700;" id="referralBadge">Recruit</span></div>
+                <div class="stat-row"><span>Total Earned</span><span style="font-weight:700; color:#c97e00;" id="totalEarnedDashboard">₹0</span></div>
+                <div class="stat-row"><span>Level</span><span style="font-weight:700;" id="referralBadge">Recruit</span></div>
             </div>
-
             <div class="card">
                 <div style="font-weight: 700; margin-bottom: 16px;">Withdrawal History</div>
                 <div id="withdrawalHistory"><div style="color:#9aa9bb;">No withdrawals yet</div></div>
             </div>
-
-            <button class="btn btn-outline" onclick="logout()" style="margin-top: 10px;">Logout</button>
+            <button class="btn btn-outline" onclick="logout()">Logout</button>
         </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyC9aONpIxib8xv6dO6W0BJSNuvursk3CcI",
-            authDomain: "highlandplatform.firebaseapp.com",
-            projectId: "highlandplatform",
-            storageBucket: "highlandplatform.firebasestorage.app",
-            messagingSenderId: "103706215525",
-            appId: "1:103706215525:web:a179f9fdd41d3c0399728c"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        let currentUser = null;
-        let confirmationResult = null;
+    <script type="module">
+        import { Client, Account, Databases, ID, Query } from 'https://cdn.jsdelivr.net/npm/appwrite@14.0.0/dist/esm/sdk.min.js';
 
-        function showLanding() {
+        // ========== UPDATED APPWRITE CONFIG ==========
+        const APPWRITE_ENDPOINT = 'https://cloud.appwrite.io/v1';
+        const APPWRITE_PROJECT_ID = '69c74d8a001174da7635';
+        const APPWRITE_API_KEY = 'standard_314e257fb22bfa214fceaafcf89ef99fac8efadfc2b7e1cc8ceda94a82d0a0dc29e65e44c95f35fbab75d2003fd7124074e033819fcdd83ee083cb87434328dadeec4440c687a2a8d865c82be32682f1ab148195bac4a309dcc9d050819e84869a5399d25d370ac24f4c7cad7d7163c15fb939877394806f7265cf03b18373b1';
+        
+        const APPWRITE_DATABASE_ID = 'highland_db';
+        const USERS_COLLECTION = 'users';
+        const PAYMENTS_COLLECTION = 'payments';
+        const WITHDRAWALS_COLLECTION = 'withdrawals';
+
+        const client = new Client();
+        client.setEndpoint(APPWRITE_ENDPOINT);
+        client.setProject(APPWRITE_PROJECT_ID);
+        
+        const account = new Account(client);
+        const databases = new Databases(client);
+        
+        let currentUserId = null;
+        let currentSession = null;
+        
+        // UI functions
+        window.showLanding = function() {
             document.getElementById('landingSection').classList.remove('hidden');
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('dashboardSection').classList.add('hidden');
-        }
-        function showLogin() {
+        };
+        
+        window.showLogin = function() {
             document.getElementById('landingSection').classList.add('hidden');
             document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('dashboardSection').classList.add('hidden');
-        }
+        };
+        
         function showDashboard() {
             document.getElementById('landingSection').classList.add('hidden');
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('dashboardSection').classList.remove('hidden');
             loadUserData();
         }
+        
         function showToast(msg) {
-            let t = document.createElement('div'); t.className = 'toast'; t.innerText = msg;
+            let t = document.createElement('div'); 
+            t.className = 'toast'; 
+            t.innerText = msg;
             document.body.appendChild(t);
-            setTimeout(() => t.remove(), 2000);
+            setTimeout(() => t.remove(), 2500);
         }
-
-        async function loadPublicData() {
-            let users = await db.collection('users').get();
-            let payments = await db.collection('payments').where('type', '==', 'access').get();
-            let totalPaid = 0;
-            payments.forEach(p => totalPaid += p.data().commission || 0);
-            document.getElementById('totalMembers').innerText = users.size;
-            document.getElementById('totalEarned').innerText = '₹' + totalPaid;
-
-            let top = await db.collection('users').orderBy('totalReferrals', 'desc').limit(10).get();
-            let lb = document.getElementById('leaderboard');
-            lb.innerHTML = '';
-            let rank = 1;
-            top.forEach(doc => {
-                let d = doc.data();
-                let earnings = (d.totalReferrals || 0) * 400;
-                lb.innerHTML += `<div class="leaderboard-item"><span class="leaderboard-rank">${rank}</span><span class="leaderboard-name">${d.name || d.phone || 'Member'}</span><span class="leaderboard-earnings">₹${earnings.toLocaleString()}</span></div>`;
-                rank++;
-            });
-            if(rank===1) lb.innerHTML = '<div class="leaderboard-item"><span class="leaderboard-rank">—</span><span class="leaderboard-name">Be the first earner!</span><span class="leaderboard-earnings">—</span></div>';
-        }
-
-        window.sendOTP = function() {
-            let phone = document.getElementById('phone').value;
-            if(phone.length !== 10) { document.getElementById('loginMessage').innerText = 'Enter 10 digits'; return; }
-            document.getElementById('loginMessage').innerText = 'Sending OTP...';
-            let appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { size: 'invisible' });
-            auth.signInWithPhoneNumber('+91' + phone, appVerifier)
-                .then(r => { confirmationResult = r; document.getElementById('loginMessage').innerText = 'OTP sent!'; document.getElementById('phoneSection').classList.add('hidden'); document.getElementById('otpSection').classList.remove('hidden'); })
-                .catch(e => { document.getElementById('loginMessage').innerText = 'Error: ' + e.message; });
+        
+        // OTP Login (Appwrite Phone)
+        window.sendOTP = async function() {
+            const phone = document.getElementById('phoneLogin').value;
+            if (phone.length !== 10) {
+                document.getElementById('loginMessage').innerText = 'Please enter a valid 10-digit mobile number';
+                return;
+            }
+            document.getElementById('loginMessage').innerHTML = '<span class="loading-spinner"></span>Sending OTP...';
+            try {
+                currentSession = await account.createPhoneSession('+91' + phone);
+                document.getElementById('loginMessage').innerHTML = '✅ OTP sent successfully! Check your SMS.';
+                document.getElementById('phoneSection').classList.add('hidden');
+                document.getElementById('otpSection').classList.remove('hidden');
+            } catch (e) {
+                document.getElementById('loginMessage').innerText = '❌ Error: ' + e.message;
+            }
         };
-        window.verifyOTP = function() {
-            let otp = document.getElementById('otp').value;
-            if(otp.length !== 6) { document.getElementById('loginMessage').innerText = '6 digits required'; return; }
-            document.getElementById('loginMessage').innerText = 'Verifying...';
-            confirmationResult.confirm(otp).then(async (result) => {
-                let user = result.user;
-                let phone = user.phoneNumber.slice(3);
-                let params = new URLSearchParams(window.location.search);
-                let referrer = params.get('ref');
-                let doc = await db.collection('users').doc(user.uid).get();
-                if(!doc.exists){
-                    await db.collection('users').doc(user.uid).set({
-                        phone: phone, name: phone, referralCode: user.uid.slice(0,8).toUpperCase(),
-                        referredBy: referrer || null, isMember: false, walletBalance: 0, totalReferrals: 0, createdAt: new Date()
-                    });
-                    if(referrer){
-                        let refDoc = await db.collection('users').doc(referrer).get();
-                        if(refDoc.exists) await db.collection('users').doc(referrer).update({ totalReferrals: firebase.firestore.FieldValue.increment(1) });
+        
+        window.verifyOTP = async function() {
+            const otp = document.getElementById('otpCode').value;
+            if (otp.length !== 6) {
+                document.getElementById('loginMessage').innerText = 'Please enter the 6-digit OTP';
+                return;
+            }
+            document.getElementById('loginMessage').innerHTML = '<span class="loading-spinner"></span>Verifying...';
+            try {
+                const session = await account.updatePhoneSession(currentSession.$id, otp);
+                currentUserId = session.userId;
+                
+                const urlParams = new URLSearchParams(window.location.search);
+                const referrer = urlParams.get('ref');
+                
+                // Check if user exists
+                const existing = await databases.listDocuments(
+                    APPWRITE_DATABASE_ID,
+                    USERS_COLLECTION,
+                    [Query.equal('phone', [document.getElementById('phoneLogin').value])]
+                );
+                
+                if (existing.total === 0) {
+                    await databases.createDocument(
+                        APPWRITE_DATABASE_ID,
+                        USERS_COLLECTION,
+                        ID.unique(),
+                        {
+                            phone: document.getElementById('phoneLogin').value,
+                            name: document.getElementById('phoneLogin').value,
+                            referredBy: referrer || null,
+                            isMember: false,
+                            walletBalance: 0,
+                            totalReferrals: 0,
+                            totalEarned: 0,
+                            referralCode: session.userId.slice(0,8).toUpperCase()
+                        }
+                    );
+                    if (referrer) {
+                        try {
+                            const refDoc = await databases.getDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, referrer);
+                            if (refDoc) {
+                                await databases.updateDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, referrer, {
+                                    totalReferrals: (refDoc.totalReferrals || 0) + 1
+                                });
+                            }
+                        } catch(e) { console.log('Referrer not found'); }
                     }
                 }
-                localStorage.setItem('userId', user.uid);
-                currentUser = user;
+                localStorage.setItem('userId', session.userId);
                 showDashboard();
-            }).catch(e => { document.getElementById('loginMessage').innerText = 'Wrong OTP'; });
-        };
-
-        async function loadUserData() {
-            if(!currentUser) { let id = localStorage.getItem('userId'); if(id) currentUser = { uid: id }; else return; }
-            let doc = await db.collection('users').doc(currentUser.uid).get();
-            let data = doc.data();
-            if(!data) return;
-            document.getElementById('walletAmount').innerText = '₹' + (data.walletBalance || 0);
-            document.getElementById('totalReferrals').innerText = data.totalReferrals || 0;
-            let link = `https://highland-official.github.io/.COM/?ref=${currentUser.uid}`;
-            document.getElementById('referralLink').innerText = link;
-
-            let refs = data.totalReferrals || 0;
-            let badge = 'Recruit';
-            if(refs>=50) badge = 'Master Earner';
-            else if(refs>=25) badge = 'Top Earner';
-            else if(refs>=10) badge = 'Pro Earner';
-            else if(refs>=5) badge = 'Earning Star';
-            document.getElementById('referralBadge').innerText = badge;
-
-            if(data.isMember){
-                document.getElementById('memberBadge').innerHTML = '<span class="status-badge premium">Active Worker</span>';
-                document.getElementById('upgradeSection').innerHTML = '<button class="btn" style="background:#2e7d32; cursor:default;">✅ Job Active</button>';
-            } else {
-                document.getElementById('memberBadge').innerHTML = '<span class="status-badge free">Not Started</span>';
-                document.getElementById('upgradeSection').innerHTML = '<a href="https://rzp.io/rzp/XhvqGQZ" target="_blank" class="btn">Start Job (₹500)</a>';
+                showToast('Welcome to Highland! 🎉');
+            } catch (e) {
+                document.getElementById('loginMessage').innerText = '❌ Wrong OTP. Please try again.';
             }
-            let earnings = await db.collection('payments').where('referrerId', '==', currentUser.uid).get();
-            let total = 0;
-            earnings.forEach(e => total += e.data().commission || 0);
-            document.getElementById('totalEarnedDashboard').innerText = '₹' + total;
-
-            let withdrawals = await db.collection('withdrawals').where('userId', '==', currentUser.uid).orderBy('createdAt', 'desc').get();
-            let histDiv = document.getElementById('withdrawalHistory');
-            if(withdrawals.empty) histDiv.innerHTML = '<div style="color:#9aa9bb;">No withdrawals yet</div>';
-            else { histDiv.innerHTML = ''; withdrawals.forEach(w => { let wd = w.data(); histDiv.innerHTML += `<div class="withdrawal-item"><span>₹${wd.amount}</span><span>${wd.status === 'pending' ? 'Pending' : 'Completed'}</span></div>`; }); }
-        }
-
-        window.copyLink = function() { navigator.clipboard.writeText(document.getElementById('referralLink').innerText); showToast('Link copied!'); };
-        window.shareWhatsApp = function() { let link = document.getElementById('referralLink').innerText; window.open(`https://wa.me/?text=Highland work from home job — earn ₹400 per person! Apply using my link: ${link}`, '_blank'); };
-        window.requestWithdraw = async function() {
-            let doc = await db.collection('users').doc(currentUser.uid).get();
-            let data = doc.data();
-            if(!data.walletBalance || data.walletBalance < 100) { showToast('Minimum ₹100 required to withdraw'); return; }
-            let upi = prompt('Enter UPI ID (example@okhdfcbank):');
-            if(!upi) return;
-            await db.collection('withdrawals').add({ userId: currentUser.uid, name: data.name || data.phone, amount: data.walletBalance, upiId: upi, status: 'pending', createdAt: new Date() });
-            showToast('Withdrawal request sent!');
-            loadUserData();
         };
-        window.logout = function() { auth.signOut(); localStorage.removeItem('userId'); currentUser = null; showLanding(); };
-
-        auth.onAuthStateChanged(async (u) => { if(u) { currentUser = u; showDashboard(); } else showLanding(); await loadPublicData(); });
-        loadPublicData();
+        
+        async function loadUserData() {
+            if (!currentUserId) currentUserId = localStorage.getItem('userId');
+            if (!currentUserId) return;
+            try {
+                const user = await databases.getDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, currentUserId);
+                document.getElementById('walletAmount').innerHTML = '₹' + (user.walletBalance || 0);
+                document.getElementById('totalReferrals').innerText = user.totalReferrals || 0;
+                const link = `https://highland-official.github.io/.COM/?ref=${currentUserId}`;
+                document.getElementById('referralLink').innerText = link;
+                
+                let badge = '🌟 Recruit';
+                let refs = user.totalReferrals || 0;
+                if (refs >= 50) badge = '👑 Master Earner';
+                else if (refs >= 25) badge = '💎 Top Earner';
+                else if (refs >= 10) badge = '⭐ Pro Earner';
+                else if (refs >= 5) badge = '🚀 Earning Star';
+                document.getElementById('referralBadge').innerText = badge;
+                
+                if (user.isMember) {
+                    document.getElementById('memberBadge').innerHTML = '<span class="status-badge premium">✅ Active Member</span>';
+                    document.getElementById('upgradeSection').innerHTML = '<div class="btn" style="background:#2e7d32; cursor:default;">🎯 Job Active • Start Referring!</div>';
+                } else {
+                    document.getElementById('memberBadge').innerHTML = '<span class="status-badge free">⏳ Not Started</span>';
+                    document.getElementById('upgradeSection').innerHTML = '<a href="https://rzp.io/rzp/XhvqGQZ" target="_blank" class="btn" style="background:#c97e00;">🔥 Start Job (₹500)</a>';
+                }
+                
+                const payments = await databases.listDocuments(
+                    APPWRITE_DATABASE_ID,
+                    PAYMENTS_COLLECTION,
+                    [Query.equal('referrerId', [currentUserId])]
+                );
+                let total = 0;
+                payments.documents.forEach(p => total += p.commission || 0);
+                document.getElementById('totalEarnedDashboard').innerHTML = '₹' + total;
+                
+                const withdrawals = await databases.listDocuments(
+                    APPWRITE_DATABASE_ID,
+                    WITHDRAWALS_COLLECTION,
+                    [Query.equal('userId', [currentUserId]), Query.orderDesc('$createdAt')]
+                );
+                const histDiv = document.getElementById('withdrawalHistory');
+                if (withdrawals.total === 0) {
+                    histDiv.innerHTML = '<div style="color:#9aa9bb;">💸 No withdrawals yet</div>';
+                } else {
+                    histDiv.innerHTML = '';
+                    withdrawals.documents.forEach(w => {
+                        const statusColor = w.status === 'completed' ? '#2e7d32' : '#c97e00';
+                        histDiv.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eef2f6;">
+                            <span>₹${w.amount}</span>
+                            <span style="color:${statusColor}; font-weight:500;">${w.status === 'completed' ? '✅ Completed' : '⏳ Pending'}</span>
+                        </div>`;
+                    });
+                }
+            } catch(e) { 
+                console.error(e); 
+                showToast('Error loading data. Please refresh.');
+            }
+        }
+        
+        async function loadPublicStats() {
+            try {
+                const users = await databases.listDocuments(APPWRITE_DATABASE_ID, USERS_COLLECTION);
+                const payments = await databases.listDocuments(APPWRITE_DATABASE_ID, PAYMENTS_COLLECTION);
+                let totalPaid = 0;
+                payments.documents.forEach(p => totalPaid += p.commission || 0);
+                document.getElementById('totalMembers').innerText = users.total;
+                document.getElementById('totalEarned').innerHTML = '₹' + totalPaid;
+            } catch(e) { console.error(e); }
+        }
+        
+        window.copyLink = function() {
+            navigator.clipboard.writeText(document.getElementById('referralLink').innerText);
+            showToast('✨ Link copied to clipboard!');
+        };
+        
+        window.shareWhatsApp = function() {
+            let link = document.getElementById('referralLink').innerText;
+            window.open(`https://wa.me/?text=🚀 Join Highland and earn ₹400 per referral! Work from home job. Use my link: ${link}`, '_blank');
+        };
+        
+        window.requestWithdraw = async function() {
+            try {
+                const user = await databases.getDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, currentUserId);
+                if (!user.walletBalance || user.walletBalance < 100) {
+                    showToast('⚠️ Minimum ₹100 required for withdrawal');
+                    return;
+                }
+                const upi = prompt('💰 Enter your UPI ID (example@okhdfcbank):');
+                if (!upi) return;
+                await databases.createDocument(APPWRITE_DATABASE_ID, WITHDRAWALS_COLLECTION, ID.unique(), {
+                    userId: currentUserId,
+                    name: user.name,
+                    amount: user.walletBalance,
+                    upiId: upi,
+                    status: 'pending'
+                });
+                showToast('✅ Withdrawal request sent! Will be processed within 24-48 hours.');
+                loadUserData();
+            } catch(e) {
+                showToast('Error: ' + e.message);
+            }
+        };
+        
+        window.logout = async function() {
+            try {
+                await account.deleteSession('current');
+            } catch(e) {}
+            localStorage.removeItem('userId');
+            currentUserId = null;
+            showLanding();
+            showToast('👋 Logged out successfully');
+        };
+        
+        // Check existing session
+        async function checkSession() {
+            try {
+                const session = await account.getSession('current');
+                if (session) {
+                    currentUserId = session.userId;
+                    localStorage.setItem('userId', currentUserId);
+                    showDashboard();
+                } else {
+                    showLanding();
+                }
+            } catch(e) {
+                showLanding();
+            }
+            loadPublicStats();
+        }
+        checkSession();
     </script>
 </body>
 </html>
