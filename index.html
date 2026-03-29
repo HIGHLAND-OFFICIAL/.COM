@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Highland | Debug Mode</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -34,20 +34,27 @@
             margin: 10px 0;
             font-weight: bold;
         }
-        .hidden { display: none; }
+        input {
+            background: #222;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            border-radius: 8px;
+        }
         pre { white-space: pre-wrap; word-break: break-all; }
+        #log { height: 300px; overflow-y: scroll; background: #1a1a1a; padding: 10px; border-radius: 8px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="card">
             <h1>🐛 HIGHLAND DEBUG MODE</h1>
-            <p>This page shows all errors and status messages.</p>
+            <p>Testing Appwrite connection with fallback CDNs</p>
         </div>
 
         <div class="card">
             <h3>📋 Status Log</h3>
-            <div id="log" style="height: 300px; overflow-y: scroll; background: #1a1a1a; padding: 10px; border-radius: 8px;"></div>
+            <div id="log"></div>
         </div>
 
         <div class="card">
@@ -59,14 +66,46 @@
 
         <div class="card">
             <h3>📱 Phone Test</h3>
-            <input type="tel" id="phoneInput" placeholder="10-digit mobile" style="width:100%; padding:10px; margin:10px 0;">
+            <input type="tel" id="phoneInput" placeholder="10-digit mobile">
             <button id="sendTestOtpBtn">Send Test OTP</button>
             <div id="otpResult" style="margin-top: 10px;"></div>
         </div>
     </div>
 
-    <!-- Appwrite SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0/dist/umd/sdk.min.js"></script>
+    <!-- Appwrite SDK - Multiple CDN attempts -->
+    <script>
+        // Try multiple CDNs
+        const cdnUrls = [
+            'https://cdn.jsdelivr.net/npm/appwrite@14.0.0/dist/umd/sdk.min.js',
+            'https://unpkg.com/appwrite@14.0.0/dist/umd/sdk.min.js',
+            'https://cdn.skypack.dev/appwrite@14.0.0'
+        ];
+        
+        let currentCdnIndex = 0;
+        
+        function loadAppwrite() {
+            addLog(`📡 Attempting to load Appwrite from: ${cdnUrls[currentCdnIndex]}`);
+            const script = document.createElement('script');
+            script.src = cdnUrls[currentCdnIndex];
+            script.onload = () => {
+                addLog('✅ Appwrite SDK loaded successfully!', 'success');
+                window.AppwriteLoaded = true;
+            };
+            script.onerror = () => {
+                addLog(`❌ Failed to load from ${cdnUrls[currentCdnIndex]}`, 'error');
+                currentCdnIndex++;
+                if (currentCdnIndex < cdnUrls.length) {
+                    loadAppwrite();
+                } else {
+                    addLog('❌ All CDNs failed. Check internet connection.', 'error');
+                }
+            };
+            document.head.appendChild(script);
+        }
+        
+        loadAppwrite();
+    </script>
+
     <script>
         // Debug log function
         const logDiv = document.getElementById('log');
@@ -88,7 +127,6 @@
         // Appwrite config
         const APPWRITE_ENDPOINT = 'https://cloud.appwrite.io/v1';
         const APPWRITE_PROJECT_ID = '69c74d8a001174da7635';
-        const APPWRITE_API_KEY = 'standard_314e257fb22bfa214fceaafcf89ef99fac8efadfc2b7e1cc8ceda94a82d0a0dc29e65e44c95f35fbab75d2003fd7124074e033819fcdd83ee083cb87434328dadeec4440c687a2a8d865c82be32682f1ab148195bac4a309dcc9d050819e84869a5399d25d370ac24f4c7cad7d7163c15fb939877394806f7265cf03b18373b1';
         const APPWRITE_DATABASE_ID = 'highland_db';
 
         let client = null;
@@ -99,11 +137,20 @@
         async function testAppwrite() {
             addLog('🔄 Testing Appwrite connection...');
             
-            if (typeof Appwrite === 'undefined') {
-                addLog('❌ Appwrite SDK not loaded! Check internet connection.', 'error');
+            if (!window.Appwrite && !window.AppwriteLoaded) {
+                addLog('❌ Appwrite SDK still not loaded. Waiting...', 'error');
+                addLog('💡 Try refreshing the page or check your internet.', 'info');
                 return;
             }
-            addLog('✅ Appwrite SDK loaded', 'success');
+            
+            await new Promise(r => setTimeout(r, 500)); // Small delay for SDK to initialize
+            
+            if (typeof Appwrite === 'undefined') {
+                addLog('❌ Appwrite SDK not available. Retry in a moment.', 'error');
+                return;
+            }
+            
+            addLog('✅ Appwrite SDK detected', 'success');
 
             try {
                 client = new Appwrite.Client();
@@ -198,10 +245,21 @@
         addLog('🐛 Debug mode started');
         addLog(`📡 Project ID: ${APPWRITE_PROJECT_ID}`);
         addLog(`🗄️ Database ID: ${APPWRITE_DATABASE_ID}`);
-        setTimeout(() => {
-            addLog('🔄 Auto-testing Appwrite connection...');
-            testAppwrite();
-        }, 1000);
+        addLog('💡 Waiting for Appwrite SDK to load...');
+        
+        // Check for SDK load
+        let checkCount = 0;
+        const interval = setInterval(() => {
+            if (window.AppwriteLoaded || typeof Appwrite !== 'undefined') {
+                addLog('✅ Appwrite SDK ready! Click "Test Appwrite Connection"', 'success');
+                clearInterval(interval);
+            }
+            checkCount++;
+            if (checkCount > 20) {
+                addLog('⚠️ SDK taking too long to load. Try refreshing.', 'error');
+                clearInterval(interval);
+            }
+        }, 500);
     </script>
 </body>
 </html>
