@@ -199,12 +199,22 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .loader {
+            text-align: center;
+            padding: 20px;
+            color: #1e3a5f;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- LOADER -->
+        <div id="loader" class="loader">
+            <div class="loading-spinner"></div> Loading...
+        </div>
+
         <!-- LANDING PAGE -->
-        <div id="landingSection">
+        <div id="landingSection" class="hidden">
             <div class="card" style="text-align: center;">
                 <span class="job-badge">🔵 WORK FROM HOME • INDIA</span>
                 <h1>HIGHLAND</h1>
@@ -285,7 +295,7 @@
         </div>
     </div>
 
-    <!-- Appwrite SDK (UMD) -->
+    <!-- Appwrite SDK -->
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0/dist/umd/sdk.min.js"></script>
     <script>
         (function() {
@@ -297,12 +307,15 @@
             const PAYMENTS_COLLECTION = 'payments';
             const WITHDRAWALS_COLLECTION = 'withdrawals';
 
-            // Global Appwrite objects (will be set after SDK loads)
-            let client, account, databases;
+            let client = null;
+            let account = null;
+            let databases = null;
             let currentUserId = null;
             let currentSession = null;
+            let isAppwriteReady = false;
 
             // UI elements
+            const loader = document.getElementById('loader');
             const landingSection = document.getElementById('landingSection');
             const loginSection = document.getElementById('loginSection');
             const dashboardSection = document.getElementById('dashboardSection');
@@ -312,7 +325,7 @@
             const otpInput = document.getElementById('otpCode');
             const loginMessage = document.getElementById('loginMessage');
 
-            // Helper functions
+            // Show/hide functions
             function showLanding() {
                 landingSection.classList.remove('hidden');
                 loginSection.classList.add('hidden');
@@ -325,9 +338,9 @@
                 dashboardSection.classList.add('hidden');
                 phoneSection.classList.remove('hidden');
                 otpSection.classList.add('hidden');
-                phoneInput.value = '';
-                otpInput.value = '';
-                loginMessage.innerHTML = '';
+                if (phoneInput) phoneInput.value = '';
+                if (otpInput) otpInput.value = '';
+                if (loginMessage) loginMessage.innerHTML = '';
             }
 
             function showDashboard() {
@@ -345,9 +358,12 @@
                 setTimeout(() => t.remove(), 3000);
             }
 
-            // Appwrite functions (will be called after SDK is ready)
+            // Appwrite functions
             async function sendOTP() {
-                if (!account) { showToast('Appwrite not ready'); return; }
+                if (!isAppwriteReady) {
+                    loginMessage.innerHTML = '❌ Please wait, loading...';
+                    return;
+                }
                 const phone = phoneInput.value;
                 if (phone.length !== 10) {
                     loginMessage.innerHTML = '❌ Enter 10 digits';
@@ -365,6 +381,7 @@
             }
 
             async function verifyOTP() {
+                if (!isAppwriteReady) return;
                 const otp = otpInput.value;
                 if (otp.length !== 6) {
                     loginMessage.innerHTML = '❌ Enter 6-digit OTP';
@@ -378,7 +395,6 @@
                     const referrer = urlParams.get('ref');
                     const phoneNumber = phoneInput.value;
 
-                    // Check if user exists
                     const existing = await databases.listDocuments(
                         APPWRITE_DATABASE_ID,
                         USERS_COLLECTION,
@@ -478,6 +494,7 @@
             }
 
             async function loadPublicStats() {
+                if (!isAppwriteReady) return;
                 try {
                     const users = await databases.listDocuments(APPWRITE_DATABASE_ID, USERS_COLLECTION);
                     const payments = await databases.listDocuments(APPWRITE_DATABASE_ID, PAYMENTS_COLLECTION);
@@ -489,7 +506,7 @@
             }
 
             async function requestWithdraw() {
-                if (!currentUserId) return;
+                if (!isAppwriteReady || !currentUserId) return;
                 try {
                     const user = await databases.getDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, currentUserId);
                     if (!user.walletBalance || user.walletBalance < 100) {
@@ -511,7 +528,9 @@
             }
 
             async function logout() {
-                try { await account.deleteSession('current'); } catch(e) {}
+                if (isAppwriteReady) {
+                    try { await account.deleteSession('current'); } catch(e) {}
+                }
                 localStorage.removeItem('userId');
                 currentUserId = null;
                 showLanding();
@@ -529,19 +548,7 @@
                 window.open(`https://wa.me/?text=Join Highland and earn ₹400 per referral! ${link}`, '_blank');
             }
 
-            // Attach event listeners after DOM ready
-            document.addEventListener('DOMContentLoaded', () => {
-                document.getElementById('applyBtn').addEventListener('click', showLogin);
-                document.getElementById('sendOtpBtn').addEventListener('click', sendOTP);
-                document.getElementById('verifyOtpBtn').addEventListener('click', verifyOTP);
-                document.getElementById('backBtn').addEventListener('click', showLanding);
-                document.getElementById('copyLinkBtn').addEventListener('click', copyLink);
-                document.getElementById('whatsappBtn').addEventListener('click', shareWhatsApp);
-                document.getElementById('withdrawBtn').addEventListener('click', requestWithdraw);
-                document.getElementById('logoutBtn').addEventListener('click', logout);
-            });
-
-            // Initialize Appwrite after SDK script loads
+            // Initialize Appwrite
             function initAppwrite() {
                 if (typeof Appwrite === 'undefined') {
                     setTimeout(initAppwrite, 100);
@@ -552,6 +559,11 @@
                 client.setProject(APPWRITE_PROJECT_ID);
                 account = new Appwrite.Account(client);
                 databases = new Appwrite.Databases(client);
+                isAppwriteReady = true;
+
+                // Hide loader, show content
+                loader.classList.add('hidden');
+                landingSection.classList.remove('hidden');
 
                 // Check existing session
                 (async () => {
@@ -571,8 +583,20 @@
                 })();
             }
 
+            // Attach event listeners after DOM ready
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('applyBtn').addEventListener('click', showLogin);
+                document.getElementById('sendOtpBtn').addEventListener('click', sendOTP);
+                document.getElementById('verifyOtpBtn').addEventListener('click', verifyOTP);
+                document.getElementById('backBtn').addEventListener('click', showLanding);
+                document.getElementById('copyLinkBtn').addEventListener('click', copyLink);
+                document.getElementById('whatsappBtn').addEventListener('click', shareWhatsApp);
+                document.getElementById('withdrawBtn').addEventListener('click', requestWithdraw);
+                document.getElementById('logoutBtn').addEventListener('click', logout);
+            });
+
             initAppwrite();
         })();
     </script>
 </body>
-</html>
+    </html>
