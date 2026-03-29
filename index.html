@@ -165,7 +165,7 @@
             100% { transform: rotate(360deg); }
         }
     </style>
-    <!-- CORRECT Appwrite SDK URL -->
+    <!-- Appwrite SDK v14 -->
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0/dist/iife/sdk.min.js"></script>
 </head>
 <body>
@@ -264,7 +264,7 @@
 
             let client, account, databases;
             let currentUserId = null;
-            let currentSession = null;
+            let currentSessionId = null;
             let isReady = false;
 
             // UI elements
@@ -309,7 +309,7 @@
                 setTimeout(() => t.remove(), 3000);
             }
 
-            // Appwrite functions
+            // Appwrite functions - CORRECTED for v14
             async function sendOTP() {
                 if (!isReady) { loginMessage.innerHTML = '❌ Please wait...'; return; }
                 const phone = phoneInput.value;
@@ -319,12 +319,17 @@
                 }
                 loginMessage.innerHTML = '<span class="loading-spinner"></span>Sending OTP...';
                 try {
-                    currentSession = await account.createPhoneSession('+91' + phone);
+                    // Correct method for Appwrite v14
+                    const session = await account.createPhoneSession(
+                        '+91' + phone  // userId is the phone number
+                    );
+                    currentSessionId = session.$id;
                     loginMessage.innerHTML = '✅ OTP sent! Check your SMS.';
                     phoneSection.classList.add('hidden');
                     otpSection.classList.remove('hidden');
                 } catch (e) {
                     loginMessage.innerHTML = '❌ Error: ' + e.message;
+                    console.error(e);
                 }
             }
 
@@ -337,18 +342,25 @@
                 }
                 loginMessage.innerHTML = '<span class="loading-spinner"></span>Verifying...';
                 try {
-                    const session = await account.updatePhoneSession(currentSession.$id, otp);
+                    // Complete the phone session with OTP
+                    const session = await account.updatePhoneSession(
+                        currentSessionId,
+                        otp
+                    );
                     currentUserId = session.userId;
                     const urlParams = new URLSearchParams(window.location.search);
                     const referrer = urlParams.get('ref');
                     const phoneNumber = phoneInput.value;
 
+                    // Check if user exists in database
                     const existing = await databases.listDocuments(
                         APPWRITE_DATABASE_ID,
                         USERS_COLLECTION,
                         [Appwrite.Query.equal('phone', phoneNumber)]
                     );
+                    
                     if (existing.total === 0) {
+                        // Create new user
                         await databases.createDocument(
                             APPWRITE_DATABASE_ID,
                             USERS_COLLECTION,
@@ -363,6 +375,7 @@
                                 referralCode: session.userId.slice(0,8).toUpperCase()
                             }
                         );
+                        // Update referrer's count
                         if (referrer) {
                             try {
                                 const refDoc = await databases.getDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, referrer);
@@ -379,6 +392,7 @@
                     showToast('🎉 Welcome to Highland!');
                 } catch (e) {
                     loginMessage.innerHTML = '❌ Wrong OTP. Please try again.';
+                    console.error(e);
                 }
             }
 
@@ -473,7 +487,9 @@
             }
 
             async function logout() {
-                if (isReady) { try { await account.deleteSession('current'); } catch(e) {} }
+                if (isReady) { 
+                    try { await account.deleteSession('current'); } catch(e) {} 
+                }
                 localStorage.removeItem('userId');
                 currentUserId = null;
                 showLanding();
