@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Highland | Work From Home Job</title>
     <style>
-        /* (same CSS as before – unchanged) */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -217,7 +216,7 @@
                 <div class="feature"><div class="feature-icon">💼</div><div><strong>Pay ₹500 once</strong> — start your job</div></div>
                 <div class="feature"><div class="feature-icon">👥</div><div><strong>Unlimited referrals</strong> — earn daily</div></div>
                 <div class="feature"><div class="feature-icon">🏦</div><div><strong>Withdraw to UPI</strong> — instant money</div></div>
-                <button class="btn" onclick="showLogin()">📋 Apply for Job →</button>
+                <button class="btn" id="applyBtn">📋 Apply for Job →</button>
                 <div class="stats">
                     <div><div class="stat-number" id="totalMembers">0</div><div class="stat-label">Workers</div></div>
                     <div><div class="stat-number" id="totalEarned">₹0</div><div class="stat-label">Paid Out</div></div>
@@ -240,14 +239,14 @@
                 <div style="margin: 12px 0 24px; color: #5b6e8c;">Enter your phone to start</div>
                 <div id="phoneSection">
                     <input type="tel" id="phoneLogin" placeholder="10-digit mobile number" maxlength="10">
-                    <button class="btn" onclick="sendOTP()">Send OTP</button>
+                    <button class="btn" id="sendOtpBtn">Send OTP</button>
                 </div>
                 <div id="otpSection" class="hidden">
                     <input type="text" id="otpCode" placeholder="6-digit OTP">
-                    <button class="btn" onclick="verifyOTP()">Verify & Start</button>
+                    <button class="btn" id="verifyOtpBtn">Verify & Start</button>
                 </div>
                 <div id="loginMessage" style="margin-top: 15px; font-size: 14px; color: #c97e00;"></div>
-                <button class="btn btn-outline" onclick="showLanding()">← Back</button>
+                <button class="btn btn-outline" id="backBtn">← Back</button>
             </div>
         </div>
 
@@ -263,14 +262,14 @@
                 <div style="font-weight: 700; margin-bottom: 12px;">🔗 My Work Link</div>
                 <div class="referral-link" id="referralLink">Loading...</div>
                 <div class="share-buttons">
-                    <div class="share-btn" onclick="copyLink()">Copy Link</div>
-                    <div class="share-btn" onclick="shareWhatsApp()">WhatsApp</div>
+                    <div class="share-btn" id="copyLinkBtn">Copy Link</div>
+                    <div class="share-btn" id="whatsappBtn">WhatsApp</div>
                 </div>
             </div>
             <div class="card">
                 <div style="font-weight: 700; margin-bottom: 16px;">Actions</div>
                 <div id="upgradeSection"></div>
-                <button class="btn btn-outline" onclick="requestWithdraw()">Withdraw Money</button>
+                <button class="btn btn-outline" id="withdrawBtn">Withdraw Money</button>
             </div>
             <div class="card">
                 <div style="font-weight: 700; margin-bottom: 16px;">My Stats</div>
@@ -282,288 +281,297 @@
                 <div style="font-weight: 700; margin-bottom: 16px;">Withdrawal History</div>
                 <div id="withdrawalHistory"><div style="color:#9aa9bb;">No withdrawals yet</div></div>
             </div>
-            <button class="btn btn-outline" onclick="logout()">Logout</button>
+            <button class="btn btn-outline" id="logoutBtn">Logout</button>
         </div>
     </div>
 
-    <!-- Appwrite SDK (global UMD build – works without modules) -->
+    <!-- Appwrite SDK (UMD) -->
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0/dist/umd/sdk.min.js"></script>
     <script>
-        // All code in one non-module script – guaranteed to run
-        console.log("Script started");
-        
-        // ========== APPWRITE CONFIG ==========
-        const APPWRITE_ENDPOINT = 'https://cloud.appwrite.io/v1';
-        const APPWRITE_PROJECT_ID = '69c74d8a001174da7635';
-        const APPWRITE_API_KEY = 'standard_314e257fb22bfa214fceaafcf89ef99fac8efadfc2b7e1cc8ceda94a82d0a0dc29e65e44c95f35fbab75d2003fd7124074e033819fcdd83ee083cb87434328dadeec4440c687a2a8d865c82be32682f1ab148195bac4a309dcc9d050819e84869a5399d25d370ac24f4c7cad7d7163c15fb939877394806f7265cf03b18373b1';
-        
-        const APPWRITE_DATABASE_ID = 'highland_db';
-        const USERS_COLLECTION = 'users';
-        const PAYMENTS_COLLECTION = 'payments';
-        const WITHDRAWALS_COLLECTION = 'withdrawals';
+        (function() {
+            // Appwrite config
+            const APPWRITE_ENDPOINT = 'https://cloud.appwrite.io/v1';
+            const APPWRITE_PROJECT_ID = '69c74d8a001174da7635';
+            const APPWRITE_DATABASE_ID = 'highland_db';
+            const USERS_COLLECTION = 'users';
+            const PAYMENTS_COLLECTION = 'payments';
+            const WITHDRAWALS_COLLECTION = 'withdrawals';
 
-        // Initialize Appwrite client (global)
-        const client = new Appwrite.Client();
-        client.setEndpoint(APPWRITE_ENDPOINT);
-        client.setProject(APPWRITE_PROJECT_ID);
-        // Optional: set key if needed for backend operations (but not required for client-side)
-        // client.setKey(APPWRITE_API_KEY); // Not needed for client-side operations with session
-        
-        const account = new Appwrite.Account(client);
-        const databases = new Appwrite.Databases(client);
-        
-        let currentUserId = null;
-        let currentSession = null;
-        
-        // ========== UI FUNCTIONS (global) ==========
-        window.showLanding = showLanding;
-        window.showLogin = showLogin;
-        window.sendOTP = sendOTP;
-        window.verifyOTP = verifyOTP;
-        window.copyLink = copyLink;
-        window.shareWhatsApp = shareWhatsApp;
-        window.requestWithdraw = requestWithdraw;
-        window.logout = logout;
-        
-        function showLanding() {
-            document.getElementById('landingSection').classList.remove('hidden');
-            document.getElementById('loginSection').classList.add('hidden');
-            document.getElementById('dashboardSection').classList.add('hidden');
-        }
-        
-        function showLogin() {
-            console.log("showLogin called");
-            document.getElementById('landingSection').classList.add('hidden');
-            document.getElementById('loginSection').classList.remove('hidden');
-            document.getElementById('dashboardSection').classList.add('hidden');
-            document.getElementById('phoneSection').classList.remove('hidden');
-            document.getElementById('otpSection').classList.add('hidden');
-            document.getElementById('phoneLogin').value = '';
-            document.getElementById('otpCode').value = '';
-            document.getElementById('loginMessage').innerHTML = '';
-        }
-        
-        function showDashboard() {
-            document.getElementById('landingSection').classList.add('hidden');
-            document.getElementById('loginSection').classList.add('hidden');
-            document.getElementById('dashboardSection').classList.remove('hidden');
-            loadUserData();
-        }
-        
-        function showToast(msg) {
-            let t = document.createElement('div'); 
-            t.className = 'toast'; 
-            t.innerText = msg;
-            document.body.appendChild(t);
-            setTimeout(() => t.remove(), 3000);
-        }
-        
-        // ========== OTP FUNCTIONS ==========
-        async function sendOTP() {
-            console.log("sendOTP called");
-            const phone = document.getElementById('phoneLogin').value;
-            if (phone.length !== 10) {
-                document.getElementById('loginMessage').innerHTML = '❌ Enter 10 digits';
-                return;
+            // Global Appwrite objects (will be set after SDK loads)
+            let client, account, databases;
+            let currentUserId = null;
+            let currentSession = null;
+
+            // UI elements
+            const landingSection = document.getElementById('landingSection');
+            const loginSection = document.getElementById('loginSection');
+            const dashboardSection = document.getElementById('dashboardSection');
+            const phoneSection = document.getElementById('phoneSection');
+            const otpSection = document.getElementById('otpSection');
+            const phoneInput = document.getElementById('phoneLogin');
+            const otpInput = document.getElementById('otpCode');
+            const loginMessage = document.getElementById('loginMessage');
+
+            // Helper functions
+            function showLanding() {
+                landingSection.classList.remove('hidden');
+                loginSection.classList.add('hidden');
+                dashboardSection.classList.add('hidden');
             }
-            document.getElementById('loginMessage').innerHTML = '<span class="loading-spinner"></span>Sending OTP...';
-            try {
-                currentSession = await account.createPhoneSession('+91' + phone);
-                document.getElementById('loginMessage').innerHTML = '✅ OTP sent! Check your SMS.';
-                document.getElementById('phoneSection').classList.add('hidden');
-                document.getElementById('otpSection').classList.remove('hidden');
-            } catch (e) {
-                console.error(e);
-                document.getElementById('loginMessage').innerHTML = '❌ Error: ' + e.message;
+
+            function showLogin() {
+                landingSection.classList.add('hidden');
+                loginSection.classList.remove('hidden');
+                dashboardSection.classList.add('hidden');
+                phoneSection.classList.remove('hidden');
+                otpSection.classList.add('hidden');
+                phoneInput.value = '';
+                otpInput.value = '';
+                loginMessage.innerHTML = '';
             }
-        }
-        
-        async function verifyOTP() {
-            const otp = document.getElementById('otpCode').value;
-            if (otp.length !== 6) {
-                document.getElementById('loginMessage').innerHTML = '❌ Enter 6-digit OTP';
-                return;
+
+            function showDashboard() {
+                landingSection.classList.add('hidden');
+                loginSection.classList.add('hidden');
+                dashboardSection.classList.remove('hidden');
+                loadUserData();
             }
-            document.getElementById('loginMessage').innerHTML = '<span class="loading-spinner"></span>Verifying...';
-            try {
-                const session = await account.updatePhoneSession(currentSession.$id, otp);
-                currentUserId = session.userId;
-                const urlParams = new URLSearchParams(window.location.search);
-                const referrer = urlParams.get('ref');
-                const phoneNumber = document.getElementById('phoneLogin').value;
-                
-                // Check if user exists
-                const existing = await databases.listDocuments(
-                    APPWRITE_DATABASE_ID,
-                    USERS_COLLECTION,
-                    [Appwrite.Query.equal('phone', phoneNumber)]
-                );
-                
-                if (existing.total === 0) {
-                    await databases.createDocument(
-                        APPWRITE_DATABASE_ID,
-                        USERS_COLLECTION,
-                        Appwrite.ID.unique(),
-                        {
-                            phone: phoneNumber,
-                            name: phoneNumber,
-                            referredBy: referrer || null,
-                            isMember: false,
-                            walletBalance: 0,
-                            totalReferrals: 0,
-                            referralCode: session.userId.slice(0,8).toUpperCase()
-                        }
-                    );
-                    if (referrer) {
-                        try {
-                            const refDoc = await databases.getDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, referrer);
-                            if (refDoc) {
-                                await databases.updateDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, referrer, {
-                                    totalReferrals: (refDoc.totalReferrals || 0) + 1
-                                });
-                            }
-                        } catch(e) { console.log('Referrer not found'); }
-                    }
-                }
-                localStorage.setItem('userId', session.userId);
-                showDashboard();
-                showToast('🎉 Welcome to Highland!');
-            } catch (e) {
-                console.error(e);
-                document.getElementById('loginMessage').innerHTML = '❌ Wrong OTP. Please try again.';
+
+            function showToast(msg) {
+                let t = document.createElement('div');
+                t.className = 'toast';
+                t.innerText = msg;
+                document.body.appendChild(t);
+                setTimeout(() => t.remove(), 3000);
             }
-        }
-        
-        // ========== DASHBOARD FUNCTIONS ==========
-        async function loadUserData() {
-            if (!currentUserId) currentUserId = localStorage.getItem('userId');
-            if (!currentUserId) return;
-            try {
-                const user = await databases.getDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, currentUserId);
-                document.getElementById('walletAmount').innerHTML = '₹' + (user.walletBalance || 0);
-                document.getElementById('totalReferrals').innerText = user.totalReferrals || 0;
-                const link = `https://highland-official.github.io/.COM/?ref=${currentUserId}`;
-                document.getElementById('referralLink').innerText = link;
-                
-                let badge = '🌟 Recruit';
-                let refs = user.totalReferrals || 0;
-                if (refs >= 50) badge = '👑 Master Earner';
-                else if (refs >= 25) badge = '💎 Top Earner';
-                else if (refs >= 10) badge = '⭐ Pro Earner';
-                else if (refs >= 5) badge = '🚀 Earning Star';
-                document.getElementById('referralBadge').innerText = badge;
-                
-                if (user.isMember) {
-                    document.getElementById('memberBadge').innerHTML = '<span class="status-badge premium">✅ Active Member</span>';
-                    document.getElementById('upgradeSection').innerHTML = '<div class="btn" style="background:#2e7d32; cursor:default;">🎯 Job Active • Start Referring!</div>';
-                } else {
-                    document.getElementById('memberBadge').innerHTML = '<span class="status-badge free">⏳ Not Started</span>';
-                    document.getElementById('upgradeSection').innerHTML = '<a href="https://rzp.io/rzp/XhvqGQZ" target="_blank" class="btn" style="background:#c97e00;">🔥 Start Job (₹500)</a>';
-                }
-                
-                const payments = await databases.listDocuments(
-                    APPWRITE_DATABASE_ID,
-                    PAYMENTS_COLLECTION,
-                    [Appwrite.Query.equal('referrerId', currentUserId)]
-                );
-                let total = 0;
-                payments.documents.forEach(p => total += p.commission || 0);
-                document.getElementById('totalEarnedDashboard').innerHTML = '₹' + total;
-                
-                const withdrawals = await databases.listDocuments(
-                    APPWRITE_DATABASE_ID,
-                    WITHDRAWALS_COLLECTION,
-                    [Appwrite.Query.equal('userId', currentUserId), Appwrite.Query.orderDesc('$createdAt')]
-                );
-                const histDiv = document.getElementById('withdrawalHistory');
-                if (withdrawals.total === 0) {
-                    histDiv.innerHTML = '<div style="color:#9aa9bb;">💸 No withdrawals yet</div>';
-                } else {
-                    histDiv.innerHTML = '';
-                    withdrawals.documents.forEach(w => {
-                        const statusColor = w.status === 'completed' ? '#2e7d32' : '#c97e00';
-                        histDiv.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eef2f6;">
-                            <span>₹${w.amount}</span>
-                            <span style="color:${statusColor}; font-weight:500;">${w.status === 'completed' ? '✅ Completed' : '⏳ Pending'}</span>
-                        </div>`;
-                    });
-                }
-            } catch(e) {
-                console.error(e);
-                showToast('Error loading data. Please refresh.');
-            }
-        }
-        
-        async function loadPublicStats() {
-            try {
-                const users = await databases.listDocuments(APPWRITE_DATABASE_ID, USERS_COLLECTION);
-                const payments = await databases.listDocuments(APPWRITE_DATABASE_ID, PAYMENTS_COLLECTION);
-                let totalPaid = 0;
-                payments.documents.forEach(p => totalPaid += p.commission || 0);
-                document.getElementById('totalMembers').innerText = users.total;
-                document.getElementById('totalEarned').innerHTML = '₹' + totalPaid;
-            } catch(e) { console.error(e); }
-        }
-        
-        async function requestWithdraw() {
-            try {
-                const user = await databases.getDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, currentUserId);
-                if (!user.walletBalance || user.walletBalance < 100) {
-                    showToast('⚠️ Minimum ₹100 required');
+
+            // Appwrite functions (will be called after SDK is ready)
+            async function sendOTP() {
+                if (!account) { showToast('Appwrite not ready'); return; }
+                const phone = phoneInput.value;
+                if (phone.length !== 10) {
+                    loginMessage.innerHTML = '❌ Enter 10 digits';
                     return;
                 }
-                const upi = prompt('💰 Enter your UPI ID:');
-                if (!upi) return;
-                await databases.createDocument(APPWRITE_DATABASE_ID, WITHDRAWALS_COLLECTION, Appwrite.ID.unique(), {
-                    userId: currentUserId,
-                    name: user.name,
-                    amount: user.walletBalance,
-                    upiId: upi,
-                    status: 'pending'
-                });
-                showToast('✅ Withdrawal request sent!');
-                loadUserData();
-            } catch(e) {
-                showToast('Error: ' + e.message);
-            }
-        }
-        
-        async function logout() {
-            try {
-                await account.deleteSession('current');
-            } catch(e) {}
-            localStorage.removeItem('userId');
-            currentUserId = null;
-            showLanding();
-            showToast('👋 Logged out');
-        }
-        
-        function copyLink() {
-            const link = document.getElementById('referralLink').innerText;
-            navigator.clipboard.writeText(link);
-            showToast('✨ Link copied!');
-        }
-        
-        function shareWhatsApp() {
-            let link = document.getElementById('referralLink').innerText;
-            window.open(`https://wa.me/?text=Join Highland and earn ₹400 per referral! ${link}`, '_blank');
-        }
-        
-        // Check existing session on load
-        (async function init() {
-            try {
-                const session = await account.getSession('current');
-                if (session) {
-                    currentUserId = session.userId;
-                    localStorage.setItem('userId', currentUserId);
-                    showDashboard();
-                } else {
-                    showLanding();
+                loginMessage.innerHTML = '<span class="loading-spinner"></span>Sending OTP...';
+                try {
+                    currentSession = await account.createPhoneSession('+91' + phone);
+                    loginMessage.innerHTML = '✅ OTP sent! Check your SMS.';
+                    phoneSection.classList.add('hidden');
+                    otpSection.classList.remove('hidden');
+                } catch (e) {
+                    loginMessage.innerHTML = '❌ Error: ' + e.message;
                 }
-            } catch(e) {
-                showLanding();
             }
-            await loadPublicStats();
+
+            async function verifyOTP() {
+                const otp = otpInput.value;
+                if (otp.length !== 6) {
+                    loginMessage.innerHTML = '❌ Enter 6-digit OTP';
+                    return;
+                }
+                loginMessage.innerHTML = '<span class="loading-spinner"></span>Verifying...';
+                try {
+                    const session = await account.updatePhoneSession(currentSession.$id, otp);
+                    currentUserId = session.userId;
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const referrer = urlParams.get('ref');
+                    const phoneNumber = phoneInput.value;
+
+                    // Check if user exists
+                    const existing = await databases.listDocuments(
+                        APPWRITE_DATABASE_ID,
+                        USERS_COLLECTION,
+                        [Appwrite.Query.equal('phone', phoneNumber)]
+                    );
+                    if (existing.total === 0) {
+                        await databases.createDocument(
+                            APPWRITE_DATABASE_ID,
+                            USERS_COLLECTION,
+                            Appwrite.ID.unique(),
+                            {
+                                phone: phoneNumber,
+                                name: phoneNumber,
+                                referredBy: referrer || null,
+                                isMember: false,
+                                walletBalance: 0,
+                                totalReferrals: 0,
+                                referralCode: session.userId.slice(0,8).toUpperCase()
+                            }
+                        );
+                        if (referrer) {
+                            try {
+                                const refDoc = await databases.getDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, referrer);
+                                if (refDoc) {
+                                    await databases.updateDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, referrer, {
+                                        totalReferrals: (refDoc.totalReferrals || 0) + 1
+                                    });
+                                }
+                            } catch(e) { console.log('Referrer not found'); }
+                        }
+                    }
+                    localStorage.setItem('userId', session.userId);
+                    showDashboard();
+                    showToast('🎉 Welcome to Highland!');
+                } catch (e) {
+                    loginMessage.innerHTML = '❌ Wrong OTP. Please try again.';
+                }
+            }
+
+            async function loadUserData() {
+                if (!currentUserId) currentUserId = localStorage.getItem('userId');
+                if (!currentUserId) return;
+                try {
+                    const user = await databases.getDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, currentUserId);
+                    document.getElementById('walletAmount').innerHTML = '₹' + (user.walletBalance || 0);
+                    document.getElementById('totalReferrals').innerText = user.totalReferrals || 0;
+                    const link = `https://highland-official.github.io/.COM/?ref=${currentUserId}`;
+                    document.getElementById('referralLink').innerText = link;
+
+                    let badge = '🌟 Recruit';
+                    let refs = user.totalReferrals || 0;
+                    if (refs >= 50) badge = '👑 Master Earner';
+                    else if (refs >= 25) badge = '💎 Top Earner';
+                    else if (refs >= 10) badge = '⭐ Pro Earner';
+                    else if (refs >= 5) badge = '🚀 Earning Star';
+                    document.getElementById('referralBadge').innerText = badge;
+
+                    if (user.isMember) {
+                        document.getElementById('memberBadge').innerHTML = '<span class="status-badge premium">✅ Active Member</span>';
+                        document.getElementById('upgradeSection').innerHTML = '<div class="btn" style="background:#2e7d32; cursor:default;">🎯 Job Active • Start Referring!</div>';
+                    } else {
+                        document.getElementById('memberBadge').innerHTML = '<span class="status-badge free">⏳ Not Started</span>';
+                        document.getElementById('upgradeSection').innerHTML = '<a href="https://rzp.io/rzp/XhvqGQZ" target="_blank" class="btn" style="background:#c97e00;">🔥 Start Job (₹500)</a>';
+                    }
+
+                    const payments = await databases.listDocuments(
+                        APPWRITE_DATABASE_ID,
+                        PAYMENTS_COLLECTION,
+                        [Appwrite.Query.equal('referrerId', currentUserId)]
+                    );
+                    let total = 0;
+                    payments.documents.forEach(p => total += p.commission || 0);
+                    document.getElementById('totalEarnedDashboard').innerHTML = '₹' + total;
+
+                    const withdrawals = await databases.listDocuments(
+                        APPWRITE_DATABASE_ID,
+                        WITHDRAWALS_COLLECTION,
+                        [Appwrite.Query.equal('userId', currentUserId), Appwrite.Query.orderDesc('$createdAt')]
+                    );
+                    const histDiv = document.getElementById('withdrawalHistory');
+                    if (withdrawals.total === 0) {
+                        histDiv.innerHTML = '<div style="color:#9aa9bb;">💸 No withdrawals yet</div>';
+                    } else {
+                        histDiv.innerHTML = '';
+                        withdrawals.documents.forEach(w => {
+                            const statusColor = w.status === 'completed' ? '#2e7d32' : '#c97e00';
+                            histDiv.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eef2f6;">
+                                <span>₹${w.amount}</span>
+                                <span style="color:${statusColor}; font-weight:500;">${w.status === 'completed' ? '✅ Completed' : '⏳ Pending'}</span>
+                            </div>`;
+                        });
+                    }
+                } catch(e) {
+                    console.error(e);
+                    showToast('Error loading data.');
+                }
+            }
+
+            async function loadPublicStats() {
+                try {
+                    const users = await databases.listDocuments(APPWRITE_DATABASE_ID, USERS_COLLECTION);
+                    const payments = await databases.listDocuments(APPWRITE_DATABASE_ID, PAYMENTS_COLLECTION);
+                    let totalPaid = 0;
+                    payments.documents.forEach(p => totalPaid += p.commission || 0);
+                    document.getElementById('totalMembers').innerText = users.total;
+                    document.getElementById('totalEarned').innerHTML = '₹' + totalPaid;
+                } catch(e) { console.error(e); }
+            }
+
+            async function requestWithdraw() {
+                if (!currentUserId) return;
+                try {
+                    const user = await databases.getDocument(APPWRITE_DATABASE_ID, USERS_COLLECTION, currentUserId);
+                    if (!user.walletBalance || user.walletBalance < 100) {
+                        showToast('⚠️ Minimum ₹100 required');
+                        return;
+                    }
+                    const upi = prompt('💰 Enter UPI ID:');
+                    if (!upi) return;
+                    await databases.createDocument(APPWRITE_DATABASE_ID, WITHDRAWALS_COLLECTION, Appwrite.ID.unique(), {
+                        userId: currentUserId,
+                        name: user.name,
+                        amount: user.walletBalance,
+                        upiId: upi,
+                        status: 'pending'
+                    });
+                    showToast('✅ Request sent!');
+                    loadUserData();
+                } catch(e) { showToast('Error: ' + e.message); }
+            }
+
+            async function logout() {
+                try { await account.deleteSession('current'); } catch(e) {}
+                localStorage.removeItem('userId');
+                currentUserId = null;
+                showLanding();
+                showToast('👋 Logged out');
+            }
+
+            function copyLink() {
+                const link = document.getElementById('referralLink').innerText;
+                navigator.clipboard.writeText(link);
+                showToast('✨ Link copied!');
+            }
+
+            function shareWhatsApp() {
+                let link = document.getElementById('referralLink').innerText;
+                window.open(`https://wa.me/?text=Join Highland and earn ₹400 per referral! ${link}`, '_blank');
+            }
+
+            // Attach event listeners after DOM ready
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('applyBtn').addEventListener('click', showLogin);
+                document.getElementById('sendOtpBtn').addEventListener('click', sendOTP);
+                document.getElementById('verifyOtpBtn').addEventListener('click', verifyOTP);
+                document.getElementById('backBtn').addEventListener('click', showLanding);
+                document.getElementById('copyLinkBtn').addEventListener('click', copyLink);
+                document.getElementById('whatsappBtn').addEventListener('click', shareWhatsApp);
+                document.getElementById('withdrawBtn').addEventListener('click', requestWithdraw);
+                document.getElementById('logoutBtn').addEventListener('click', logout);
+            });
+
+            // Initialize Appwrite after SDK script loads
+            function initAppwrite() {
+                if (typeof Appwrite === 'undefined') {
+                    setTimeout(initAppwrite, 100);
+                    return;
+                }
+                client = new Appwrite.Client();
+                client.setEndpoint(APPWRITE_ENDPOINT);
+                client.setProject(APPWRITE_PROJECT_ID);
+                account = new Appwrite.Account(client);
+                databases = new Appwrite.Databases(client);
+
+                // Check existing session
+                (async () => {
+                    try {
+                        const session = await account.getSession('current');
+                        if (session) {
+                            currentUserId = session.userId;
+                            localStorage.setItem('userId', currentUserId);
+                            showDashboard();
+                        } else {
+                            showLanding();
+                        }
+                    } catch(e) {
+                        showLanding();
+                    }
+                    await loadPublicStats();
+                })();
+            }
+
+            initAppwrite();
         })();
     </script>
 </body>
