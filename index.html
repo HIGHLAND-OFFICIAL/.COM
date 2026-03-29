@@ -46,7 +46,7 @@
         #log {
             background: #1a1a1a;
             padding: 10px;
-            height: 200px;
+            height: 300px;
             overflow-y: scroll;
             font-size: 12px;
             border-radius: 8px;
@@ -57,7 +57,7 @@
 <body>
     <div class="card">
         <h1>🐛 HIGHLAND DEBUG</h1>
-        <p>Testing Appwrite on your Android phone</p>
+        <p>Testing Appwrite v14 Phone Auth</p>
     </div>
 
     <div class="card">
@@ -107,11 +107,22 @@
         // Appwrite config
         const APPWRITE_ENDPOINT = 'https://cloud.appwrite.io/v1';
         const APPWRITE_PROJECT_ID = '69c74d8a001174da7635';
-        const APPWRITE_DATABASE_ID = 'highland_db';
 
-        let client, account, databases;
+        let client, account;
         let currentSession = null;
         let isReady = false;
+
+        // List all available methods on account object
+        function listMethods(obj) {
+            let methods = [];
+            for (let key in obj) {
+                if (typeof obj[key] === 'function') {
+                    methods.push(key);
+                }
+            }
+            addLog('📋 Available methods: ' + methods.join(', '));
+            return methods;
+        }
 
         // Initialize Appwrite
         function init() {
@@ -130,8 +141,10 @@
                 addLog('✅ Client created', false);
                 
                 account = new Appwrite.Account(client);
-                databases = new Appwrite.Databases(client);
-                addLog('✅ Account and Databases created', false);
+                addLog('✅ Account created', false);
+                
+                // List all available methods
+                listMethods(account);
                 
                 isReady = true;
                 showStatus('✅ Ready! Enter phone number');
@@ -141,7 +154,7 @@
             }
         }
 
-        // Send OTP
+        // Send OTP - Try different method names
         async function sendOTP() {
             if (!isReady) {
                 resultDiv.innerHTML = '<span class="error">❌ Appwrite not ready</span>';
@@ -155,24 +168,34 @@
             resultDiv.innerHTML = '<span class="success">📤 Sending OTP...</span>';
             addLog(`Sending OTP to +91${phone}`);
             
-            try {
-                // Method 1: Try createPhoneSession
-                currentSession = await account.createPhoneSession('+91' + phone);
-                addLog('✅ OTP session created: ' + currentSession.$id);
-                resultDiv.innerHTML = '<span class="success">✅ OTP sent! Check SMS</span>';
-                otpDiv.classList.remove('hidden');
-            } catch (e) {
-                addLog('❌ Error: ' + e.message, true);
-                resultDiv.innerHTML = `<span class="error">❌ ${e.message}</span>`;
-                
-                // Show more details
-                if (e.message.includes('phone')) {
-                    resultDiv.innerHTML += '<br>💡 Make sure Phone auth is enabled in Appwrite dashboard';
-                }
-                if (e.message.includes('rate')) {
-                    resultDiv.innerHTML += '<br>💡 Too many attempts. Wait 1 minute.';
+            // Try different method names that might work
+            const methodsToTry = [
+                { name: 'createPhoneSession', params: ['+91' + phone] },
+                { name: 'createPhoneVerification', params: ['+91' + phone] },
+                { name: 'createSession', params: ['+91' + phone, 'phone'] },
+                { name: 'sendPhoneVerification', params: ['+91' + phone] }
+            ];
+            
+            for (let method of methodsToTry) {
+                if (typeof account[method.name] === 'function') {
+                    addLog(`Trying: ${method.name}...`);
+                    try {
+                        const result = await account[method.name](...method.params);
+                        addLog(`✅ Success with ${method.name}!`);
+                        currentSession = result;
+                        resultDiv.innerHTML = '<span class="success">✅ OTP sent! Check SMS</span>';
+                        otpDiv.classList.remove('hidden');
+                        return;
+                    } catch (e) {
+                        addLog(`❌ ${method.name} failed: ${e.message}`, true);
+                    }
+                } else {
+                    addLog(`⚠️ ${method.name} not available`, true);
                 }
             }
+            
+            resultDiv.innerHTML = '<span class="error">❌ No working phone auth method found. Check Appwrite docs.</span>';
+            addLog('❌ All phone auth methods failed', true);
         }
 
         // Verify OTP
@@ -185,17 +208,30 @@
             resultDiv.innerHTML = '<span class="success">🔐 Verifying...</span>';
             addLog(`Verifying OTP: ${otp}`);
             
-            try {
-                const session = await account.updatePhoneSession(currentSession.$id, otp);
-                addLog('✅ OTP verified! User ID: ' + session.userId);
-                resultDiv.innerHTML = '<span class="success">✅ Login successful! Redirecting...</span>';
-                setTimeout(() => {
-                    window.location.href = 'https://highland-official.github.io/.COM/';
-                }, 1500);
-            } catch (e) {
-                addLog('❌ Verification failed: ' + e.message, true);
-                resultDiv.innerHTML = `<span class="error">❌ Wrong OTP: ${e.message}</span>`;
+            // Try different verify methods
+            const verifyMethods = [
+                { name: 'updatePhoneSession', params: [currentSession.$id, otp] },
+                { name: 'updatePhoneVerification', params: [currentSession.$id, otp] },
+                { name: 'createSession', params: ['+91' + phoneInput.value, otp, 'phone'] }
+            ];
+            
+            for (let method of verifyMethods) {
+                if (typeof account[method.name] === 'function') {
+                    try {
+                        const session = await account[method.name](...method.params);
+                        addLog(`✅ Verified with ${method.name}! User ID: ${session.userId}`);
+                        resultDiv.innerHTML = '<span class="success">✅ Login successful!</span>';
+                        setTimeout(() => {
+                            window.location.href = 'https://highland-official.github.io/.COM/';
+                        }, 1500);
+                        return;
+                    } catch (e) {
+                        addLog(`❌ ${method.name} failed: ${e.message}`, true);
+                    }
+                }
             }
+            
+            resultDiv.innerHTML = '<span class="error">❌ Verification failed. Check Appwrite docs.</span>';
         }
 
         // Event listeners
