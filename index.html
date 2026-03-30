@@ -1,123 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Highland SMS Test</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f7fb;
-            padding: 20px;
-        }
-        .container { max-width: 400px; margin: 0 auto; }
-        .card {
-            background: white;
-            border-radius: 24px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .btn {
-            background: #1e3a5f;
-            color: white;
-            padding: 14px;
-            border-radius: 60px;
-            width: 100%;
-            border: none;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 10px 0;
-            cursor: pointer;
-        }
-        input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #ddd;
-            border-radius: 60px;
-            font-size: 16px;
-            margin: 10px 0;
-        }
-        .hidden { display: none; }
-        .success { color: green; margin: 10px 0; }
-        .error { color: red; margin: 10px 0; }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>Supabase OTP Debug</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    input, button {
+      padding: 14px;
+      margin: 8px;
+      width: 90%;
+      max-width: 320px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+    button { background: #22c55e; color: white; font-weight: bold; }
+    #log {
+      margin-top: 20px;
+      text-align: left;
+      background: black;
+      padding: 10px;
+      font-size: 12px;
+      height: 250px;
+      overflow-y: scroll;
+      white-space: pre-wrap;
+      border-radius: 10px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <h1>📱 Highland SMS Test</h1>
-            <p>Enter your phone to receive OTP</p>
-            
-            <div id="step1">
-                <input type="tel" id="phone" placeholder="10-digit mobile number" maxlength="10">
-                <button class="btn" id="sendBtn">Send OTP</button>
-            </div>
-            
-            <div id="step2" class="hidden">
-                <input type="text" id="otp" placeholder="6-digit OTP">
-                <button class="btn" id="verifyBtn">Verify OTP</button>
-            </div>
-            
-            <div id="message"></div>
-        </div>
-    </div>
 
-    <script>
-        const SUPABASE_URL = 'https://hwezthfuxgtlhyyofrsa.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_slq94VMSpehkdCFoA4PXOw_bgcChKgC';
-        
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
-        let phoneNumber = '';
-        
-        document.getElementById('sendBtn').onclick = async () => {
-            const phone = document.getElementById('phone').value;
-            if (phone.length !== 10) {
-                document.getElementById('message').innerHTML = '<p class="error">❌ Enter 10 digits</p>';
-                return;
-            }
-            
-            phoneNumber = phone;
-            document.getElementById('message').innerHTML = '<p class="success">📤 Sending OTP...</p>';
-            
-            const { error } = await supabase.auth.signInWithOtp({
-                phone: '+91' + phone
-            });
-            
-            if (error) {
-                document.getElementById('message').innerHTML = '<p class="error">❌ Error: ' + error.message + '</p>';
-            } else {
-                document.getElementById('message').innerHTML = '<p class="success">✅ OTP sent! Check your SMS.</p>';
-                document.getElementById('step1').classList.add('hidden');
-                document.getElementById('step2').classList.remove('hidden');
-            }
-        };
-        
-        document.getElementById('verifyBtn').onclick = async () => {
-            const otp = document.getElementById('otp').value;
-            if (otp.length !== 6) {
-                document.getElementById('message').innerHTML = '<p class="error">❌ Enter 6-digit OTP</p>';
-                return;
-            }
-            
-            document.getElementById('message').innerHTML = '<p class="success">🔐 Verifying...</p>';
-            
-            const { data, error } = await supabase.auth.verifyOtp({
-                phone: '+91' + phoneNumber,
-                token: otp,
-                type: 'sms'
-            });
-            
-            if (error) {
-                document.getElementById('message').innerHTML = '<p class="error">❌ Wrong OTP: ' + error.message + '</p>';
-            } else {
-                document.getElementById('message').innerHTML = '<p class="success">✅ SUCCESS! You are logged in. User ID: ' + data.user.id + '</p>';
-                document.getElementById('step2').classList.add('hidden');
-            }
-        };
-    </script>
+<h2>Supabase OTP Debug</h2>
+
+<input id="phone" placeholder="Phone 919876543210">
+<button id="sendBtn" type="button">Send OTP</button>
+
+<input id="otp" placeholder="Enter OTP">
+<button id="verifyBtn" type="button">Verify OTP</button>
+
+<div id="log"></div>
+
+<script>
+function log(msg) {
+  const logBox = document.getElementById("log");
+  logBox.innerText += msg + "\\n";
+  console.log(msg);
+}
+
+window.onerror = function(message, source, lineno, colno, error) {
+  log("JS ERROR: " + message + " at line " + lineno);
+};
+
+document.addEventListener("DOMContentLoaded", function() {
+
+  log("Page Loaded");
+
+  if (!window.supabase) {
+    log("ERROR: Supabase library NOT loaded");
+    return;
+  } else {
+    log("Supabase library loaded");
+  }
+
+  const supabaseUrl = "https://hwezthfuxgtlhyyofrsa.supabase.co";
+  const supabaseKey = "PASTE_YOUR_ANON_KEY";
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+  log("Supabase client created");
+
+  document.getElementById("sendBtn").addEventListener("click", async () => {
+    log("Send OTP button clicked");
+
+    const phone = document.getElementById("phone").value;
+    if (!phone) {
+      log("ERROR: Phone number empty");
+      return;
+    }
+
+    log("Sending OTP to +" + phone);
+
+    try {
+      const { data, error } = await supabase.auth.signInWithOtp({
+        phone: "+" + phone
+      });
+
+      if (error) {
+        log("Supabase Error: " + error.message);
+      } else {
+        log("OTP request sent successfully");
+        log(JSON.stringify(data));
+      }
+    } catch (err) {
+      log("NETWORK ERROR: " + err.message);
+    }
+  });
+
+  document.getElementById("verifyBtn").addEventListener("click", async () => {
+    log("Verify button clicked");
+
+    const phone = document.getElementById("phone").value;
+    const otp = document.getElementById("otp").value;
+
+    if (!otp) {
+      log("ERROR: OTP empty");
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase.auth.verifyOtp({
+        phone: "+" + phone,
+        token: otp,
+        type: "sms"
+      });
+
+      if (error) {
+        log("Verify Error: " + error.message);
+      } else {
+        log("Login Success");
+        log("User ID: " + data.user.id);
+
+        // Insert user into table
+        const { error: dbError } = await supabase
+          .from("users")
+          .insert([{ id: data.user.id, phone: data.user.phone }]);
+
+        if (dbError) {
+          log("DB Error: " + dbError.message);
+        } else {
+          log("User inserted into database");
+        }
+      }
+    } catch (err) {
+      log("Verify Network Error: " + err.message);
+    }
+  });
+
+});
+</script>
+
 </body>
 </html>
