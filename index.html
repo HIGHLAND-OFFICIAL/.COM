@@ -1,140 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>OTP Debug</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
-  <style>
-    body {
-      font-family: Arial;
-      background: #0f172a;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-    input, button {
-      padding: 14px;
-      margin: 8px;
-      width: 90%;
-      max-width: 320px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-    }
-    button { background: #22c55e; color: white; font-weight: bold; }
-    #log {
-      margin-top: 20px;
-      text-align: left;
-      background: black;
-      padding: 10px;
-      font-size: 12px;
-      height: 300px;
-      overflow-y: scroll;
-      white-space: pre-wrap;
-      border-radius: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appwrite Test</title>
+    <style>
+        body { font-family: monospace; background: #0a0a0a; color: #0f0; padding: 20px; }
+        .card { background: #111; padding: 20px; margin: 10px 0; border-radius: 10px; border: 1px solid #0f0; }
+        .error { color: #f00; }
+        .success { color: #0f0; }
+        input, button { padding: 10px; margin: 5px; border-radius: 5px; }
+        button { background: #0f0; color: #000; cursor: pointer; }
+        #log { height: 300px; overflow-y: scroll; background: #1a1a1a; padding: 10px; font-size: 12px; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0/dist/iife/sdk.min.js"></script>
 </head>
 <body>
+    <div class="card">
+        <h2>🔧 Appwrite Test</h2>
+        <div id="status">Loading...</div>
+    </div>
 
-<h2>Supabase OTP Debug</h2>
+    <div class="card">
+        <input type="tel" id="phone" placeholder="10-digit mobile" maxlength="10">
+        <button id="sendBtn">Send OTP</button>
+        <div id="otpArea" style="display:none; margin-top:10px;">
+            <input type="text" id="otp" placeholder="6-digit OTP">
+            <button id="verifyBtn">Verify</button>
+        </div>
+        <div id="result"></div>
+    </div>
 
-<input id="phone" placeholder="Enter phone with country code e.g. 918010920477">
-<button id="sendBtn" type="button">Send OTP</button>
+    <div class="card">
+        <h3>📜 Log</h3>
+        <div id="log"></div>
+    </div>
 
-<input id="otp" placeholder="Enter OTP">
-<button id="verifyBtn" type="button">Verify OTP</button>
+    <script>
+        const logDiv = document.getElementById('log');
+        function log(msg, isError = false) {
+            const entry = document.createElement('div');
+            entry.style.color = isError ? '#f00' : '#0f0';
+            entry.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logDiv.appendChild(entry);
+            entry.scrollIntoView();
+        }
 
-<div id="log"></div>
+        // Appwrite config
+        const ENDPOINT = 'https://cloud.appwrite.io/v1';
+        const PROJECT_ID = '69c74d8a001174da7635';
+        
+        let client, account, currentSession = null;
 
-<script>
-function log(msg) {
-  const logBox = document.getElementById("log");
-  logBox.innerText += msg + "\n";
-  console.log(msg);
-}
+        function init() {
+            log('Initializing Appwrite...');
+            if (typeof Appwrite === 'undefined') {
+                log('❌ Appwrite SDK not loaded!', true);
+                setTimeout(init, 500);
+                return;
+            }
+            log('✅ Appwrite SDK loaded');
+            
+            client = new Appwrite.Client();
+            client.setEndpoint(ENDPOINT);
+            client.setProject(PROJECT_ID);
+            account = new Appwrite.Account(client);
+            log('✅ Appwrite ready');
+            document.getElementById('status').innerHTML = '✅ Ready - Enter phone number';
+        }
 
-window.onerror = function(message, source, lineno, colno, error) {
-  log("JS ERROR: " + message + " at line " + lineno);
-};
+        document.getElementById('sendBtn').onclick = async () => {
+            const phone = document.getElementById('phone').value;
+            if (phone.length !== 10) {
+                document.getElementById('result').innerHTML = '<span class="error">❌ Enter 10 digits</span>';
+                return;
+            }
+            document.getElementById('result').innerHTML = '📤 Sending OTP...';
+            log(`Sending OTP to +91${phone}`);
+            
+            try {
+                currentSession = await account.createPhoneSession('+91' + phone);
+                log(`✅ Session created: ${currentSession.$id}`);
+                document.getElementById('result').innerHTML = '✅ OTP sent! Check SMS';
+                document.getElementById('otpArea').style.display = 'block';
+            } catch (e) {
+                log(`❌ Error: ${e.message}`, true);
+                document.getElementById('result').innerHTML = `<span class="error">❌ ${e.message}</span>`;
+            }
+        };
 
-document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('verifyBtn').onclick = async () => {
+            const otp = document.getElementById('otp').value;
+            if (otp.length !== 6) {
+                document.getElementById('result').innerHTML = '<span class="error">❌ Enter 6-digit OTP</span>';
+                return;
+            }
+            document.getElementById('result').innerHTML = '🔐 Verifying...';
+            log(`Verifying OTP: ${otp}`);
+            
+            try {
+                const session = await account.updatePhoneSession(currentSession.$id, otp);
+                log(`✅ SUCCESS! User ID: ${session.userId}`);
+                document.getElementById('result').innerHTML = `<span class="success">✅ LOGIN SUCCESS! User ID: ${session.userId}</span>`;
+            } catch (e) {
+                log(`❌ Wrong OTP: ${e.message}`, true);
+                document.getElementById('result').innerHTML = '<span class="error">❌ Wrong OTP</span>';
+            }
+        };
 
-  log("Page Loaded");
-
-  if (!window.supabase) {
-    log("ERROR: Supabase library NOT loaded");
-    return;
-  } else {
-    log("Supabase library loaded");
-  }
-
-  const supabaseUrl = "https://hwezthfuxgtlhyyofrsa.supabase.co";
-  const supabaseKey = "PASTE_ANON_KEY_HERE";
-  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-  log("Supabase client created");
-
-  document.getElementById("sendBtn").addEventListener("click", async () => {
-    log("Send OTP button clicked");
-
-    const phone = document.getElementById("phone").value;
-
-    if (!phone) {
-      log("ERROR: Phone number empty");
-      return;
-    }
-
-    log("Sending OTP to +" + phone);
-
-    try {
-      const { data, error } = await supabase.auth.signInWithOtp({
-        phone: "+" + phone
-      });
-
-      if (error) {
-        log("Supabase Error: " + error.message);
-      } else {
-        log("OTP request sent successfully");
-        log(JSON.stringify(data));
-      }
-    } catch (err) {
-      log("NETWORK ERROR: " + err.message);
-    }
-  });
-
-  document.getElementById("verifyBtn").addEventListener("click", async () => {
-    log("Verify button clicked");
-
-    const phone = document.getElementById("phone").value;
-    const otp = document.getElementById("otp").value;
-
-    if (!otp) {
-      log("ERROR: OTP empty");
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase.auth.verifyOtp({
-        phone: "+" + phone,
-        token: otp,
-        type: "sms"
-      });
-
-      if (error) {
-        log("Verify Error: " + error.message);
-      } else {
-        log("Login Success");
-        log("User ID: " + data.user.id);
-      }
-    } catch (err) {
-      log("Verify Network Error: " + err.message);
-    }
-  });
-
-});
-</script>
-
+        init();
+    </script>
 </body>
 </html>
