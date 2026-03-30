@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appwrite Test</title>
+    <title>Appwrite Phone Test</title>
     <style>
         body { font-family: monospace; background: #0a0a0a; color: #0f0; padding: 20px; }
         .card { background: #111; padding: 20px; margin: 10px 0; border-radius: 10px; border: 1px solid #0f0; }
         .error { color: #f00; }
         .success { color: #0f0; }
-        input, button { padding: 10px; margin: 5px; border-radius: 5px; }
+        input, button { padding: 10px; margin: 5px; border-radius: 5px; font-size: 16px; }
         button { background: #0f0; color: #000; cursor: pointer; }
-        #log { height: 300px; overflow-y: scroll; background: #1a1a1a; padding: 10px; font-size: 12px; }
+        #log { height: 250px; overflow-y: scroll; background: #1a1a1a; padding: 10px; font-size: 12px; margin-top: 10px; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0/dist/iife/sdk.min.js"></script>
 </head>
 <body>
     <div class="card">
-        <h2>🔧 Appwrite Test</h2>
+        <h2>📱 Appwrite Phone Auth Test</h2>
         <div id="status">Loading...</div>
     </div>
 
@@ -46,9 +46,9 @@
             entry.scrollIntoView();
         }
 
-        // Appwrite config
-        const ENDPOINT = 'https://cloud.appwrite.io/v1';
+        const ENDPOINT = 'https://sgp.cloud.appwrite.io/v1';
         const PROJECT_ID = '69c74d8a001174da7635';
+        const API_KEY = 'standard_751e7709fd2400de4b8b6bc48567bfb6c2694aea17d8f6c034ba87417a236d7f799aa7ff97668621afb796dc2217f69f8114321b3297380343f0d3416c597b5d3eb7e7637325b6750dce0013203c73107168ccef4bcadc05b44750bfbf34c878312f856abd16b3abd48f696da321065466568dda9c05cb761c864e081c8b8a5c';
         
         let client, account, currentSession = null;
 
@@ -64,9 +64,11 @@
             client = new Appwrite.Client();
             client.setEndpoint(ENDPOINT);
             client.setProject(PROJECT_ID);
+            client.setKey(API_KEY);
             account = new Appwrite.Account(client);
+            
             log('✅ Appwrite ready');
-            document.getElementById('status').innerHTML = '✅ Ready - Enter phone number';
+            document.getElementById('status').innerHTML = '✅ Ready';
         }
 
         document.getElementById('sendBtn').onclick = async () => {
@@ -79,8 +81,9 @@
             log(`Sending OTP to +91${phone}`);
             
             try {
-                currentSession = await account.createPhoneSession('+91' + phone);
-                log(`✅ Session created: ${currentSession.$id}`);
+                const session = await account.createPhoneSession('+91' + phone);
+                currentSession = session;
+                log(`✅ Session created: ${session.$id}`);
                 document.getElementById('result').innerHTML = '✅ OTP sent! Check SMS';
                 document.getElementById('otpArea').style.display = 'block';
             } catch (e) {
@@ -103,7 +106,7 @@
                 log(`✅ SUCCESS! User ID: ${session.userId}`);
                 document.getElementById('result').innerHTML = `<span class="success">✅ LOGIN SUCCESS! User ID: ${session.userId}</span>`;
             } catch (e) {
-                log(`❌ Wrong OTP: ${e.message}`, true);
+                log(`❌ Verification failed: ${e.message}`, true);
                 document.getElementById('result').innerHTML = '<span class="error">❌ Wrong OTP</span>';
             }
         };
