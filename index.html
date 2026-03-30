@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Supabase OTP Debug</title>
+  <title>OTP Debug</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
@@ -29,7 +29,7 @@
       background: black;
       padding: 10px;
       font-size: 12px;
-      height: 250px;
+      height: 300px;
       overflow-y: scroll;
       white-space: pre-wrap;
       border-radius: 10px;
@@ -40,7 +40,7 @@
 
 <h2>Supabase OTP Debug</h2>
 
-<input id="phone" placeholder="Phone 919876543210">
+<input id="phone" placeholder="Enter phone with country code e.g. 918010920477">
 <button id="sendBtn" type="button">Send OTP</button>
 
 <input id="otp" placeholder="Enter OTP">
@@ -51,7 +51,7 @@
 <script>
 function log(msg) {
   const logBox = document.getElementById("log");
-  logBox.innerText += msg + "\\n";
+  logBox.innerText += msg + "\n";
   console.log(msg);
 }
 
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   const supabaseUrl = "https://hwezthfuxgtlhyyofrsa.supabase.co";
-  const supabaseKey = "PASTE_YOUR_ANON_KEY";
+  const supabaseKey = "PASTE_ANON_KEY_HERE";
   const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
   log("Supabase client created");
@@ -80,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function() {
     log("Send OTP button clicked");
 
     const phone = document.getElementById("phone").value;
+
     if (!phone) {
       log("ERROR: Phone number empty");
       return;
@@ -126,17 +127,6 @@ document.addEventListener("DOMContentLoaded", function() {
       } else {
         log("Login Success");
         log("User ID: " + data.user.id);
-
-        // Insert user into table
-        const { error: dbError } = await supabase
-          .from("users")
-          .insert([{ id: data.user.id, phone: data.user.phone }]);
-
-        if (dbError) {
-          log("DB Error: " + dbError.message);
-        } else {
-          log("User inserted into database");
-        }
       }
     } catch (err) {
       log("Verify Network Error: " + err.message);
