@@ -1,117 +1,233 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appwrite Phone Test</title>
-    <style>
-        body { font-family: monospace; background: #0a0a0a; color: #0f0; padding: 20px; }
-        .card { background: #111; padding: 20px; margin: 10px 0; border-radius: 10px; border: 1px solid #0f0; }
-        .error { color: #f00; }
-        .success { color: #0f0; }
-        input, button { padding: 10px; margin: 5px; border-radius: 5px; font-size: 16px; }
-        button { background: #0f0; color: #000; cursor: pointer; }
-        #log { height: 250px; overflow-y: scroll; background: #1a1a1a; padding: 10px; font-size: 12px; margin-top: 10px; }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0/dist/iife/sdk.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Highland Jobs</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+body{
+font-family:system-ui;
+background:#0f172a;
+color:white;
+padding:20px;
+}
+.container{max-width:450px;margin:auto;}
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:20px;
+margin-bottom:20px;
+}
+input{
+width:100%;
+padding:12px;
+margin:5px 0;
+border-radius:10px;
+border:none;
+}
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:#ff8c42;
+color:white;
+font-weight:bold;
+margin-top:10px;
+}
+.hidden{display:none;}
+.wallet{font-size:40px;text-align:center;color:#ffb347;}
+.link{background:#020617;padding:10px;border-radius:10px;font-size:12px;word-break:break-all;}
+</style>
 </head>
+
 <body>
-    <div class="card">
-        <h2>📱 Appwrite Phone Auth Test</h2>
-        <div id="status">Loading...</div>
-    </div>
+<div class="container">
 
-    <div class="card">
-        <input type="tel" id="phone" placeholder="10-digit mobile" maxlength="10">
-        <button id="sendBtn">Send OTP</button>
-        <div id="otpArea" style="display:none; margin-top:10px;">
-            <input type="text" id="otp" placeholder="6-digit OTP">
-            <button id="verifyBtn">Verify</button>
-        </div>
-        <div id="result"></div>
-    </div>
+<div id="home" class="card">
+<h1>HIGHLAND JOBS</h1>
+<p>Earn ₹400 per referral</p>
+<button onclick="showAuth()">Start Now</button>
+</div>
 
-    <div class="card">
-        <h3>📜 Log</h3>
-        <div id="log"></div>
-    </div>
+<div id="auth" class="card hidden">
+<h3>Login</h3>
+<input id="loginPhone" placeholder="Phone">
+<input id="loginPass" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
 
-    <script>
-        const logDiv = document.getElementById('log');
-        function log(msg, isError = false) {
-            const entry = document.createElement('div');
-            entry.style.color = isError ? '#f00' : '#0f0';
-            entry.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}`;
-            logDiv.appendChild(entry);
-            entry.scrollIntoView();
-        }
+<hr>
 
-        const ENDPOINT = 'https://sgp.cloud.appwrite.io/v1';
-        const PROJECT_ID = '69c74d8a001174da7635';
-        const API_KEY = 'standard_751e7709fd2400de4b8b6bc48567bfb6c2694aea17d8f6c034ba87417a236d7f799aa7ff97668621afb796dc2217f69f8114321b3297380343f0d3416c597b5d3eb7e7637325b6750dce0013203c73107168ccef4bcadc05b44750bfbf34c878312f856abd16b3abd48f696da321065466568dda9c05cb761c864e081c8b8a5c';
-        
-        let client, account, currentSession = null;
+<h3>Signup</h3>
+<input id="signPhone" placeholder="Phone">
+<input id="signPass" type="password" placeholder="Password">
+<input id="coupon" placeholder="Coupon (optional)">
+<button onclick="signup()">Signup</button>
 
-        function init() {
-            log('Initializing Appwrite...');
-            if (typeof Appwrite === 'undefined') {
-                log('❌ Appwrite SDK not loaded!', true);
-                setTimeout(init, 500);
-                return;
-            }
-            log('✅ Appwrite SDK loaded');
-            
-            client = new Appwrite.Client();
-            client.setEndpoint(ENDPOINT);
-            client.setProject(PROJECT_ID);
-            client.setKey(API_KEY);
-            account = new Appwrite.Account(client);
-            
-            log('✅ Appwrite ready');
-            document.getElementById('status').innerHTML = '✅ Ready';
-        }
+<button onclick="back()">Back</button>
+<p id="msg"></p>
+</div>
 
-        document.getElementById('sendBtn').onclick = async () => {
-            const phone = document.getElementById('phone').value;
-            if (phone.length !== 10) {
-                document.getElementById('result').innerHTML = '<span class="error">❌ Enter 10 digits</span>';
-                return;
-            }
-            document.getElementById('result').innerHTML = '📤 Sending OTP...';
-            log(`Sending OTP to +91${phone}`);
-            
-            try {
-                const session = await account.createPhoneSession('+91' + phone);
-                currentSession = session;
-                log(`✅ Session created: ${session.$id}`);
-                document.getElementById('result').innerHTML = '✅ OTP sent! Check SMS';
-                document.getElementById('otpArea').style.display = 'block';
-            } catch (e) {
-                log(`❌ Error: ${e.message}`, true);
-                document.getElementById('result').innerHTML = `<span class="error">❌ ${e.message}</span>`;
-            }
-        };
+<div id="dash" class="hidden">
 
-        document.getElementById('verifyBtn').onclick = async () => {
-            const otp = document.getElementById('otp').value;
-            if (otp.length !== 6) {
-                document.getElementById('result').innerHTML = '<span class="error">❌ Enter 6-digit OTP</span>';
-                return;
-            }
-            document.getElementById('result').innerHTML = '🔐 Verifying...';
-            log(`Verifying OTP: ${otp}`);
-            
-            try {
-                const session = await account.updatePhoneSession(currentSession.$id, otp);
-                log(`✅ SUCCESS! User ID: ${session.userId}`);
-                document.getElementById('result').innerHTML = `<span class="success">✅ LOGIN SUCCESS! User ID: ${session.userId}</span>`;
-            } catch (e) {
-                log(`❌ Verification failed: ${e.message}`, true);
-                document.getElementById('result').innerHTML = '<span class="error">❌ Wrong OTP</span>';
-            }
-        };
+<div class="card">
+<div class="wallet" id="wallet">₹0</div>
+<div id="memberStatus"></div>
+</div>
 
-        init();
-    </script>
+<div class="card">
+<h3>Your Referral Link</h3>
+<div class="link" id="refLink"></div>
+<button onclick="copy()">Copy</button>
+<button onclick="whatsapp()">WhatsApp</button>
+</div>
+
+<div class="card">
+<button id="upgradeBtn">Upgrade ₹500</button>
+<button onclick="withdraw()">Withdraw</button>
+<button onclick="logout()">Logout</button>
+</div>
+
+</div>
+
+</div>
+
+<script>
+const supabase = window.supabase.createClient(
+"https://hwezthfuxgtlhyyofrsa.supabase.co",
+"sb_publishable_slq94VMSpehkdCFoA4PXOw_bgcChKgC"
+);
+
+let userId = localStorage.getItem("userId");
+
+function showAuth(){
+home.classList.add("hidden");
+auth.classList.remove("hidden");
+}
+function back(){
+auth.classList.add("hidden");
+home.classList.remove("hidden");
+}
+
+async function signup(){
+let phone=signPhone.value;
+let pass=signPass.value;
+let cp=coupon.value;
+
+if(phone.length!=10){msg.innerText="Invalid phone";return;}
+if(pass.length<4){msg.innerText="Password min 4";return;}
+
+let isMember=false;
+
+if(cp){
+let {data}=await supabase.from("coupons").select("*").eq("code",cp).single();
+if(data && data.used_count < data.max_use){
+isMember=true;
+await supabase.from("coupons").update({used_count:data.used_count+1}).eq("code",cp);
+}else{
+msg.innerText="Invalid coupon";return;
+}
+}
+
+let ref=new URLSearchParams(location.search).get("ref");
+
+let {data:newUser,error}=await supabase.from("users").insert({
+phone:phone,
+password:pass,
+is_member:isMember,
+referred_by:ref
+}).select().single();
+
+if(error){msg.innerText=error.message;return;}
+
+if(ref && isMember){
+let {data:r}=await supabase.from("users").select("*").eq("id",ref).single();
+if(r && r.is_member){
+await supabase.from("users").update({
+wallet_balance:r.wallet_balance+400,
+total_referrals:r.total_referrals+1
+}).eq("id",ref);
+
+await supabase.from("payments").insert({
+user_id:ref,
+amount:400,
+type:"referral"
+});
+}
+}
+
+localStorage.setItem("userId",newUser.id);
+userId=newUser.id;
+loadDash();
+}
+
+async function login(){
+let {data}=await supabase.from("users").select("*")
+.eq("phone",loginPhone.value).single();
+
+if(!data){msg.innerText="User not found";return;}
+if(data.password!=loginPass.value){msg.innerText="Wrong password";return;}
+
+localStorage.setItem("userId",data.id);
+userId=data.id;
+loadDash();
+}
+
+async function loadDash(){
+home.classList.add("hidden");
+auth.classList.add("hidden");
+dash.classList.remove("hidden");
+
+let {data}=await supabase.from("users").select("*").eq("id",userId).single();
+
+wallet.innerText="₹"+data.wallet_balance;
+refLink.innerText=location.origin+"?ref="+data.id;
+
+if(data.is_member){
+memberStatus.innerText="Active Member";
+upgradeBtn.style.display="none";
+}else{
+memberStatus.innerText="Not Member";
+upgradeBtn.onclick=()=>{
+localStorage.setItem("pending_member",userId);
+window.location.href="https://rzp.io/rzp/XhvqGQZ";
+}
+}
+}
+
+function copy(){
+navigator.clipboard.writeText(refLink.innerText);
+alert("Copied");
+}
+function whatsapp(){
+window.open("https://wa.me/?text=Join and earn ₹400 "+refLink.innerText);
+}
+
+async function withdraw(){
+let {data}=await supabase.from("users").select("*").eq("id",userId).single();
+if(!data.is_member){alert("Only members");return;}
+if(data.wallet_balance<100){alert("Min ₹100");return;}
+
+let upi=prompt("Enter UPI");
+if(!upi)return;
+
+await supabase.from("withdrawals").insert({
+user_id:userId,
+amount:data.wallet_balance,
+upi_id:upi
+});
+await supabase.from("users").update({wallet_balance:0}).eq("id",userId);
+alert("Requested");
+loadDash();
+}
+
+function logout(){
+localStorage.removeItem("userId");
+location.reload();
+}
+
+if(userId) loadDash();
+</script>
 </body>
 </html>
